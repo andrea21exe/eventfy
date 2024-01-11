@@ -10,4 +10,10 @@ public  class Utente {
         this.nome = nome;
         this.id = currentId++;
     }
+
+    @Override
+    public String toString() {
+        return "Utente [id=" + id + ", nome=" + nome + "]";
+    }
+
 }

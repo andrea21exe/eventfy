@@ -25,8 +25,25 @@ public class Impianto {
         }
     }
 
-    public int getId(){
+    public int getId() {
         return this.id;
+    }
+
+    public int getCapienza() {
+        return this.capienza;
+    }
+
+    public boolean maggioreUgualeDi(int capienza) {
+        if (capienza >= this.capienza) {
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public String toString() {
+        return "Impianto [id=" + id + ", nome=" + nome + ", luogo=" + luogo + ", capienza=" + capienza + ", superficie="
+                + superficie + ", gestore=" + gestore.toString() + "]";
     }
 
 }
