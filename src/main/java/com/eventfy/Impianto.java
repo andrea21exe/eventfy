@@ -40,6 +40,10 @@ public class Impianto {
         return false;
     }
 
+    public Gestore getGestore(){
+        return this.gestore;
+    }
+
     @Override
     public String toString() {
         return "Impianto [id=" + id + ", nome=" + nome + ", luogo=" + luogo + ", capienza=" + capienza + ", superficie="

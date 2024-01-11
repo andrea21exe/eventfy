@@ -15,11 +15,14 @@ public class Eventfy {
     private Utente utenteCorrente;
     private Impianto impiantoCorrente;
     private Prenotazione prenotazioneCorrente;
+    private Gestore gestoreCorrente;
 
     private List<Impianto> listaImpianti;
+    private List<Prenotazione> listaPrenotazioni;
     private Map<Integer, Impianto> mappaImpiantiTemp;
 
     private Map<Integer, Utente> mappaUtenti;
+    private Map<Integer, Impianto> mappaImpianti;
 
     private Map<Integer, Prenotazione> mappaPrenotazioniPendenti;
     private Map<Integer, Prenotazione> mappaPrenotazioniAccettate;
@@ -53,7 +56,7 @@ public class Eventfy {
     public List<Impianto> nuovaPrenotazione(String titolo, String descrizione, int durata, int capienza_min,
             LocalDate data, LocalTime ora) {
 
-        prenotazioneCorrente = new Prenotazione(titolo, descrizione, durata, data, ora, utenteCorrente);
+        prenotazioneCorrente = new Prenotazione(titolo, descrizione, durata, data, ora, utenteCorrente, impiantoCorrente);
 
         for (Impianto impianto : listaImpianti) {
             if (impianto.maggioreUgualeDi(capienza_min)) {
@@ -65,4 +68,30 @@ public class Eventfy {
 
     }
 
-}
+    public void prenotaImpianto(int codice_impianto){
+        impiantoCorrente = mappaImpianti.get(codice_impianto);
+        prenotazioneCorrente.setImpianto(impiantoCorrente);
+    }
+
+    public void confermaPrenotazione(){
+        int codice_prenotazione = prenotazioneCorrente.getId();
+        mappaPrenotazioniPendenti.put(codice_prenotazione, prenotazioneCorrente);
+    }
+
+
+    public List<Prenotazione> mostraPrenotazioniPendenti(){
+        for(int key : mappaPrenotazioniPendenti.keySet()){
+            prenotazioneCorrente = mappaPrenotazioniPendenti.get(key);
+
+            impiantoCorrente = prenotazioneCorrente.getImpianto();
+            
+            if(gestoreCorrente.equals(impiantoCorrente.getGestore())){
+                listaPrenotazioni.add(prenotazioneCorrente);
+            }
+        }
+
+        return listaPrenotazioni;
+    }
+
+
+} 

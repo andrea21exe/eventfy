@@ -12,16 +12,31 @@ public class Prenotazione {
     private LocalTime ora;
     private Evento evento;
     private Artista artista;
+    private Impianto impianto;
 
-    public Prenotazione(String titolo, String descrizione, int durata, LocalDate data, LocalTime ora, Utente artista) {
+    public Prenotazione(String titolo, String descrizione, int durata, LocalDate data, LocalTime ora, Utente artista, Impianto impianto) {
         if (artista instanceof Artista) {
             this.id = currentId++;
             this.data = LocalDate.now();
             this.ora = LocalTime.now();
             evento = new Evento(id, titolo, descrizione, durata, data, ora);
+            this.impianto = impianto;
+            this.artista = (Artista)artista;
         } else {
             throw new IllegalArgumentException("Utente non artista");
         }
+    }
+
+    public void setImpianto(Impianto impianto){
+        this.impianto = impianto;
+    }
+
+    public int getId(){
+        return this.id;
+    }
+
+    public Impianto getImpianto(){
+        return this.impianto;
     }
 
 }
