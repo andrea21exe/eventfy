@@ -22,7 +22,7 @@ public class Eventfy {
     private Map<Integer, Impianto> mappaImpiantiTemp;
 
     private Map<Integer, Utente> mappaUtenti;
-    private Map<Integer, Impianto> mappaImpianti;
+
 
     private Map<Integer, Prenotazione> mappaPrenotazioniPendenti;
     private Map<Integer, Prenotazione> mappaPrenotazioniAccettate;
@@ -69,7 +69,7 @@ public class Eventfy {
     }
 
     public void prenotaImpianto(int codice_impianto){
-        impiantoCorrente = mappaImpianti.get(codice_impianto);
+        impiantoCorrente = mappaImpiantiTemp.get(codice_impianto);
         prenotazioneCorrente.setImpianto(impiantoCorrente);
     }
 
@@ -93,5 +93,15 @@ public class Eventfy {
         return listaPrenotazioni;
     }
 
+    public Prenotazione selezionaPrenotazionePendente(int codice_prenotazione){
+        prenotazioneCorrente = mappaPrenotazioniPendenti.get(codice_prenotazione);
+        return prenotazioneCorrente;
+    }
+
+    public void accettaPrenotazione(){
+        int codice_prenotazione = prenotazioneCorrente.getId();
+        mappaPrenotazioniAccettate.put(codice_prenotazione, prenotazioneCorrente);
+        mappaPrenotazioniPendenti.remove(codice_prenotazione);
+    }
 
 } 
