@@ -51,11 +51,15 @@ public class Eventfy {
         impiantoCorrente = null;
     }
 
+
     public List<Impianto> nuovaPrenotazione(String titolo, String descrizione, int durata, int capienza_min,
             LocalDate data, LocalTime ora) {
 
         prenotazioneCorrente = new Prenotazione(titolo, descrizione, durata, data, ora, utenteCorrente,
                 impiantoCorrente);
+
+        mappaImpiantiTemp = new HashMap<Integer, Impianto>();
+
 
         for (Impianto impianto : listaImpianti) {
             if (impianto.maggioreUgualeDi(capienza_min)) {
@@ -68,13 +72,13 @@ public class Eventfy {
     }
 
     public void prenotaImpianto(int codice_impianto) {
-        impiantoCorrente = mappaImpiantiTemp.get(codice_impianto);
-        prenotazioneCorrente.setImpianto(impiantoCorrente);
+        prenotazioneCorrente.setImpianto(mappaImpiantiTemp.get(codice_impianto));
     }
 
     public void confermaPrenotazione() {
         int codice_prenotazione = prenotazioneCorrente.getId();
         mappaPrenotazioniPendenti.put(codice_prenotazione, prenotazioneCorrente);
+        mappaImpiantiTemp = null;
     }
 
     public List<Prenotazione> mostraPrenotazioniPendenti() {
@@ -114,4 +118,19 @@ public class Eventfy {
         return listaImpianti;
     }
 
+    public void setImpiantoCorrente(Impianto impianto){
+        impiantoCorrente = impianto;
+    }
+
+    public Utente getUtenteCorrente(){
+        return utenteCorrente;
+    }
+
+    public Prenotazione getPrenotazioneCorrente(){
+        return prenotazioneCorrente;
+    }
+
+    public void setPrenotazioneCorrente(Prenotazione prenotazione){
+        prenotazioneCorrente = prenotazione;
+    }
 }
