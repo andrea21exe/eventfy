@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Iterator;
 
 public class Eventfy {
 
@@ -23,7 +22,6 @@ public class Eventfy {
 
     private Map<Integer, Utente> mappaUtenti;
 
-
     private Map<Integer, Prenotazione> mappaPrenotazioniPendenti;
     private Map<Integer, Prenotazione> mappaPrenotazioniAccettate;
 
@@ -35,7 +33,7 @@ public class Eventfy {
         mappaPrenotazioniPendenti = new HashMap<Integer, Prenotazione>();
     }
 
-    public Eventfy getIstanceEventfy() {
+    public static Eventfy getIstanceEventfy() {
         if (sistema == null) {
             sistema = new Eventfy();
         }
@@ -56,7 +54,8 @@ public class Eventfy {
     public List<Impianto> nuovaPrenotazione(String titolo, String descrizione, int durata, int capienza_min,
             LocalDate data, LocalTime ora) {
 
-        prenotazioneCorrente = new Prenotazione(titolo, descrizione, durata, data, ora, utenteCorrente, impiantoCorrente);
+        prenotazioneCorrente = new Prenotazione(titolo, descrizione, durata, data, ora, utenteCorrente,
+                impiantoCorrente);
 
         for (Impianto impianto : listaImpianti) {
             if (impianto.maggioreUgualeDi(capienza_min)) {
@@ -68,24 +67,23 @@ public class Eventfy {
 
     }
 
-    public void prenotaImpianto(int codice_impianto){
+    public void prenotaImpianto(int codice_impianto) {
         impiantoCorrente = mappaImpiantiTemp.get(codice_impianto);
         prenotazioneCorrente.setImpianto(impiantoCorrente);
     }
 
-    public void confermaPrenotazione(){
+    public void confermaPrenotazione() {
         int codice_prenotazione = prenotazioneCorrente.getId();
         mappaPrenotazioniPendenti.put(codice_prenotazione, prenotazioneCorrente);
     }
 
-
-    public List<Prenotazione> mostraPrenotazioniPendenti(){
-        for(int key : mappaPrenotazioniPendenti.keySet()){
+    public List<Prenotazione> mostraPrenotazioniPendenti() {
+        for (int key : mappaPrenotazioniPendenti.keySet()) {
             prenotazioneCorrente = mappaPrenotazioniPendenti.get(key);
 
             impiantoCorrente = prenotazioneCorrente.getImpianto();
-            
-            if(gestoreCorrente.equals(impiantoCorrente.getGestore())){
+
+            if (gestoreCorrente.equals(impiantoCorrente.getGestore())) {
                 listaPrenotazioni.add(prenotazioneCorrente);
             }
         }
@@ -93,15 +91,27 @@ public class Eventfy {
         return listaPrenotazioni;
     }
 
-    public Prenotazione selezionaPrenotazionePendente(int codice_prenotazione){
+    public Prenotazione selezionaPrenotazionePendente(int codice_prenotazione) {
         prenotazioneCorrente = mappaPrenotazioniPendenti.get(codice_prenotazione);
         return prenotazioneCorrente;
     }
 
-    public void accettaPrenotazione(){
+    public void accettaPrenotazione() {
         int codice_prenotazione = prenotazioneCorrente.getId();
         mappaPrenotazioniAccettate.put(codice_prenotazione, prenotazioneCorrente);
         mappaPrenotazioniPendenti.remove(codice_prenotazione);
     }
 
-} 
+    public Impianto getImpiantoCorrente() {
+        return impiantoCorrente;
+    }
+
+    public void setUtenteCorrente(Utente utente){
+        utenteCorrente = utente; 
+    }
+
+    public List<Impianto> getListaImpianti(){
+        return listaImpianti;
+    }
+
+}

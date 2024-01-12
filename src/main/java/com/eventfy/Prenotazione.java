@@ -39,4 +39,10 @@ public class Prenotazione {
         return this.impianto;
     }
 
+    @Override
+    public String toString() {
+        return "Prenotazione [id=" + id + ", data=" + data + ", ora=" + ora + ", evento=" + evento + ", artista="
+                + artista + ", impianto=" + impianto + "]";
+    }
+    
 }
