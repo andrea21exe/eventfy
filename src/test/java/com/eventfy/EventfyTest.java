@@ -1,6 +1,7 @@
 package com.eventfy;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -112,5 +113,49 @@ public class EventfyTest {
         assertTrue(eventfy.getPrenotazioniPendenti().containsValue(p));
 
     }
+
+    @Test
+    void mostraPrenotazioniPendentiTest() {
+        //SCELGO un gestore già presente così da farci ritornare le sue prenotazioni pendenti
+        eventfy.signUpLogIn(new Gestore("Gigi"));
+        //Ritorno le prenotazioni pendente del gestore "Gigi"
+        List<Prenotazione> result = eventfy.mostraPrenotazioniPendenti();
+
+        assertNotNull(result);
+        
+		assertEquals(0, result.size());
+    }
+
+
+    @Test
+    void testSelezionaPrenotazionePendente() {
+       //SCELGO il codice di prenotazione 0 già inserito nel sistema
+        Prenotazione pRicercata = eventfy.selezionaPrenotazionePendente(0);
+        // Verifica che la prenotazione sia stata selezionata correttamente
+        assertNotNull(pRicercata);
+        assertEquals(0, pRicercata.getId());
+    }
+
+@Test
+    void testAccettaPrenotazione() {
+       //SCELGO il codice di prenotazione 1 già inserito nel sistema
+        Prenotazione pRicercata = eventfy.selezionaPrenotazionePendente(1);
+        // Verifica che la prenotazione sia stata selezionata correttamente
+        assertNotNull(pRicercata);
+        // Accetta la prenotazione selezionata
+        eventfy.accettaPrenotazione();
+        // Verifica che la prenotazione sia stata spostata correttamente da pendente ad accettata
+        assertTrue(eventfy.getPrenotazioniAccettate().containsValue(pRicercata));
+        // Verifica che la prenotazione sia stata tolta da pendente
+        assertFalse(eventfy.getPrenotazioniPendenti().containsValue(pRicercata));
+    }
+
+
+
+
+
+
+
+
 
 }

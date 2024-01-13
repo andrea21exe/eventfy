@@ -30,6 +30,7 @@ public class Eventfy {
     // Singleton
     private Eventfy() {
         listaImpianti = new ArrayList<Impianto>();
+        listaPrenotazioni=new ArrayList<Prenotazione>();
         mappaUtenti = new HashMap<Integer, Utente>();
         mappaPrenotazioniAccettate = new HashMap<Integer, Prenotazione>();
         mappaPrenotazioniPendenti = new HashMap<Integer, Prenotazione>();
@@ -90,7 +91,7 @@ public class Eventfy {
 
             impiantoCorrente = prenotazioneCorrente.getImpianto();
 
-            if (gestoreCorrente.equals(impiantoCorrente.getGestore())) {
+            if (utenteCorrente.equals(impiantoCorrente.getGestore())) {
                 listaPrenotazioni.add(prenotazioneCorrente);
             }
         }
