@@ -16,4 +16,8 @@ public  class Utente {
         return "Utente [id=" + id + ", nome=" + nome + "]";
     }
 
+    public int getId(){
+        return this.id;
+    }
+
 }

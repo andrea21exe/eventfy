@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import scala.util.control.Exception;
+
 public class Eventfy {
 
     private static Eventfy sistema; // Singleton
@@ -51,7 +53,6 @@ public class Eventfy {
         impiantoCorrente = null;
     }
 
-
     public List<Impianto> nuovaPrenotazione(String titolo, String descrizione, int durata, int capienza_min,
             LocalDate data, LocalTime ora) {
 
@@ -59,7 +60,6 @@ public class Eventfy {
                 impiantoCorrente);
 
         mappaImpiantiTemp = new HashMap<Integer, Impianto>();
-
 
         for (Impianto impianto : listaImpianti) {
             if (impianto.maggioreUgualeDi(capienza_min)) {
@@ -72,13 +72,16 @@ public class Eventfy {
     }
 
     public void prenotaImpianto(int codice_impianto) {
+        Impianto impianto = mappaImpiantiTemp.get(codice_impianto);
         prenotazioneCorrente.setImpianto(mappaImpiantiTemp.get(codice_impianto));
     }
 
-    public void confermaPrenotazione() {
+    public Prenotazione confermaPrenotazione() {
         int codice_prenotazione = prenotazioneCorrente.getId();
         mappaPrenotazioniPendenti.put(codice_prenotazione, prenotazioneCorrente);
         mappaImpiantiTemp = null;
+        prenotazioneCorrente = null;
+        return mappaPrenotazioniPendenti.get(codice_prenotazione);
     }
 
     public List<Prenotazione> mostraPrenotazioniPendenti() {
@@ -110,27 +113,94 @@ public class Eventfy {
         return impiantoCorrente;
     }
 
-    public void setUtenteCorrente(Utente utente){
-        utenteCorrente = utente; 
+    public void setUtenteCorrente(Utente utente) {
+        utenteCorrente = utente;
     }
 
-    public List<Impianto> getListaImpianti(){
+    public List<Impianto> getListaImpianti() {
         return listaImpianti;
     }
 
-    public void setImpiantoCorrente(Impianto impianto){
+    public void setImpiantoCorrente(Impianto impianto) {
         impiantoCorrente = impianto;
     }
 
-    public Utente getUtenteCorrente(){
+    public Utente getUtenteCorrente() {
         return utenteCorrente;
     }
 
-    public Prenotazione getPrenotazioneCorrente(){
+    public Prenotazione getPrenotazioneCorrente() {
         return prenotazioneCorrente;
     }
 
-    public void setPrenotazioneCorrente(Prenotazione prenotazione){
+    public void setPrenotazioneCorrente(Prenotazione prenotazione) {
         prenotazioneCorrente = prenotazione;
+    }
+
+    public Map<Integer, Prenotazione> getPrenotazioniPendenti() {
+        return mappaPrenotazioniPendenti;
+    }
+
+    public Map<Integer, Prenotazione> getPrenotazioniAccettate() {
+        return mappaPrenotazioniAccettate;
+    }
+
+    // EFFETTUA IL "LOG-IN"
+    public void signUpLogIn(Utente utente) {
+        mappaUtenti.put(utente.getId(), utente);
+        utenteCorrente = utente;
+    }
+
+    public Impianto getImpianto(int id) {
+        for (Impianto i : listaImpianti) {
+            if (i.getId() == id) {
+                return i;
+            }
+        }
+        return null;
+    }
+
+    // POPOLA LE MAPPE/LISTE
+    public void populate() {
+
+        /*
+         * mappaUtenti.put(utente.getId(), utente);
+         * utenteCorrente = utente;
+         */
+
+        // Popola la mappa degli utenti
+        Gestore g1 = new Gestore("Gigi");
+        mappaUtenti.put(g1.getId(), g1);
+        Gestore g2 = new Gestore("Paolo");
+        mappaUtenti.put(g2.getId(), g2);
+        Gestore g3 = new Gestore("Marco");
+        mappaUtenti.put(g3.getId(), g3);
+        Artista a1 = new Artista("THEWEEKND");
+        mappaUtenti.put(a1.getId(), a1);
+        Artista a2 = new Artista("WillIAm");
+        mappaUtenti.put(a2.getId(), a2);
+        Artista a3 = new Artista("DojaCat");
+        mappaUtenti.put(a3.getId(), a3);
+
+        // Popola la lista impianti
+        Impianto i1 = new Impianto("San Siro", "Milano", 75000, 700, g1);
+        listaImpianti.add(i1);
+        Impianto i2 = new Impianto("Pal1", "Catania", 3000, 200, g3);
+        listaImpianti.add(i2);
+        Impianto i3 = new Impianto("Stadio Arena", "Roma", 20000, 500, g2);
+        listaImpianti.add(i3);
+        Impianto i4 = new Impianto("Ippodromo C", "Bari", 45000, 1000, g1);
+        listaImpianti.add(i4);
+
+        // Popola le prenotazioni
+        Prenotazione p0 = new Prenotazione("P0", "d0", 20, LocalDate.now(), LocalTime.now(), a3, i1);
+        Prenotazione p1 = new Prenotazione("P1", "d0", 203, LocalDate.now(), LocalTime.now(), a1, i2);
+        Prenotazione p2 = new Prenotazione("P2", "d2", 120, LocalDate.now(), LocalTime.now(), a2, i3);
+        Prenotazione p3 = new Prenotazione("P3", "d3", 130, LocalDate.now(), LocalTime.now(), a1, i4);
+        mappaPrenotazioniPendenti.put(p0.getId(), p0);
+        mappaPrenotazioniPendenti.put(p1.getId(), p1);
+        mappaPrenotazioniAccettate.put(p2.getId(), p2);
+        mappaPrenotazioniAccettate.put(p3.getId(), p3);
+
     }
 }

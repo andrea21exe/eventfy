@@ -19,87 +19,98 @@ public class EventfyTest {
 
     @BeforeAll
     public static void initTest() {
-
         eventfy = Eventfy.getIstanceEventfy();
-        
-        //eventfy.setUtenteCorrente(new Gestore("andrea"));
-        //eventfy.setImpiantoCorrente(new Impianto("Impianto1", "Luogo1", 100, 200, eventfy.getUtenteCorrente()));
-        //eventfy.setPrenotazioneCorrente(new Prenotazione("Prenotazione1", "Descrizione prenotazione 1", 2, 130, LocalDate.now(), LocalTime.now(), new Artista("Massi"), eventfy.getImpiantoCorrente()));
+        eventfy.populate();
     }
- 
+
     @Test
     void testNuovoImpianto() {
 
-        /*try{
-            eventfy.nuovoImpianto("null", "null", 0, 0);
-            fail("Non hai messo niente");
-        } catch(Exception e){
-            assertEquals(e.getMessage(), "Non va");
-        }*/
+        //Login - SignUp
+        eventfy.signUpLogIn(new Gestore("Carlo"));
 
-        try {
-            assertNull(eventfy.getImpiantoCorrente());
-            eventfy.nuovoImpianto("San Siro", "Milano", 80000, 100);
-            assertNotNull(eventfy.getImpiantoCorrente());
-        } catch (Exception e) {
-            fail("Errore");
-        }
+        assertNull(eventfy.getImpiantoCorrente());
+        eventfy.nuovoImpianto("San Siro", "Milano", 80000, 100);
+        assertNotNull(eventfy.getImpiantoCorrente());
+
 
     }
 
     @Test
     void testConfermaImpianto() {
 
-        assertNull(eventfy.getImpiantoCorrente()); 
+         //Login - SignUp
+        eventfy.signUpLogIn(new Gestore("Carlo"));
 
-        Impianto nuovoImpianto = eventfy.nuovoImpianto("San Siro", "Milano", 80000, 100);
+        Impianto nuovoImpianto = eventfy.nuovoImpianto("Metro Stad", "Milano", 80000, 100);
         eventfy.confermaImpianto();
 
-        assertNull(eventfy.getImpiantoCorrente()); 
-        assertEquals(1, eventfy.getListaImpianti().size());
-        assertTrue(eventfy.getListaImpianti().contains(nuovoImpianto)); 
-        
-    }  
+        assertNull(eventfy.getImpiantoCorrente());
+        assertEquals(5, eventfy.getListaImpianti().size());
+        assertTrue(eventfy.getListaImpianti().contains(nuovoImpianto));
+
+    }
+
     @Test
     void testNuovaPrenotazione() {
 
-        eventfy.setUtenteCorrente(new Artista("andrea"));
-        eventfy.setImpiantoCorrente(new Impianto("Impianto1", "Luogo1", 100, 200, new Gestore("ciao")));
+         //Login - SignUp
+        eventfy.signUpLogIn(new Artista("Metro Boomin"));
+        
+        assertNull(eventfy.getPrenotazioneCorrente());
 
-        eventfy.confermaImpianto();
+        //Testo implicitamente il metodo isMaggioreUguale della classe Impianto
+        List<Impianto> impiantiDisponibili = eventfy.nuovaPrenotazione("Prenotazione1", "Descrizione 1", 2,
+                15000, LocalDate.now(), LocalTime.now());
+        assertEquals(3, impiantiDisponibili.size());
 
-        List<Impianto> impiantiDisponibili = eventfy.nuovaPrenotazione("Prenotazione1","Descrizione prenotazione 1", 2,130, LocalDate.now(), LocalTime.now());
-
-        assertTrue(!impiantiDisponibili.isEmpty(), "La lista degli impianti disponibili non deve essere vuota");
-
-        assertEquals(1, impiantiDisponibili.size(), "La lista degli impianti disponibili deve contenere 1 elemento");
-
-        assertNotNull(eventfy.getPrenotazioneCorrente(), "La prenotazione corrente non deve essere nulla");
+        assertNotNull(eventfy.getPrenotazioneCorrente());
 
     }
+
     @Test
     void testPrenotaImpianto() {
 
-        eventfy.setUtenteCorrente(new Artista("andrea"));
-        eventfy.setImpiantoCorrente(new Impianto("Impianto1", "Luogo1", 100, 200, new Gestore("ciao")));
+        //Login - SignUp
+        eventfy.signUpLogIn(new Artista("Dua Lipa"));
 
-        List<Impianto> impiantiDisponibili = eventfy.nuovaPrenotazione("Prenotazione1","Descrizione prenotazione 1", 2,130, LocalDate.now(), LocalTime.now());
+        eventfy.nuovaPrenotazione("P1", "d1", 329, 20, LocalDate.now(), LocalTime.now());
+        //SCELGO L'IMPIANTO CON ID = 0
+        eventfy.prenotaImpianto(0); 
+        //L'impianto scelto deve essere associato alla prenotazione corrente
+        assertEquals(eventfy.getImpianto(0), eventfy.getPrenotazioneCorrente().getImpianto()); 
 
-        int codice_impianto = eventfy.getImpiantoCorrente().getId();
-
-        eventfy.confermaImpianto();
-
-        eventfy.prenotaImpianto(codice_impianto);
-
-
-        //assertEquals(eventfy.getPrenotazioneCorrente().getImpianto().getId(),codice_impianto, "L'impianto corrente deve corrispondere all'impianto selezionato");
-
-        assertNotNull(eventfy.getPrenotazioneCorrente(), "La prenotazione corrente non deve essere nulla");
+        // QUANDO FAREMO LE ESTENSIONI PROVEREMO A SELEZIONARE UN IMPIANTO CHE 
+        // NON E' NELLA MAPPA TEMPORANEA (CHE NON ESISTE O NON SODDISFA I REQUISITI DI CAPIENZA)
+        /* 
+        impiantiDisponibili = eventfy.nuovaPrenotazione("P2", "d2", 329, 10000, LocalDate.now(), LocalTime.now());
+        //SCELGO L'IMPIANTO CON ID = 0
+        eventfy.prenotaImpianto(1); 
+        */
     }
 
     @Test
     void testConfermaPrenotazione() {
+
+        eventfy.signUpLogIn(new Artista("Dua Lipa"));
+
+        //Ottengo la dimensione della mappa delle prenotazioni pendenti prima di confermare una nuova prenotazione
+        int mappaPrenotazioniPendenti_size = eventfy.getPrenotazioniPendenti().size();
         
+        eventfy.nuovaPrenotazione("P1", "d1", 329, 20, LocalDate.now(), LocalTime.now());
+        //SCELGO L'IMPIANTO CON ID = 3
+        eventfy.prenotaImpianto(3); 
+        //Controllo che Prenotazionecorrente NON sia null
+        assertNotNull(eventfy.getPrenotazioneCorrente());
+        //Confermo la Prenotazione
+        Prenotazione p = eventfy.confermaPrenotazione();
+        //Controllo che la prenotazionecorrente sia null
+        assertNull(eventfy.getPrenotazioneCorrente());
+        //Controllo che la dimensione della mappa dopo della conferma sia aumentata di 1 (dopo la conferma)
+        assertEquals(mappaPrenotazioniPendenti_size + 1, eventfy.getPrenotazioniPendenti().size());
+        //Controllo che la prenotazione sia stata inserita nella mappa delle prenotazioni pendenti
+        assertTrue(eventfy.getPrenotazioniPendenti().containsValue(p));
+
     }
 
 }

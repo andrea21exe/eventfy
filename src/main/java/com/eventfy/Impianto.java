@@ -34,7 +34,7 @@ public class Impianto {
     }
 
     public boolean maggioreUgualeDi(int capienza) {
-        if (capienza >= this.capienza) {
+        if (this.capienza >= capienza) {
             return true;
         }
         return false;
