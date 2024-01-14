@@ -18,8 +18,8 @@ public class Eventfy {
     private Prenotazione prenotazioneCorrente;
 
     private List<Impianto> listaImpianti;
-    private List<Prenotazione> listaPrenotazioni;
     private Map<Integer, Impianto> mappaImpiantiTemp;
+    private Map<Integer, Prenotazione> mappaPrenotazioniTemp;
 
     private Map<Integer, Utente> mappaUtenti;
 
@@ -29,7 +29,6 @@ public class Eventfy {
     // Singleton
     private Eventfy() {
         listaImpianti = new ArrayList<Impianto>();
-        listaPrenotazioni=new ArrayList<Prenotazione>();
         mappaUtenti = new HashMap<Integer, Utente>();
         mappaPrenotazioniAccettate = new HashMap<Integer, Prenotazione>();
         mappaPrenotazioniPendenti = new HashMap<Integer, Prenotazione>();
@@ -85,21 +84,21 @@ public class Eventfy {
     }
 
     public List<Prenotazione> mostraPrenotazioniPendenti() {
+
+        mappaPrenotazioniTemp = new HashMap<Integer, Prenotazione>();
+
         for (int key : mappaPrenotazioniPendenti.keySet()) {
-            prenotazioneCorrente = mappaPrenotazioniPendenti.get(key);
-
-            impiantoCorrente = prenotazioneCorrente.getImpianto();
-
-            if (utenteCorrente.equals(impiantoCorrente.getGestore())) {
-                listaPrenotazioni.add(prenotazioneCorrente);
+            Prenotazione p = mappaPrenotazioniPendenti.get(key);
+            if (p.hasGestore((Gestore)utenteCorrente)) {
+                mappaPrenotazioniTemp.put(p.getId(), p);
             }
         }
 
-        return listaPrenotazioni;
+        return new ArrayList<Prenotazione>(mappaPrenotazioniTemp.values());
     }
 
     public Prenotazione selezionaPrenotazionePendente(int codice_prenotazione) {
-        prenotazioneCorrente = mappaPrenotazioniPendenti.get(codice_prenotazione);
+        prenotazioneCorrente = mappaPrenotazioniTemp.get(codice_prenotazione);
         return prenotazioneCorrente;
     }
 
@@ -107,6 +106,8 @@ public class Eventfy {
         int codice_prenotazione = prenotazioneCorrente.getId();
         mappaPrenotazioniAccettate.put(codice_prenotazione, prenotazioneCorrente);
         mappaPrenotazioniPendenti.remove(codice_prenotazione);
+        mappaPrenotazioniTemp = null;
+        prenotazioneCorrente = null;
     }
 
     public Impianto getImpiantoCorrente() {
@@ -143,6 +144,14 @@ public class Eventfy {
 
     public Map<Integer, Prenotazione> getPrenotazioniAccettate() {
         return mappaPrenotazioniAccettate;
+    }
+
+    public void logIn(int id){
+        utenteCorrente = mappaUtenti.get(id);
+    }
+
+    public Map<Integer, Prenotazione> getMapPrenotazioniTemp(){
+        return mappaPrenotazioniTemp;
     }
 
     // EFFETTUA LA REGISTRAZIONE ED IL "LOG-IN" 

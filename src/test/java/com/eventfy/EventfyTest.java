@@ -116,46 +116,58 @@ public class EventfyTest {
 
     @Test
     void mostraPrenotazioniPendentiTest() {
-        //SCELGO un gestore già presente così da farci ritornare le sue prenotazioni pendenti
+        //SCELGO un nuovo utente così da farci ritornare le sue prenotazioni pendenti
         eventfy.signUpLogIn(new Gestore("Gigi"));
-        //Ritorno le prenotazioni pendente del gestore "Gigi"
+        //Ritorno le prenotazioni pendente del gestore "Gigi" (devono essere 0 perchè appena registrato)
         List<Prenotazione> result = eventfy.mostraPrenotazioniPendenti();
-
         assertNotNull(result);
-        
 		assertEquals(0, result.size());
+
+        //Facciamo il logIn con un altro utente già inserito
+        eventfy.logIn(0);
+        result = eventfy.mostraPrenotazioniPendenti();
+        //L'utente con ID = 0 ha una prenotazione pendente
+        assertTrue(result.size() > 0);
+
+
     }
 
 
     @Test
     void testSelezionaPrenotazionePendente() {
-       //SCELGO il codice di prenotazione 0 già inserito nel sistema
+
+        eventfy.logIn(0);
+        assertNull(eventfy.getMapPrenotazioniTemp());
+        assertNull(eventfy.getPrenotazioneCorrente());
+
+        eventfy.mostraPrenotazioniPendenti();
+        assertNotNull(eventfy.getMapPrenotazioniTemp());
+
+        //SCELGO il codice di prenotazione 0 già inserito nel sistema
         Prenotazione pRicercata = eventfy.selezionaPrenotazionePendente(0);
         // Verifica che la prenotazione sia stata selezionata correttamente
         assertNotNull(pRicercata);
+        assertNotNull(eventfy.getPrenotazioneCorrente());
         assertEquals(0, pRicercata.getId());
     }
 
 @Test
     void testAccettaPrenotazione() {
-       //SCELGO il codice di prenotazione 1 già inserito nel sistema
-        Prenotazione pRicercata = eventfy.selezionaPrenotazionePendente(1);
-        // Verifica che la prenotazione sia stata selezionata correttamente
-        assertNotNull(pRicercata);
+        
+        eventfy.logIn(0);
+        eventfy.mostraPrenotazioniPendenti();
+        Prenotazione pRicercata = eventfy.selezionaPrenotazionePendente(0);
         // Accetta la prenotazione selezionata
         eventfy.accettaPrenotazione();
         // Verifica che la prenotazione sia stata spostata correttamente da pendente ad accettata
         assertTrue(eventfy.getPrenotazioniAccettate().containsValue(pRicercata));
         // Verifica che la prenotazione sia stata tolta da pendente
         assertFalse(eventfy.getPrenotazioniPendenti().containsValue(pRicercata));
+        // Verifica che le variabili temporanee siano state svuotate
+        assertNull(eventfy.getPrenotazioneCorrente());
+        assertNull(eventfy.getMapPrenotazioniTemp());
+        
+
     }
-
-
-
-
-
-
-
-
 
 }
