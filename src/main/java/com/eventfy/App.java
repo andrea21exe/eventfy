@@ -1,5 +1,8 @@
 package com.eventfy;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.List;
 import java.util.Scanner;
 
 public class App {
@@ -22,7 +25,7 @@ public class App {
     private static void displayMenu() {
         System.out.println("Seleziona un'opzione:");
         System.out.println("1. Inserisci un nuovo impianto");
-        System.out.println("2. Opzione 2");
+        System.out.println("2. Richiedi prenotazione impianto");
         System.out.println("3. Opzione 3");
     }
 
@@ -45,6 +48,7 @@ public class App {
                 inserisciImpianto();
                 break;
             case 2:
+                nuovaPrenotazione();
                 System.out.println("Hai selezionato l'Opzione 2");
                 break;
             case 3:
@@ -102,4 +106,97 @@ public class App {
         //Ritorna al menù
         menu();
     }
+
+    public static void nuovaPrenotazione(){
+
+        Eventfy sistema = Eventfy.getIstanceEventfy();
+        Scanner input = new Scanner(System.in);
+        
+        sistema.signUpLogIn(new Artista("Andrea"));
+
+        System.out.println("Hai selezionato: Inserisci nuova prenotazione");
+        System.out.println("Inserisci il titolo dell'evento"); 
+        String titolo = input.nextLine(); //titolo
+
+        System.out.println("Inserisci una descrizione dell'evento");
+        String descrizione = input.nextLine(); //descrizione
+
+        System.out.println("Per quante ore vuoi prenotare l'impianto?");
+        while(!input.hasNextInt()){
+            System.out.println("Inserisci un numero intero, riprova");
+            input.next();
+        }
+        int durata = input.nextInt(); //durata
+
+        System.out.println("Qual è la capienza minima dell'impianto in cui vuoi esibirti?");
+        while(!input.hasNextInt()){
+            System.out.println("Inserisci un numero intero, riprova");
+            input.next();
+        }
+        int capienza = input.nextInt(); //capienza
+        input.nextLine();
+
+
+        System.out.println("Quando vuoi esibirti? Inserisci la data nel formato dd.mm.yyyy");
+        String dataString = input.nextLine(); //data
+        LocalDate data = null;
+        try {
+            // Dividi la stringa in giorno, mese e anno
+            String[] giornoMeseAnno = dataString.split("\\.");
+
+            // Estrai giorno, mese e anno come interi
+            int giorno = Integer.parseInt(giornoMeseAnno[0]);
+            int mese = Integer.parseInt(giornoMeseAnno[1]);
+            int anno = Integer.parseInt(giornoMeseAnno[2]);
+
+            data = LocalDate.of(anno, mese, giorno);
+
+        } catch (Exception e) {
+            System.out.println("Formato non valido");
+        }
+
+        System.out.println("Inserisci l'ora nel formato hh.mm");
+        String oraString = input.nextLine(); //ora
+        LocalTime orario = null;
+        try {
+            // Dividi la stringa in ora, minuti
+            String[] oraMinuti = oraString.split("\\.");
+
+            // Estrai ora minuti come interi
+            int ora = Integer.parseInt(oraMinuti[0]);
+            int minuti = Integer.parseInt(oraMinuti[1]);
+
+            orario = LocalTime.of(ora, minuti);
+
+        } catch (Exception e) {
+            System.out.println("Formato non valido");
+        }
+        
+        //Si DOVREBBE verificare che i vari parametri siano validi
+        List<Impianto> impiantiDisponibili = sistema.nuovaPrenotazione(titolo, descrizione, durata, capienza, data, orario);
+
+        //Stampa la lista di impianti disponibili
+        for(Impianto i : impiantiDisponibili){
+            System.out.println(i);
+        }
+
+        System.out.println("");
+        System.out.println("Inserisci l'ID dell'impianto di cui vuoi richiedere la prenotazione");
+        while(!input.hasNextInt()){
+            System.out.println("Inserisci un numero intero, riprova");
+            input.next();
+        }
+        int id = input.nextInt();
+        input.nextLine();
+
+        sistema.prenotaImpianto(id);
+        System.out.println("");
+        System.out.println("Premi invio per confermare la prenotazione");
+        input.nextLine();
+        System.out.println(sistema.confermaPrenotazione());
+
+        menu();
+
+    }
+
 }

@@ -16,7 +16,6 @@ public class Eventfy {
     private Utente utenteCorrente;
     private Impianto impiantoCorrente;
     private Prenotazione prenotazioneCorrente;
-    private Gestore gestoreCorrente;
 
     private List<Impianto> listaImpianti;
     private List<Prenotazione> listaPrenotazioni;
@@ -58,7 +57,7 @@ public class Eventfy {
             LocalDate data, LocalTime ora) {
 
         prenotazioneCorrente = new Prenotazione(titolo, descrizione, durata, data, ora, utenteCorrente,
-                impiantoCorrente);
+                impiantoCorrente); //inizialmente impianto corrente è null
 
         mappaImpiantiTemp = new HashMap<Integer, Impianto>();
 
@@ -68,7 +67,7 @@ public class Eventfy {
             }
         }
 
-        return new ArrayList<>(mappaImpiantiTemp.values());
+        return new ArrayList<Impianto>(mappaImpiantiTemp.values());
 
     }
 
@@ -146,7 +145,7 @@ public class Eventfy {
         return mappaPrenotazioniAccettate;
     }
 
-    // EFFETTUA IL "LOG-IN"
+    // EFFETTUA LA REGISTRAZIONE ED IL "LOG-IN" 
     public void signUpLogIn(Utente utente) {
         mappaUtenti.put(utente.getId(), utente);
         utenteCorrente = utente;
@@ -163,11 +162,6 @@ public class Eventfy {
 
     // POPOLA LE MAPPE/LISTE
     public void populate() {
-
-        /*
-         * mappaUtenti.put(utente.getId(), utente);
-         * utenteCorrente = utente;
-         */
 
         // Popola la mappa degli utenti
         Gestore g1 = new Gestore("Gigi");
