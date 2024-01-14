@@ -26,7 +26,7 @@ public class App {
         System.out.println("Seleziona un'opzione:");
         System.out.println("1. Inserisci un nuovo impianto");
         System.out.println("2. Richiedi prenotazione impianto");
-        System.out.println("3. Opzione 3");
+        System.out.println("3. Gestisci prenotazione");
     }
 
     private static int getOperazioneUtente() {
@@ -52,6 +52,7 @@ public class App {
                 System.out.println("Hai selezionato l'Opzione 2");
                 break;
             case 3:
+                gestisciPrenotazioni();
                 System.out.println("Hai selezionato l'Opzione 3");
                 break;
             default:
@@ -197,6 +198,50 @@ public class App {
 
         menu();
 
+    }
+
+    public static void gestisciPrenotazioni(){
+        Eventfy sistema = Eventfy.getIstanceEventfy();
+        Scanner input = new Scanner(System.in);
+        // Ottiene la lista delle prenotazioni pendenti dal sistema
+        List<Prenotazione> prenotazioniPendenti=sistema.mostraPrenotazioniPendenti();
+       // Se non ci sono prenotazioni pendenti, torna al menu principale
+        if (prenotazioniPendenti == null || prenotazioniPendenti.isEmpty()) {
+            System.out.println("Nessuna prenotazione pendente.");
+            menu();  // Torna al menu principale se non ci sono prenotazioni pendenti.
+            return;
+        }
+        // Stampa le prenotazioni pendenti
+        System.out.println("Prenotazioni Pendenti");
+        for(Prenotazione p: prenotazioniPendenti){
+            System.out.println(p);
+        }
+         // Chiede all'utente di inserire il codice della prenotazione da gestire
+        System.out.println("Inserisci il codice della prenotazione da gestire:");
+        while(!input.hasNextInt()){
+            System.out.println("Inserisci un numero intero, riprova");
+            input.next();
+        }
+        int codice_prenotazione=input.nextInt();
+       // Se la prenotazione è valida
+        Prenotazione p=sistema.selezionaPrenotazionePendente(codice_prenotazione);
+        if(p!=null){
+            System.out.println("Hai selezionato la prenotazione:"+p);
+            System.out.println("Vuoi accettare questa Prenotazione?(Si/No)");
+            String risp=input.next().toLowerCase();
+            if (risp.equals("si")) {
+                sistema.accettaPrenotazione();
+                System.out.println("Prenotazione accettata!");
+            } else {
+                System.out.println("Operazione annullata.");
+            }
+            // Se la prenotazione non è valida
+        } else {
+            System.out.println("Prenotazione non valida.");
+        }
+
+        //Ritorna al menù
+        menu();
     }
 
 }

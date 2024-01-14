@@ -46,8 +46,7 @@ public class Impianto {
 
     @Override
     public String toString() {
-        return "Impianto [id=" + id + ", nome=" + nome + ", luogo=" + luogo + ", capienza=" + capienza + ", superficie="
-                + superficie + ", gestore=" + gestore.toString() + "]";
+        return "Impianto [id=" + id + ", nome=" + nome + ", luogo=" + luogo + ", capienza=" + capienza + ", superficie="+ superficie + ", gestore=" + gestore.toString() + "]";
     }
 
 }
