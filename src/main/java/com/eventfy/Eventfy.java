@@ -16,6 +16,7 @@ public class Eventfy {
     private Utente utenteCorrente;
     private Impianto impiantoCorrente;
     private Prenotazione prenotazioneCorrente;
+    private Invito invitoCorrente;
 
     private List<Impianto> listaImpianti;
     private Map<Integer, Impianto> mappaImpiantiTemp;
@@ -27,6 +28,7 @@ public class Eventfy {
     private Map<Integer, Prenotazione> mappaPrenotazioniAccettate;
 
     private Map<Integer, Prenotazione> mappaPrenotazioniArtistaAccettate;
+    private Map<Integer, Invito> mappaInviti;
 
     // Singleton
     private Eventfy() {
@@ -230,4 +232,40 @@ public class Eventfy {
         Artista a = prenotazioneCorrente.getArtista();
         return a.getListaBrani();
     }
+
+
+
+    public List<Prenotazione> mostraPrenotazioniAccettate() {
+
+        mappaPrenotazioniTemp = new HashMap<Integer, Prenotazione>();
+
+        for (int key : mappaPrenotazioniAccettate.keySet()) {
+            Prenotazione p = mappaPrenotazioniAccettate.get(key);
+            if (p.hasGestore((Gestore)utenteCorrente)) {
+                mappaPrenotazioniTemp.put(p.getId(), p);
+            }
+        }
+
+        return new ArrayList<Prenotazione>(mappaPrenotazioniTemp.values());
+    }
+
+
+    public List<Utente> selezionaPrenotazioneEvento(int codice_prenotazione) {
+        prenotazioneCorrente = mappaPrenotazioniTemp.get(codice_prenotazione);
+        Evento eventoSelezionato=prenotazioneCorrente.getEvento();
+        Invito invitoCorrente=new Invito(eventoSelezionato);
+
+        return listaArtisti; /*Fare lista Artisti */
+
+    }
+    public void invitaArtista(int codice_artista){
+    Utente ArtistaSelezionato = mappaUtenti.get(codice_artista);
+    /*Da completare */
+
+        mappaInviti.put(prenotazioneCorrente.getId(),invitoCorrente);
+    }
+    
+
+
+
 }

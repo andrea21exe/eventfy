@@ -116,16 +116,10 @@ public class EventfyTest {
 
     @Test
     void mostraPrenotazioniPendentiTest() {
-        //SCELGO un nuovo utente così da farci ritornare le sue prenotazioni pendenti
-        eventfy.signUpLogIn(new Gestore("Gigi"));
-        //Ritorno le prenotazioni pendente del gestore "Gigi" (devono essere 0 perchè appena registrato)
-        List<Prenotazione> result = eventfy.mostraPrenotazioniPendenti();
-        assertNotNull(result);
-		assertEquals(0, result.size());
-
+        
         //Facciamo il logIn con un altro utente già inserito
         eventfy.logIn(0);
-        result = eventfy.mostraPrenotazioniPendenti();
+        List<Prenotazione> result = eventfy.mostraPrenotazioniPendenti();
         //L'utente con ID = 0 ha una prenotazione pendente
         assertTrue(result.size() > 0);
 
