@@ -28,6 +28,7 @@ public class Eventfy {
     private Map<Integer, Prenotazione> mappaPrenotazioniAccettate;
 
     private Map<Integer, Prenotazione> mappaPrenotazioniArtistaAccettate;
+    private Map<integer,Utente>mappaUtentiTemp;
     private Map<Integer, Invito> mappaInviti;
 
     // Singleton
@@ -251,13 +252,20 @@ public class Eventfy {
 
 
     public List<Utente> selezionaPrenotazioneEvento(int codice_prenotazione) {
+        Map<Integer, Utente> mappaUtentiTemp = new HashMap<>();
         prenotazioneCorrente = mappaPrenotazioniTemp.get(codice_prenotazione);
         Evento eventoSelezionato=prenotazioneCorrente.getEvento();
         Invito invitoCorrente=new Invito(eventoSelezionato);
 
-        return listaArtisti; /*Fare lista Artisti */
-
-    }
+        for (Utente utente : mappaUtenti.values()) {
+            if (utente instanceof Artista) {
+                mappaUtentiTemp.put(utente.getId(), utente);
+            }
+        }
+        return new ArrayList<Utente>(mappaUtentiTemp.values());
+            
+        }
+        
     public void invitaArtista(int codice_artista){
     Utente ArtistaSelezionato = mappaUtenti.get(codice_artista);
     /*Da completare */
