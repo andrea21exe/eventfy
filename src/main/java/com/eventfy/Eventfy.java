@@ -223,10 +223,11 @@ public class Eventfy {
         }
         return mappaPrenotazioniArtistaAccettate;
     }
-
-    public void recuperaBraniArtista(int codice_prenotazione){
-        Prenotazione p = mappaPrenotazioniArtistaAccettate.get(codice_prenotazione);
-        // da completare aggiungere evento in prenotazione e brano in evento
-        // vedere se aggiungere anche artista come attributo in brano
+    
+// ho sostituito la seconda operazione aggiungiScaletta2 con questa 
+    public List<Brano> recuperaBraniArtista(int codice_prenotazione){
+        prenotazioneCorrente = mappaPrenotazioniArtistaAccettate.get(codice_prenotazione);
+        Artista a = prenotazioneCorrente.getArtista();
+        return a.getListaBrani();
     }
 }

@@ -48,6 +48,10 @@ public class Prenotazione {
         return artista == this.artista;
     }
 
+    public Artista getArtista(){
+        return this.artista;
+    }
+
     @Override
     public String toString() {
         return "Prenotazione [id=" + id + ", data=" + data + ", ora=" + ora + ", evento=" + evento + ", artista="+ artista + ", impianto=" + impianto + "]";
