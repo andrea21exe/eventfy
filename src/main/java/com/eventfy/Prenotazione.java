@@ -43,6 +43,11 @@ public class Prenotazione {
         return gestore == this.impianto.getGestore();
     }
 
+
+    public boolean hasArtista(Artista artista){
+        return artista == this.artista;
+    }
+
     @Override
     public String toString() {
         return "Prenotazione [id=" + id + ", data=" + data + ", ora=" + ora + ", evento=" + evento + ", artista="+ artista + ", impianto=" + impianto + "]";

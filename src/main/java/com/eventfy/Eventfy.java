@@ -26,6 +26,8 @@ public class Eventfy {
     private Map<Integer, Prenotazione> mappaPrenotazioniPendenti;
     private Map<Integer, Prenotazione> mappaPrenotazioniAccettate;
 
+    private Map<Integer, Prenotazione> mappaPrenotazioniArtistaAccettate;
+
     // Singleton
     private Eventfy() {
         listaImpianti = new ArrayList<Impianto>();
@@ -206,5 +208,25 @@ public class Eventfy {
         mappaPrenotazioniAccettate.put(p2.getId(), p2);
         mappaPrenotazioniAccettate.put(p3.getId(), p3);
 
+    }
+
+    public Map<Integer, Prenotazione> aggiungiScaletta(){
+
+        for (int key : mappaPrenotazioniAccettate.keySet()) {
+            Prenotazione p = mappaPrenotazioniAccettate.get(key);
+            if (utenteCorrente instanceof Artista) {
+
+                if (p.hasArtista((Artista)utenteCorrente)) {
+                    mappaPrenotazioniArtistaAccettate.put(p.getId(), p);
+                }
+            }
+        }
+        return mappaPrenotazioniArtistaAccettate;
+    }
+
+    public void recuperaBraniArtista(int codice_prenotazione){
+        Prenotazione p = mappaPrenotazioniArtistaAccettate.get(codice_prenotazione);
+        // da completare aggiungere evento in prenotazione e brano in evento
+        // vedere se aggiungere anche artista come attributo in brano
     }
 }

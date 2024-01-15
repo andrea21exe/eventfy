@@ -238,6 +238,7 @@ public class App {
             // Se la prenotazione non è valida
         } else {
             System.out.println("Prenotazione non valida.");
+            //CONSIDERARE IL CASO IN CUI NON VENGONO ACCETTATE LE PRENOTAZIONI NELLE ESTENSIONI
         }
 
         //Ritorna al menù
