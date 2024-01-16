@@ -11,18 +11,25 @@ public class Invito {
     private LocalDate data;
     private LocalTime ora;
     private Evento evento;
+    private Utente artistaMittente;
+    private Utente artistaInvitato;
 
-
-    public Invito(Evento evento) {
+    public Invito(Evento evento, Utente artistaMittente, Utente artistaInvitato) {
         this.id = currentId++;
         this.data = LocalDate.now();
         this.ora = LocalTime.now();
         this.evento=evento;
+        this.artistaMittente=artistaMittente;
+        this.artistaInvitato=artistaInvitato;
     }
 
+    public int getId() {
+        return this.id;
+    }
+    
     @Override
     public String toString() {
-        return "Invito [id=" + id +", data=" + data + ", ora=" + ora +"Evento"+evento+"]";
+        return "Invito [id=" + id +", data=" + data + ", ora=" + ora +"Evento"+evento+", artistaMittente"+artistaMittente+", artistaInvitato"+artistaInvitato+"]";
     }
 
 

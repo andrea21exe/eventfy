@@ -28,7 +28,9 @@ public class Evento {
     public void addBrano(Brano b){
         listaBrani.add(b);
     }
-
+    public int getId(){
+        return this.id;
+    }
     public List<Brano> getListaBrani(){
         return listaBrani;
     }

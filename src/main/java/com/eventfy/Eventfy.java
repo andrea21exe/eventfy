@@ -16,6 +16,7 @@ public class Eventfy {
     private Utente utenteCorrente;
     private Impianto impiantoCorrente;
     private Prenotazione prenotazioneCorrente;
+    private Evento eventoCorrente;
     private Invito invitoCorrente;
 
     private List<Impianto> listaImpianti;
@@ -28,7 +29,7 @@ public class Eventfy {
     private Map<Integer, Prenotazione> mappaPrenotazioniAccettate;
 
     private Map<Integer, Prenotazione> mappaPrenotazioniArtistaAccettate;
-    private Map<Integer,Utente>mappaUtentiTemp;
+    private Map<Integer, Utente> mappaUtentiTemp;
     private Map<Integer, Invito> mappaInviti;
 
     private List<Brano> listaBraniCorrente;
@@ -39,6 +40,7 @@ public class Eventfy {
         mappaUtenti = new HashMap<Integer, Utente>();
         mappaPrenotazioniAccettate = new HashMap<Integer, Prenotazione>();
         mappaPrenotazioniPendenti = new HashMap<Integer, Prenotazione>();
+        mappaInviti=new HashMap<Integer, Invito>();
     }
 
     public static Eventfy getIstanceEventfy() {
@@ -63,7 +65,7 @@ public class Eventfy {
             LocalDate data, LocalTime ora) {
 
         prenotazioneCorrente = new Prenotazione(titolo, descrizione, durata, data, ora, utenteCorrente,
-                impiantoCorrente); //inizialmente impianto corrente è null
+                impiantoCorrente); // inizialmente impianto corrente è null
 
         mappaImpiantiTemp = new HashMap<Integer, Impianto>();
 
@@ -79,7 +81,7 @@ public class Eventfy {
 
     public void prenotaImpianto(int codice_impianto) {
         Impianto impianto = mappaImpiantiTemp.get(codice_impianto);
-        prenotazioneCorrente.setImpianto(mappaImpiantiTemp.get(codice_impianto));
+        prenotazioneCorrente.setImpianto(impianto);
     }
 
     public Prenotazione confermaPrenotazione() {
@@ -93,10 +95,9 @@ public class Eventfy {
     public List<Prenotazione> mostraPrenotazioniPendenti() {
 
         mappaPrenotazioniTemp = new HashMap<Integer, Prenotazione>();
-
         for (int key : mappaPrenotazioniPendenti.keySet()) {
             Prenotazione p = mappaPrenotazioniPendenti.get(key);
-            if (p.hasGestore((Gestore)utenteCorrente)) {
+            if (p.hasGestore((Gestore) utenteCorrente)) {
                 mappaPrenotazioniTemp.put(p.getId(), p);
             }
         }
@@ -152,16 +153,19 @@ public class Eventfy {
     public Map<Integer, Prenotazione> getPrenotazioniAccettate() {
         return mappaPrenotazioniAccettate;
     }
+    public Map<Integer, Invito> getInviti() {
+        return mappaInviti;
+    }
 
-    public void logIn(int id){
+    public void logIn(int id) {
         utenteCorrente = mappaUtenti.get(id);
     }
 
-    public Map<Integer, Prenotazione> getMapPrenotazioniTemp(){
+    public Map<Integer, Prenotazione> getMapPrenotazioniTemp() {
         return mappaPrenotazioniTemp;
     }
 
-    // EFFETTUA LA REGISTRAZIONE ED IL "LOG-IN" 
+    // EFFETTUA LA REGISTRAZIONE ED IL "LOG-IN"
     public void signUpLogIn(Utente utente) {
         mappaUtenti.put(utente.getId(), utente);
         utenteCorrente = utente;
@@ -215,39 +219,39 @@ public class Eventfy {
 
     }
 
-    public Map<Integer, Prenotazione> aggiungiScaletta(){
+    public Map<Integer, Prenotazione> aggiungiScaletta() {
 
         for (int key : mappaPrenotazioniAccettate.keySet()) {
             Prenotazione p = mappaPrenotazioniAccettate.get(key);
             if (utenteCorrente instanceof Artista) {
 
-                if (p.hasArtista((Artista)utenteCorrente)) {
+                if (p.hasArtista((Artista) utenteCorrente)) {
                     mappaPrenotazioniArtistaAccettate.put(p.getId(), p);
                 }
             }
         }
         return mappaPrenotazioniArtistaAccettate;
     }
-    
-// ho sostituito la seconda operazione aggiungiScaletta2 con questa 
-    public Map<Integer, Brano> recuperaBraniArtista(int codice_prenotazione){
+
+    // ho sostituito la seconda operazione aggiungiScaletta2 con questa
+    public Map<Integer, Brano> recuperaBraniArtista(int codice_prenotazione) {
         prenotazioneCorrente = mappaPrenotazioniArtistaAccettate.get(codice_prenotazione);
         if (utenteCorrente instanceof Artista) {
 
-        utenteCorrente = prenotazioneCorrente.getArtista();
+            utenteCorrente = prenotazioneCorrente.getArtista();
 
-        return ((Artista)utenteCorrente).getMappaBrani();
+            return ((Artista) utenteCorrente).getMappaBrani();
         }
         return null;
     }
 
+    // supponiamo di visualizzare la mappa dei brani con i rispettivi codici e di
+    // scegliere un codice di un brano
 
-//supponiamo di visualizzare la mappa dei brani con i rispettivi codici e di scegliere un codice di un brano
-
-    public void aggiungiBrano(int codice_brano){
+    public void aggiungiBrano(int codice_brano) {
         if (utenteCorrente instanceof Artista) {
 
-            Brano b = ((Artista)utenteCorrente).getMappaBrani().get(codice_brano);
+            Brano b = ((Artista) utenteCorrente).getMappaBrani().get(codice_brano);
             Evento e = prenotazioneCorrente.getEvento();
             e.addBrano(b);
 
@@ -256,54 +260,43 @@ public class Eventfy {
 
     }
 
-    // vedere se ha senso quest'ultima operazione poiché effettivamente non fa niente
-    //sennò si dovrebbe aggiungere il brano dopo ad evento
+    // vedere se ha senso quest'ultima operazione poiché effettivamente non fa
+    // niente
+    // sennò si dovrebbe aggiungere il brano dopo ad evento
 
-    public void confermaScaletta(){
+    public void confermaScaletta() {
         listaBraniCorrente = null;
     }
-
-
-
 
     public List<Prenotazione> mostraPrenotazioniAccettate() {
 
         mappaPrenotazioniTemp = new HashMap<Integer, Prenotazione>();
-
         for (int key : mappaPrenotazioniAccettate.keySet()) {
             Prenotazione p = mappaPrenotazioniAccettate.get(key);
-            if (p.hasGestore((Gestore)utenteCorrente)) {
+            if (p.hasArtista((Artista) utenteCorrente)) {
                 mappaPrenotazioniTemp.put(p.getId(), p);
             }
         }
-
         return new ArrayList<Prenotazione>(mappaPrenotazioniTemp.values());
     }
 
-
-    public List<Utente> selezionaPrenotazioneEvento(int codice_prenotazione) {
-        Map<Integer, Utente> mappaUtentiTemp = new HashMap<>();
-        prenotazioneCorrente = mappaPrenotazioniTemp.get(codice_prenotazione);
-        Evento eventoSelezionato=prenotazioneCorrente.getEvento();
-        Invito invitoCorrente=new Invito(eventoSelezionato);
-
+    public List<Utente> SelezionaPrenotazioneInvito(int codice_prenotazione) {
+        prenotazioneCorrente = mappaPrenotazioniAccettate.get(codice_prenotazione);
+        eventoCorrente = prenotazioneCorrente.getEvento();
+        mappaUtentiTemp=new HashMap<Integer, Utente>();
         for (Utente utente : mappaUtenti.values()) {
             if (utente instanceof Artista) {
                 mappaUtentiTemp.put(utente.getId(), utente);
             }
         }
         return new ArrayList<Utente>(mappaUtentiTemp.values());
-            
-        }
-        
-    public void invitaArtista(int codice_artista){
-    Utente ArtistaSelezionato = mappaUtenti.get(codice_artista);
-    /*Da completare */
 
-        mappaInviti.put(prenotazioneCorrente.getId(),invitoCorrente);
     }
-    
 
-
+    public void invitaArtista(int codice_artista) {
+        Utente artistaInvitato = mappaUtenti.get(codice_artista);
+        invitoCorrente = new Invito(eventoCorrente, utenteCorrente, artistaInvitato);
+        mappaInviti.put(eventoCorrente.getId(), invitoCorrente);
+    }
 
 }
