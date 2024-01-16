@@ -32,8 +32,6 @@ public class Eventfy {
     private Map<Integer, Utente> mappaUtentiTemp;
     private Map<Integer, Invito> mappaInviti;
 
-    private List<Brano> listaBraniCorrente;
-
     // Singleton
     private Eventfy() {
         listaImpianti = new ArrayList<Impianto>();
@@ -254,18 +252,8 @@ public class Eventfy {
             Brano b = ((Artista) utenteCorrente).getMappaBrani().get(codice_brano);
             Evento e = prenotazioneCorrente.getEvento();
             e.addBrano(b);
-
-            listaBraniCorrente = e.getListaBrani();
         }
 
-    }
-
-    // vedere se ha senso quest'ultima operazione poiché effettivamente non fa
-    // niente
-    // sennò si dovrebbe aggiungere il brano dopo ad evento
-
-    public void confermaScaletta() {
-        listaBraniCorrente = null;
     }
 
     public List<Prenotazione> mostraPrenotazioniAccettate() {
