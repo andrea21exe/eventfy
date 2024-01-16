@@ -28,8 +28,10 @@ public class Eventfy {
     private Map<Integer, Prenotazione> mappaPrenotazioniAccettate;
 
     private Map<Integer, Prenotazione> mappaPrenotazioniArtistaAccettate;
-    private Map<integer,Utente>mappaUtentiTemp;
+    private Map<Integer,Utente>mappaUtentiTemp;
     private Map<Integer, Invito> mappaInviti;
+
+    private List<Brano> listaBraniCorrente;
 
     // Singleton
     private Eventfy() {
@@ -228,11 +230,39 @@ public class Eventfy {
     }
     
 // ho sostituito la seconda operazione aggiungiScaletta2 con questa 
-    public List<Brano> recuperaBraniArtista(int codice_prenotazione){
+    public Map<Integer, Brano> recuperaBraniArtista(int codice_prenotazione){
         prenotazioneCorrente = mappaPrenotazioniArtistaAccettate.get(codice_prenotazione);
-        Artista a = prenotazioneCorrente.getArtista();
-        return a.getListaBrani();
+        if (utenteCorrente instanceof Artista) {
+
+        utenteCorrente = prenotazioneCorrente.getArtista();
+
+        return ((Artista)utenteCorrente).getMappaBrani();
+        }
+        return null;
     }
+
+
+//supponiamo di visualizzare la mappa dei brani con i rispettivi codici e di scegliere un codice di un brano
+
+    public void aggiungiBrano(int codice_brano){
+        if (utenteCorrente instanceof Artista) {
+
+            Brano b = ((Artista)utenteCorrente).getMappaBrani().get(codice_brano);
+            Evento e = prenotazioneCorrente.getEvento();
+            e.addBrano(b);
+
+            listaBraniCorrente = e.getListaBrani();
+        }
+
+    }
+
+    // vedere se ha senso quest'ultima operazione poiché effettivamente non fa niente
+    //sennò si dovrebbe aggiungere il brano dopo ad evento
+
+    public void confermaScaletta(){
+        listaBraniCorrente = null;
+    }
+
 
 
 

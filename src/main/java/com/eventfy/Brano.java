@@ -8,12 +8,15 @@ public class Brano {
     private String album;
     private int durata;
     private Artista artista;
+    private static int currentId = 0;
+    private final int id;
 
      public Brano(String titolo, String album, int durata, Artista artista) {
         this.titolo = titolo;
         this.album = album;
         this.durata = durata;
         this.artista = artista;
+        this.id = currentId++;
     }
     
 

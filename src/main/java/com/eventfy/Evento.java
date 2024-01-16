@@ -24,6 +24,15 @@ public class Evento {
         this.listaBrani = null;
     }
 
+
+    public void addBrano(Brano b){
+        listaBrani.add(b);
+    }
+
+    public List<Brano> getListaBrani(){
+        return listaBrani;
+    }
+
     @Override
     public String toString() {
         return "Evento [id=" + id + ", titolo=" + titolo + ", descrizione=" + descrizione + ", durata=" + durata

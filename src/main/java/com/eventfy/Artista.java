@@ -1,23 +1,28 @@
 package com.eventfy;
 
 import java.util.List;
+import java.util.Map;
 
 public class Artista extends Utente{
 
-    private List<Brano> listaBrani;
-    
-    public Artista(String nome, List<Brano> listaBrani){
+    private Map<Integer, Brano> mappaBrani;
+
+    public Artista(String nome){
         super(nome);
-        this.listaBrani = listaBrani;
+    }
+    
+    public Artista(String nome, Map<Integer, Brano> mappaBrani){
+        super(nome);
+        this.mappaBrani = mappaBrani;
     }
 
-    public List<Brano> getListaBrani(){
-        return this.listaBrani;
+    public Map<Integer, Brano> getMappaBrani(){
+        return this.mappaBrani;
     }
 
     @Override
     public String toString() {
-        return "Artista [ nome= " + nome + "listaBrani=" + listaBrani + "]";
+        return "Artista [ nome= " + nome + "mappaBrani=" + mappaBrani + "]";
     }
 
     
