@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+
 public class Eventfy {
 
     private static Eventfy sistema; // Singleton
@@ -27,7 +28,6 @@ public class Eventfy {
     private Map<Integer, Prenotazione> mappaPrenotazioniAccettate;
 
     //UC6-UC7
-    private Map<Integer, Prenotazione> mappaPrenotazioniArtistaAccettateTemp;
     private Map<Integer, Utente> mappaUtentiTemp;
     private Map<Integer, Invito> mappaInviti;
 
@@ -163,6 +163,10 @@ public class Eventfy {
         return mappaPrenotazioniTemp;
     }
 
+    public Utente getUtente(int id){
+        return mappaUtenti.get(id);
+    }
+
     // EFFETTUA LA REGISTRAZIONE ED IL "LOG-IN"
     public void signUpLogIn(Utente utente) {
         mappaUtenti.put(utente.getId(), utente);
@@ -182,21 +186,29 @@ public class Eventfy {
     public void populate() {
 
         // Popola la mappa degli utenti
-        Gestore g1 = new Gestore("Gigi");
+        Gestore g1 = new Gestore("Gigi"); //id 0
         mappaUtenti.put(g1.getId(), g1);
-        Gestore g2 = new Gestore("Paolo");
+        Gestore g2 = new Gestore("Paolo"); // id 1
         mappaUtenti.put(g2.getId(), g2);
-        Gestore g3 = new Gestore("Marco");
+        Gestore g3 = new Gestore("Marco"); // id 2
         mappaUtenti.put(g3.getId(), g3);
-        Artista a1 = new Artista("THEWEEKND");
+        Artista a1 = new Artista("THEWEEKND"); //id 3
         mappaUtenti.put(a1.getId(), a1);
-        Artista a2 = new Artista("WillIAm");
+        Artista a2 = new Artista("SZA"); //id 4
         mappaUtenti.put(a2.getId(), a2);
-        Artista a3 = new Artista("DojaCat");
+        Artista a3 = new Artista("DojaCat"); //id 5
         mappaUtenti.put(a3.getId(), a3);
 
+        a1.nuovoBrano("Starboy", "Starboy", 3); //id 1
+        a1.nuovoBrano("Sacrifice", "Starboy", 3); //id 2
+        a1.nuovoBrano("Out Of Time", "Dawn FM", 3); //id 3
+        a2.nuovoBrano("Good Days", "SOS", 3); //id 4
+        a2.nuovoBrano("Kill Bill", "SOS", 3); //id 5
+        a3.nuovoBrano("Agora Hills", "Album D", 3); //id 6
+
+
         // Popola la lista impianti
-        Impianto i1 = new Impianto("San Siro", "Milano", 75000, 700, g1);
+        Impianto i1 = new Impianto("San Siro", "Milano", 75000, 700, g1); 
         listaImpianti.add(i1);
         Impianto i2 = new Impianto("Pal1", "Catania", 3000, 200, g3);
         listaImpianti.add(i2);
@@ -210,35 +222,41 @@ public class Eventfy {
         Prenotazione p1 = new Prenotazione("P1", "d0", 203, LocalDate.now(), LocalTime.now(), a1, i2);
         Prenotazione p2 = new Prenotazione("P2", "d2", 120, LocalDate.now(), LocalTime.now(), a2, i3);
         Prenotazione p3 = new Prenotazione("P3", "d3", 130, LocalDate.now(), LocalTime.now(), a1, i4);
+        Prenotazione p4 = new Prenotazione("P4", "d4", 130, LocalDate.now(), LocalTime.now(), a1, i4);
+        Prenotazione p5 = new Prenotazione("P5", "d5", 130, LocalDate.now(), LocalTime.now(), a1, i1);
         mappaPrenotazioniPendenti.put(p0.getId(), p0);
         mappaPrenotazioniPendenti.put(p1.getId(), p1);
         mappaPrenotazioniAccettate.put(p2.getId(), p2);
         mappaPrenotazioniAccettate.put(p3.getId(), p3);
+        mappaPrenotazioniAccettate.put(p4.getId(), p4);
+        mappaPrenotazioniAccettate.put(p5.getId(), p5);
 
     }
 
-    //Uguale al metodo "mostraprenotazioniaccettate" sotto
+    
+    //Simile al metodo "mostraprenotazioniaccettate" sotto
+    //UC6-----------------------------------------------------
     public List<Prenotazione> aggiungiScaletta() {
 
-        mappaPrenotazioniAccettate = new HashMap<Integer, Prenotazione>();
+        mappaPrenotazioniTemp = new HashMap<Integer, Prenotazione>();
 
         for (int key : mappaPrenotazioniAccettate.keySet()) {
             Prenotazione p = mappaPrenotazioniAccettate.get(key);
             if (utenteCorrente instanceof Artista) {
 
                 if (p.hasArtista((Artista) utenteCorrente)) {
-                    mappaPrenotazioniArtistaAccettateTemp.put(p.getId(), p);
+                    mappaPrenotazioniTemp.put(p.getId(), p);
                 }
             }
         }
 
-        return new ArrayList<>(mappaPrenotazioniArtistaAccettateTemp.values());
+        return new ArrayList<>(mappaPrenotazioniTemp.values());
     }
 
     // ho sostituito la seconda operazione aggiungiScaletta2 con questa
     public List<Brano> recuperaBraniArtista(int codice_prenotazione) {
 
-        prenotazioneCorrente = mappaPrenotazioniArtistaAccettateTemp.get(codice_prenotazione);
+        prenotazioneCorrente = mappaPrenotazioniTemp.get(codice_prenotazione);
 
         if (utenteCorrente instanceof Artista) {
             //L'utente corrente è già quello della prenotazione corrente 
@@ -246,25 +264,17 @@ public class Eventfy {
             return ((Artista) utenteCorrente).getListaBrani();
         }
 
-        mappaPrenotazioniArtistaAccettateTemp = null;
-
+        mappaPrenotazioniTemp = null;
         return null;
+
     }
 
     // supponiamo di visualizzare la mappa dei brani con i rispettivi codici e di
     // scegliere un codice di un brano
     public void aggiungiBrano(int codice_brano) {
-
         if (utenteCorrente instanceof Artista) {
-
             prenotazioneCorrente.addBrano(((Artista)utenteCorrente).getBrano(codice_brano));
-            /*
-            Brano b = ((Artista) utenteCorrente).getMappaBrani().get(codice_brano);
-            Evento e = prenotazioneCorrente.getEvento();
-            e.addBrano(b);
-            */
         }
-
     }
 
     //CI SERVE UN MODO PER METTERE A NULL LA PRENOTAZIONE CORRENTE UNA VOLTA CONCLUSO L'UC6
@@ -273,8 +283,8 @@ public class Eventfy {
     }
 
 
-
-    //Uguale al metodo "aggiungiscaletta" sopra. In astah abbiamo chiamato questo metodo "invitaArtista"
+    //UC7-------------------------------------------------------
+    //SImile al metodo "aggiungiscaletta" sopra. In astah abbiamo chiamato questo metodo "invitaArtista"
     public List<Prenotazione> mostraPrenotazioniAccettate() {
 
         mappaPrenotazioniTemp = new HashMap<Integer, Prenotazione>();
@@ -290,7 +300,7 @@ public class Eventfy {
 
     }
 
-    public List<Utente> SelezionaPrenotazioneInvito(int codice_prenotazione) {
+    public List<Utente> selezionaPrenotazioneInvito(int codice_prenotazione) {
 
         //Non dobbiamo creare l'associazione tra evento e sistema. La prenotazione ci fa da tramite.
         //Costruisco l'oggetto invito direttamente qui, nella successiva funzione gli associerò -->
@@ -305,7 +315,6 @@ public class Eventfy {
             }
         }
 
-        mappaPrenotazioniTemp = null;
         return new ArrayList<Utente>(mappaUtentiTemp.values());
 
     }
@@ -317,7 +326,16 @@ public class Eventfy {
 
         invitoCorrente = null;
         mappaUtentiTemp = null;
+        mappaPrenotazioniTemp = null;
 
+    }
+
+    public Invito getInvitoCorrente(){
+        return this.invitoCorrente;
+    }
+
+    public Map<Integer, Invito> getMappaInviti(){
+        return mappaInviti;
     }
 
 }

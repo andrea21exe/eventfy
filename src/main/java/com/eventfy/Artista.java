@@ -32,5 +32,18 @@ public class Artista extends Utente{
         return "Artista [ nome= " + nome + "]";
     }
 
+    public void setMappaBrani(List<Brano> lista){
+
+        mappaBrani = new HashMap<Integer, Brano>();
+
+        for(Brano b : lista){
+            mappaBrani.put(b.getId(), b);
+        }
+    }
+
+    public void nuovoBrano(String titolo, String album, int durata){
+        Brano b = new Brano(titolo, album, durata);
+        this.mappaBrani.put(b.getId(), b);
+    }
     
 }

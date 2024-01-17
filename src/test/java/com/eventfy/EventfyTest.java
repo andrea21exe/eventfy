@@ -148,14 +148,14 @@ public class EventfyTest {
 
     @Test
     void testAccettaPrenotazione() {
-        // Facciamo il logIn con utente già inserito
+        // Facciamo il logIn con un gestore esistente
         eventfy.logIn(0);
+
         eventfy.mostraPrenotazioniPendenti();
         Prenotazione pRicercata = eventfy.selezionaPrenotazionePendente(0);
         // Accetta la prenotazione selezionata
         eventfy.accettaPrenotazione();
-        // Verifica che la prenotazione sia stata spostata correttamente da pendente ad
-        // accettata
+        // Verifica che la prenotazione sia stata spostata correttamente da pendente ad accettata
         assertTrue(eventfy.getPrenotazioniAccettate().containsValue(pRicercata));
         // Verifica che la prenotazione sia stata tolta da pendente
         assertFalse(eventfy.getPrenotazioniPendenti().containsValue(pRicercata));
@@ -166,34 +166,67 @@ public class EventfyTest {
     }
 
     @Test
+    void testRecuperaBraniArtista() {
+        // Facciamo il logIn con un gestore esistente
+        eventfy.logIn(3);
+
+        eventfy.aggiungiScaletta();
+        List<Brano> brani = eventfy.recuperaBraniArtista(5);
+        assertEquals(3, brani.size());
+
+    }
+
+    @Test
+    void testAggiungiBrano() {
+        // Facciamo il logIn con un gestore esistente
+        eventfy.logIn(3);
+
+        eventfy.aggiungiScaletta();
+        eventfy.recuperaBraniArtista(5);
+        eventfy.aggiungiBrano(0);
+        eventfy.aggiungiBrano(2);
+
+        assertEquals(2, eventfy.getPrenotazioneCorrente().getEvento().getListaBrani().size());
+        
+    }
+
+    @Test
     void mostraPrenotazioniAccettateTest() {
+        eventfy.logIn(3);//Artista TheWeeknd
+
         // Chiamata al metodo mostraPrenotazioniAccettate
         List<Prenotazione> result = eventfy.mostraPrenotazioniAccettate();
         assertNotNull(result);
         // L'utente con ID = 0 ha una prenotazione pendente
-        assertTrue(result.size() > 0);
+        assertEquals(3, result.size());
 
     }
 
     @Test
     void  SelezionaPrenotazioneInvito() {
+        eventfy.logIn(3);//Artista TheWeeknd
+
+        assertNull(eventfy.getInvitoCorrente());
+        eventfy.mostraPrenotazioniAccettate();
         // Chiamata al metodo selezionaArtista
-        List<Utente> artistiSelezionati = eventfy. SelezionaPrenotazioneInvito(3);
+        List<Utente> artisti = eventfy.selezionaPrenotazioneInvito(4);
+        assertNotNull(eventfy.getInvitoCorrente());
         // Verifica che la lista non sia vuota
-        assertFalse(artistiSelezionati.isEmpty());
+        assertFalse(artisti.isEmpty());
     }
 
     @Test
-    void invitaArtistaTest() {
-        // Facciamo il logIn con un utente già inserito
-        eventfy.logIn(3);
-        //vado a richiamare la funzione SelezionaPrenotazioneInvito per trovare l'evento
-        eventfy.SelezionaPrenotazioneInvito(3);
-        // Chiamata al metodo invitaArtista
-        eventfy.invitaArtista(4);
-         // Verifica che la lista non sia vuota
-        assertFalse(eventfy.getInviti().isEmpty());
-    
+    void invitaArtistaTest() {   
+        eventfy.logIn(3);//Artista TheWeeknd
+
+        //Inizialmente non esistono inviti
+        assertEquals(0, eventfy.getMappaInviti().size());
+        eventfy.mostraPrenotazioniAccettate();
+        eventfy.selezionaPrenotazioneInvito(4);
+        eventfy.invitaArtista(0);
+        //Deve essere stato registrato un invito
+        assertEquals(1, eventfy.getMappaInviti().size());
+
     }
 
 }

@@ -5,8 +5,6 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import scala.Array;
-
 public class Evento {
 
     private final int id;
