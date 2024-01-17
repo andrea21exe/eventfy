@@ -51,9 +51,15 @@ public class Prenotazione {
     public Artista getArtista(){
         return this.artista;
     }
+
     public Evento getEvento(){
         return this.evento;
     }
+
+    public void addBrano(Brano brano){
+        evento.addBrano(brano);
+    }
+
     @Override
     public String toString() {
         return "Prenotazione [id=" + id + ", data=" + data + ", ora=" + ora + ", evento=" + evento + ", artista="+ artista + ", impianto=" + impianto + "]";

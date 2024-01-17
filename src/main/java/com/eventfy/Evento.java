@@ -2,7 +2,10 @@ package com.eventfy;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
+
+import scala.Array;
 
 public class Evento {
 
@@ -21,16 +24,18 @@ public class Evento {
         this.durata = durata;
         this.data = data;
         this.ora = ora;
-        this.listaBrani = null;
+        this.listaBrani = new ArrayList<Brano>();
     }
 
 
     public void addBrano(Brano b){
         listaBrani.add(b);
     }
+
     public int getId(){
         return this.id;
     }
+
     public List<Brano> getListaBrani(){
         return listaBrani;
     }
