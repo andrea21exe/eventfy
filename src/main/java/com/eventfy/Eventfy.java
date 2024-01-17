@@ -268,6 +268,10 @@ public class Eventfy {
     }
 
     //CI SERVE UN MODO PER METTERE A NULL LA PRENOTAZIONE CORRENTE UNA VOLTA CONCLUSO L'UC6
+    public void setPrenotazioneCorrenteNull(){
+        prenotazioneCorrente = null;
+    }
+
 
 
     //Uguale al metodo "aggiungiscaletta" sopra. In astah abbiamo chiamato questo metodo "invitaArtista"
