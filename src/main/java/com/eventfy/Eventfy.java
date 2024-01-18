@@ -286,7 +286,12 @@ public class Eventfy {
         prenotazioneCorrente = null;
     }
 
-
+    public boolean getTipoUtente() {
+        if (utenteCorrente instanceof Gestore) {
+            return false;
+        } 
+        return true;
+    }
     //UC7-------------------------------------------------------
     //SImile al metodo "aggiungiscaletta" sopra. In astah abbiamo chiamato questo metodo "invitaArtista"
     public List<Prenotazione> mostraPrenotazioniAccettate() {
@@ -299,7 +304,7 @@ public class Eventfy {
                 mappaPrenotazioniTemp.put(p.getId(), p);
             }
         }
-
+//da sistemare non ritorna id dell'artista
         return new ArrayList<Prenotazione>(mappaPrenotazioniTemp.values());
 
     }

@@ -8,7 +8,7 @@ import java.util.Scanner;
 public class App {
 
     public static void main(String[] args) {
-        
+
         Eventfy sistema = Eventfy.getIstanceEventfy();
         sistema.populate();
         sistema.signUpLogIn(new Gestore("Andrea"));
@@ -16,7 +16,7 @@ public class App {
         menu();
     }
 
-    private static void menu(){
+    private static void menu() {
         displayMenu();
         int scelta = getOperazioneUtente();
         processaScelta(scelta);
@@ -27,6 +27,9 @@ public class App {
         System.out.println("1. Inserisci un nuovo impianto");
         System.out.println("2. Richiedi prenotazione impianto");
         System.out.println("3. Gestisci prenotazione");
+        System.out.println("4. Gestisci i brani");
+        System.out.println("5. Invita Artista");
+        System.out.println("6. Gestisci invito");
     }
 
     private static int getOperazioneUtente() {
@@ -38,7 +41,7 @@ public class App {
         }
 
         int i = scanner.nextInt();
-        //scanner.close();
+        // scanner.close();
         return i;
     }
 
@@ -55,6 +58,18 @@ public class App {
                 gestisciPrenotazioni();
                 System.out.println("Hai selezionato l'Opzione 3");
                 break;
+            case 4:
+                gestioneBrani();
+                System.out.println("Hai selezionato l'Opzione 4");
+                break;
+            case 5:
+                invitaArtista();
+                System.out.println("Hai selezionato l'Opzione 5");
+                break;
+            case 6:
+                gestisciInvito();
+                System.out.println("Hai selezionato l'Opzione 6");
+                break;
             default:
                 System.out.println("Opzione non valida");
         }
@@ -65,32 +80,32 @@ public class App {
         Eventfy sistema = Eventfy.getIstanceEventfy();
         Scanner input = new Scanner(System.in);
 
-        //Inserisci dati impianto
+        // Inserisci dati impianto
         System.out.println("Hai selezionato: Inserisci nuovo impianto");
-        System.out.println("Inserisci il nome dell'impianto"); 
-        String nome = input.nextLine(); //nome
+        System.out.println("Inserisci il nome dell'impianto");
+        String nome = input.nextLine(); // nome
 
         System.out.println("Inserisci il luogo dell'impianto");
-        String luogo = input.nextLine(); //luogo
+        String luogo = input.nextLine(); // luogo
 
-        //capienza (int)
+        // capienza (int)
         System.out.println("Inserisci la capienza (intero)");
-        while(!input.hasNextInt()){
+        while (!input.hasNextInt()) {
             System.out.println("Capienza deve essere un numero intero, riprova");
             input.next();
         }
         int capienza = input.nextInt();
 
-        //superficie (int)
+        // superficie (int)
         System.out.println("Inserisci la superficie (intero)");
-        while(!input.hasNextInt()){
+        while (!input.hasNextInt()) {
             System.out.println("Superficie deve essere un numero intero, riprova");
             input.next();
         }
         int superficie = input.nextInt();
         input.nextLine();
 
-        //Visualizza il riepilogo dell'impianto inserito
+        // Visualizza il riepilogo dell'impianto inserito
         Impianto impianto = sistema.nuovoImpianto(nome, luogo, capienza, superficie);
         System.out.println("");
         System.out.println("Riepilogo impianto:");
@@ -101,45 +116,44 @@ public class App {
         System.out.println("");
         input.nextLine();
 
-        //Conferma l'inserimento
-        sistema.confermaImpianto();        
+        // Conferma l'inserimento
+        sistema.confermaImpianto();
 
-        //Ritorna al menù
+        // Ritorna al menù
         menu();
     }
 
-    public static void nuovaPrenotazione(){
+    public static void nuovaPrenotazione() {
 
         Eventfy sistema = Eventfy.getIstanceEventfy();
         Scanner input = new Scanner(System.in);
-        
+
         sistema.signUpLogIn(new Artista("Andrea"));
 
         System.out.println("Hai selezionato: Inserisci nuova prenotazione");
-        System.out.println("Inserisci il titolo dell'evento"); 
-        String titolo = input.nextLine(); //titolo
+        System.out.println("Inserisci il titolo dell'evento");
+        String titolo = input.nextLine(); // titolo
 
         System.out.println("Inserisci una descrizione dell'evento");
-        String descrizione = input.nextLine(); //descrizione
+        String descrizione = input.nextLine(); // descrizione
 
         System.out.println("Per quante ore vuoi prenotare l'impianto?");
-        while(!input.hasNextInt()){
+        while (!input.hasNextInt()) {
             System.out.println("Inserisci un numero intero, riprova");
             input.next();
         }
-        int durata = input.nextInt(); //durata
+        int durata = input.nextInt(); // durata
 
         System.out.println("Qual è la capienza minima dell'impianto in cui vuoi esibirti?");
-        while(!input.hasNextInt()){
+        while (!input.hasNextInt()) {
             System.out.println("Inserisci un numero intero, riprova");
             input.next();
         }
-        int capienza = input.nextInt(); //capienza
+        int capienza = input.nextInt(); // capienza
         input.nextLine();
 
-
         System.out.println("Quando vuoi esibirti? Inserisci la data nel formato dd.mm.yyyy");
-        String dataString = input.nextLine(); //data
+        String dataString = input.nextLine(); // data
         LocalDate data = null;
         try {
             // Dividi la stringa in giorno, mese e anno
@@ -157,7 +171,7 @@ public class App {
         }
 
         System.out.println("Inserisci l'ora nel formato hh.mm");
-        String oraString = input.nextLine(); //ora
+        String oraString = input.nextLine(); // ora
         LocalTime orario = null;
         try {
             // Dividi la stringa in ora, minuti
@@ -172,18 +186,19 @@ public class App {
         } catch (Exception e) {
             System.out.println("Formato non valido");
         }
-        
-        //Si DOVREBBE verificare che i vari parametri siano validi
-        List<Impianto> impiantiDisponibili = sistema.nuovaPrenotazione(titolo, descrizione, durata, capienza, data, orario);
 
-        //Stampa la lista di impianti disponibili
-        for(Impianto i : impiantiDisponibili){
+        // Si DOVREBBE verificare che i vari parametri siano validi
+        List<Impianto> impiantiDisponibili = sistema.nuovaPrenotazione(titolo, descrizione, durata, capienza, data,
+                orario);
+
+        // Stampa la lista di impianti disponibili
+        for (Impianto i : impiantiDisponibili) {
             System.out.println(i);
         }
 
         System.out.println("");
         System.out.println("Inserisci l'ID dell'impianto di cui vuoi richiedere la prenotazione");
-        while(!input.hasNextInt()){
+        while (!input.hasNextInt()) {
             System.out.println("Inserisci un numero intero, riprova");
             input.next();
         }
@@ -200,48 +215,150 @@ public class App {
 
     }
 
-    public static void gestisciPrenotazioni(){
+    public static void gestisciPrenotazioni() {
         Eventfy sistema = Eventfy.getIstanceEventfy();
         Scanner input = new Scanner(System.in);
         // Ottiene la lista delle prenotazioni pendenti dal sistema
-        List<Prenotazione> prenotazioniPendenti=sistema.mostraPrenotazioniPendenti();
-       // Se non ci sono prenotazioni pendenti, torna al menu principale
+        List<Prenotazione> prenotazioniPendenti = sistema.mostraPrenotazioniPendenti();
+        // Se non ci sono prenotazioni pendenti, torna al menu principale
         if (prenotazioniPendenti == null || prenotazioniPendenti.isEmpty()) {
             System.out.println("Nessuna prenotazione pendente.");
-            menu();  // Torna al menu principale se non ci sono prenotazioni pendenti.
+            menu(); // Torna al menu principale se non ci sono prenotazioni pendenti.
             return;
         }
         // Stampa le prenotazioni pendenti
         System.out.println("Prenotazioni Pendenti");
-        for(Prenotazione p: prenotazioniPendenti){
+        for (Prenotazione p : prenotazioniPendenti) {
             System.out.println(p);
         }
-         // Chiede all'utente di inserire il codice della prenotazione da gestire
+        // Chiede all'utente di inserire il codice della prenotazione da gestire
         System.out.println("Inserisci il codice della prenotazione da gestire:");
-        while(!input.hasNextInt()){
+        while (!input.hasNextInt()) {
             System.out.println("Inserisci un numero intero, riprova");
             input.next();
         }
-        int codice_prenotazione=input.nextInt();
-       // Se la prenotazione è valida
-        Prenotazione p=sistema.selezionaPrenotazionePendente(codice_prenotazione);
-        if(p!=null){
-            System.out.println("Hai selezionato la prenotazione:"+p);
-            System.out.println("Vuoi accettare questa Prenotazione?(Si/No)");
-            String risp=input.next().toLowerCase();
-            if (risp.equals("si")) {
-                sistema.accettaPrenotazione();
-                System.out.println("Prenotazione accettata!");
-            } else {
-                System.out.println("Operazione annullata.");
-            }
+        int codice_prenotazione = input.nextInt();
+        // Se la prenotazione è valida
+        Prenotazione p = sistema.selezionaPrenotazionePendente(codice_prenotazione);
+        if (p != null) {
+            System.out.println("Hai selezionato la prenotazione:" + p);
+            sistema.accettaPrenotazione();
             // Se la prenotazione non è valida
         } else {
             System.out.println("Prenotazione non valida.");
-            //CONSIDERARE IL CASO IN CUI NON VENGONO ACCETTATE LE PRENOTAZIONI NELLE ESTENSIONI
+            // CONSIDERARE IL CASO IN CUI NON VENGONO ACCETTATE LE PRENOTAZIONI NELLE
+            // ESTENSIONI
         }
 
-        //Ritorna al menù
+        // Ritorna al menù
+        menu();
+    }
+
+    private static void gestioneBrani() {
+        Eventfy sistema = Eventfy.getIstanceEventfy();
+        Scanner input = new Scanner(System.in);
+        if ((sistema.getTipoUtente())) {
+            List<Prenotazione> prenotazioni = sistema.aggiungiScaletta();
+            if (!prenotazioni.isEmpty()) {
+                System.out.println("Prenotazioni accettate per questo artista:");
+                for (Prenotazione prenotazione : prenotazioni) {
+                    System.out.println(prenotazione);
+                }
+                System.out.print("Inserisci il codice della prenotazione: ");
+                int codice_prenotazione = input.nextInt();
+                List<Brano> listaBrani = sistema.recuperaBraniArtista(codice_prenotazione);
+                // Se trova brani da aggiungere
+                if (listaBrani != null) {
+                    System.out.println("Brani dell'artista :");
+                    for (Brano brano : listaBrani) {
+                        System.out.println(brano);
+                    }
+                    // Aggiungi il brano alla scaletta
+                    System.out.println("Inserisci il codice del brano da aggiungere: ");
+                    int codice_brano = input.nextInt();
+                    sistema.aggiungiBrano(codice_brano);
+                    System.out.println("Brano aggiunto alla scaletta");
+                } else {
+                    // Nel caso in cui non abbia brani da poter inserire
+
+                    System.out.println("Errore nel recupero dei brani.");
+                }
+
+                menu();
+            } else {
+                // Se l'artista non ha prenotazioni accettate
+
+                System.out.println("Nessuna prenotazione accettata per questo artista. ");
+                menu();
+            }
+        } else {
+            System.out.println("Solo un artista può invitare ");
+        }
+        menu();
+
+    }
+
+    private static void invitaArtista() {
+        Eventfy sistema = Eventfy.getIstanceEventfy();
+        Scanner input = new Scanner(System.in);
+        if ((sistema.getTipoUtente())) {
+            // 1. Mostra prenotazioni accettate
+            List<Prenotazione> prenotazioni = sistema.mostraPrenotazioniAccettate();
+            if (!prenotazioni.isEmpty()) {
+                System.out.println("Prenotazioni accettate:");
+                for (Prenotazione p : prenotazioni) {
+                    System.out.println(p);
+                }
+                System.out.println("Inserisci il codice della prenotazione per cui desideri inviare un invito:");
+                int codice_prenotazione = input.nextInt();
+                input.nextLine();
+                List<Utente> artistiDisponibili = sistema.selezionaPrenotazioneInvito(codice_prenotazione);
+                System.out.println("Artisti disponibili per l'invito:");
+                for (Utente artista : artistiDisponibili) {
+                    System.out.println(artista);
+                }
+                // 4. Invita artista
+                System.out.println("Inserisci il codice dell'artista che desideri invitare:");
+                int codice_artista = input.nextInt();
+                input.nextLine();
+                sistema.invitaArtista(codice_artista);
+
+                System.out.println("Invito inviato con successo!");
+
+            } else {
+                // Se l'artista non ha prenotazioni accettate
+
+                System.out.println("Nessuna prenotazione accettata per questo artista. ");
+            }
+        } else {
+            System.out.println("Solo un artista può invitare ");
+        }
+        menu();
+    }
+
+    private static void gestisciInvito() {
+        Eventfy sistema = Eventfy.getIstanceEventfy();
+        Scanner input = new Scanner(System.in);
+        sistema.logIn(3);
+        if ((sistema.getTipoUtente())) {
+            List<Invito> invitiPendenti = sistema.gestisciInvito();
+            if (!invitiPendenti.isEmpty()) {
+                System.out.println("Inviti Pendenti:");
+                for (Invito invito : invitiPendenti) {
+                    System.out.println(invito);
+                }
+                System.out.println("Inserisci il codice dell'invitoche vuoi accettare:");
+                int codice_invito = input.nextInt();
+                Evento invito = sistema.selezionaInvito(codice_invito);
+                System.out.println("Hai selezionato l'invito per l'evento: " + invito);
+                sistema.accettaInvito();
+            } else {
+                System.out.println("Nessun invito pendente.");
+            }
+        } else {
+            System.out.println("Solo un artista può gestire gli inviti");
+        }
+        // Ritorna al menu principale
         menu();
     }
 
