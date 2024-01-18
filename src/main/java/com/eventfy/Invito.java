@@ -50,6 +50,10 @@ public class Invito {
         return this.evento;
     }
 
+    public boolean hasDestinatario(Artista artista){
+        return artista == this.artistaDestinatario;
+    }
+
     @Override
     public String toString() {
         return "Invito [id=" + id + ", data=" + data + ", ora=" + ora + ", evento=" + evento + ", artistaMittente="

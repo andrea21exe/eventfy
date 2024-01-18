@@ -29,10 +29,10 @@ public class Eventfy {
 
     //UC6-UC7
     private Map<Integer, Utente> mappaUtentiTemp;
-    private Map<Integer, Invito> mappaInviti;
+    private Map<Integer, Invito> mappaInvitiPendenti;
 
     //UC8
-    private Map<Integer, Invito> mappaInvitiArtista;
+    private Map<Integer, Invito> mappaInvitiTemp;
     private Map<Integer, Invito> mappaInvitiAccettati;
 
     // Singleton
@@ -41,7 +41,7 @@ public class Eventfy {
         mappaUtenti = new HashMap<Integer, Utente>();
         mappaPrenotazioniAccettate = new HashMap<Integer, Prenotazione>();
         mappaPrenotazioniPendenti = new HashMap<Integer, Prenotazione>();
-        mappaInviti = new HashMap<Integer, Invito>();
+        mappaInvitiPendenti = new HashMap<Integer, Invito>();
     }
 
     public static Eventfy getIstanceEventfy() {
@@ -156,7 +156,7 @@ public class Eventfy {
     }
 
     public Map<Integer, Invito> getInviti() {
-        return mappaInviti;
+        return mappaInvitiPendenti;
     }
 
     public void logIn(int id) {
@@ -308,7 +308,7 @@ public class Eventfy {
 
         //Non dobbiamo creare l'associazione tra evento e sistema. La prenotazione ci fa da tramite.
         //Costruisco l'oggetto invito direttamente qui, nella successiva funzione gli associerò -->
-        // --> l'artista invitato e lo inserirò nella mappaInviti
+        // --> l'artista invitato e lo inserirò nella mappaInvitiPendenti
 
         invitoCorrente = new Invito(mappaPrenotazioniTemp.get(codice_prenotazione).getEvento(), (Artista)utenteCorrente);
         mappaUtentiTemp = new HashMap<Integer, Utente>(); 
@@ -326,7 +326,7 @@ public class Eventfy {
     public void invitaArtista(int codice_artista) {
 
         invitoCorrente.setDestinatario((Artista)mappaUtentiTemp.get(codice_artista));
-        mappaInviti.put(invitoCorrente.getId(), invitoCorrente);
+        mappaInvitiPendenti.put(invitoCorrente.getId(), invitoCorrente);
 
         invitoCorrente = null;
         mappaUtentiTemp = null;
@@ -339,44 +339,40 @@ public class Eventfy {
     }
 
     public Map<Integer, Invito> getMappaInviti(){
-        return mappaInviti;
+        return mappaInvitiPendenti;
     }
 
-// supponendo che la mappaInviti sia popolata
-    public Map<Integer, Invito> gestisciInvito(){
-        mappaInviti = getMappaInviti();
+// supponendo che la mappaInvitiPendenti sia popolata
+    public List<Invito> gestisciInvito(){
 
-        for (int key : mappaInviti.keySet()) {
-            Invito i = mappaInviti.get(key);
+        for (int key : mappaInvitiPendenti.keySet()) {
+            Invito i = mappaInvitiPendenti.get(key);
             if(utenteCorrente instanceof Artista){
-                if (utenteCorrente.equals(i.geArtistaDestinatario())) {
-                mappaInvitiArtista.put(i.getId(), i);
+                if (i.hasDestinatario((Artista)utenteCorrente)) {
+                    mappaInvitiTemp.put(i.getId(), i);
                 }
             }
         }
 
-        return mappaInvitiArtista;
+        return new ArrayList<Invito>(mappaInvitiTemp.values());
 
     }
 
     // seleziono un id dalla mappa inviti relativa all'artista
     public Evento selezionaInvito(int codice_invito){
-        invitoCorrente = mappaInvitiArtista.get(codice_invito);
 
+        invitoCorrente = mappaInvitiTemp.get(codice_invito);
         return invitoCorrente.getEvento();
+
     }
     
-
     public void accettaInvito(){
+
         int codice_invito = invitoCorrente.getId();
-
-        mappaInviti.remove(codice_invito);
-
+        mappaInvitiPendenti.remove(codice_invito);
         mappaInvitiAccettati.put(codice_invito, invitoCorrente);
-
         invitoCorrente = null;
+        mappaInvitiTemp = null;
+    
     }
-
-
-
 }
