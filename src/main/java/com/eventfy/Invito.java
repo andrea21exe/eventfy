@@ -40,6 +40,16 @@ public class Invito {
         return this.id;
     }
 
+
+    public Artista geArtistaDestinatario(){
+        return this.artistaDestinatario;
+    }
+
+
+    public Evento getEvento(){
+        return this.evento;
+    }
+
     @Override
     public String toString() {
         return "Invito [id=" + id + ", data=" + data + ", ora=" + ora + ", evento=" + evento + ", artistaMittente="

@@ -31,6 +31,10 @@ public class Eventfy {
     private Map<Integer, Utente> mappaUtentiTemp;
     private Map<Integer, Invito> mappaInviti;
 
+    //UC8
+    private Map<Integer, Invito> mappaInvitiArtista;
+    private Map<Integer, Invito> mappaInvitiAccettati;
+
     // Singleton
     private Eventfy() {
         listaImpianti = new ArrayList<Impianto>();
@@ -337,5 +341,42 @@ public class Eventfy {
     public Map<Integer, Invito> getMappaInviti(){
         return mappaInviti;
     }
+
+// supponendo che la mappaInviti sia popolata
+    public Map<Integer, Invito> gestisciInvito(){
+        mappaInviti = getMappaInviti();
+
+        for (int key : mappaInviti.keySet()) {
+            Invito i = mappaInviti.get(key);
+            if(utenteCorrente instanceof Artista){
+                if (utenteCorrente.equals(i.geArtistaDestinatario())) {
+                mappaInvitiArtista.put(i.getId(), i);
+                }
+            }
+        }
+
+        return mappaInvitiArtista;
+
+    }
+
+    // seleziono un id dalla mappa inviti relativa all'artista
+    public Evento selezionaInvito(int codice_invito){
+        invitoCorrente = mappaInvitiArtista.get(codice_invito);
+
+        return invitoCorrente.getEvento();
+    }
+    
+
+    public void accettaInvito(){
+        int codice_invito = invitoCorrente.getId();
+
+        mappaInviti.remove(codice_invito);
+
+        mappaInvitiAccettati.put(codice_invito, invitoCorrente);
+
+        invitoCorrente = null;
+    }
+
+
 
 }
