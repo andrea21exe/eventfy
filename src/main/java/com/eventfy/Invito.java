@@ -41,7 +41,7 @@ public class Invito {
     }
 
 
-    public Artista geArtistaDestinatario(){
+    public Artista getArtistaDestinatario(){
         return this.artistaDestinatario;
     }
 

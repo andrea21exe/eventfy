@@ -186,57 +186,6 @@ public class Eventfy {
         return null;
     }
 
-    // POPOLA LE MAPPE/LISTE
-    public void populate() {
-
-        // Popola la mappa degli utenti
-        Gestore g1 = new Gestore("Gigi"); //id 0
-        mappaUtenti.put(g1.getId(), g1);
-        Gestore g2 = new Gestore("Paolo"); // id 1
-        mappaUtenti.put(g2.getId(), g2);
-        Gestore g3 = new Gestore("Marco"); // id 2
-        mappaUtenti.put(g3.getId(), g3);
-        Artista a1 = new Artista("THEWEEKND"); //id 3
-        mappaUtenti.put(a1.getId(), a1);
-        Artista a2 = new Artista("SZA"); //id 4
-        mappaUtenti.put(a2.getId(), a2);
-        Artista a3 = new Artista("DojaCat"); //id 5
-        mappaUtenti.put(a3.getId(), a3);
-
-        a1.nuovoBrano("Starboy", "Starboy", 3); //id 1
-        a1.nuovoBrano("Sacrifice", "Starboy", 3); //id 2
-        a1.nuovoBrano("Out Of Time", "Dawn FM", 3); //id 3
-        a2.nuovoBrano("Good Days", "SOS", 3); //id 4
-        a2.nuovoBrano("Kill Bill", "SOS", 3); //id 5
-        a3.nuovoBrano("Agora Hills", "Album D", 3); //id 6
-
-
-        // Popola la lista impianti
-        Impianto i1 = new Impianto("San Siro", "Milano", 75000, 700, g1); 
-        listaImpianti.add(i1);
-        Impianto i2 = new Impianto("Pal1", "Catania", 3000, 200, g3);
-        listaImpianti.add(i2);
-        Impianto i3 = new Impianto("Stadio Arena", "Roma", 20000, 500, g2);
-        listaImpianti.add(i3);
-        Impianto i4 = new Impianto("Ippodromo C", "Bari", 45000, 1000, g1);
-        listaImpianti.add(i4);
-
-        // Popola le prenotazioni
-        Prenotazione p0 = new Prenotazione("P0", "d0", 20, LocalDate.now(), LocalTime.now(), a3, i1);
-        Prenotazione p1 = new Prenotazione("P1", "d0", 203, LocalDate.now(), LocalTime.now(), a1, i2);
-        Prenotazione p2 = new Prenotazione("P2", "d2", 120, LocalDate.now(), LocalTime.now(), a2, i3);
-        Prenotazione p3 = new Prenotazione("P3", "d3", 130, LocalDate.now(), LocalTime.now(), a1, i4);
-        Prenotazione p4 = new Prenotazione("P4", "d4", 130, LocalDate.now(), LocalTime.now(), a1, i4);
-        Prenotazione p5 = new Prenotazione("P5", "d5", 130, LocalDate.now(), LocalTime.now(), a1, i1);
-        mappaPrenotazioniPendenti.put(p0.getId(), p0);
-        mappaPrenotazioniPendenti.put(p1.getId(), p1);
-        mappaPrenotazioniAccettate.put(p2.getId(), p2);
-        mappaPrenotazioniAccettate.put(p3.getId(), p3);
-        mappaPrenotazioniAccettate.put(p4.getId(), p4);
-        mappaPrenotazioniAccettate.put(p5.getId(), p5);
-
-    }
-
     
     //Simile al metodo "mostraprenotazioniaccettate" sotto
     //UC6-----------------------------------------------------
@@ -286,12 +235,14 @@ public class Eventfy {
         prenotazioneCorrente = null;
     }
 
-    public boolean getTipoUtente() {
-        if (utenteCorrente instanceof Gestore) {
-            return false;
-        } 
-        return true;
+    public boolean hasArtistaCorrente() {
+        return utenteCorrente instanceof Artista;
     }
+
+    public boolean hasGestoreCorrente() {
+        return utenteCorrente instanceof Gestore;
+    }
+
     //UC7-------------------------------------------------------
     //SImile al metodo "aggiungiscaletta" sopra. In astah abbiamo chiamato questo metodo "invitaArtista"
     public List<Prenotazione> mostraPrenotazioniAccettate() {
@@ -310,10 +261,6 @@ public class Eventfy {
     }
 
     public List<Utente> selezionaPrenotazioneInvito(int codice_prenotazione) {
-
-        //Non dobbiamo creare l'associazione tra evento e sistema. La prenotazione ci fa da tramite.
-        //Costruisco l'oggetto invito direttamente qui, nella successiva funzione gli associerò -->
-        // --> l'artista invitato e lo inserirò nella mappaInvitiPendenti
 
         invitoCorrente = new Invito(mappaPrenotazioniTemp.get(codice_prenotazione).getEvento(), (Artista)utenteCorrente);
         mappaUtentiTemp = new HashMap<Integer, Utente>(); 
@@ -379,5 +326,65 @@ public class Eventfy {
         invitoCorrente = null;
         mappaInvitiTemp = null;
     
+    }
+
+
+     // POPOLA LE MAPPE/LISTE
+     public void populate() {
+
+        // Popola la mappa degli utenti
+        Gestore g1 = new Gestore("Gigi"); //id 0
+        mappaUtenti.put(g1.getId(), g1);
+        Gestore g2 = new Gestore("Paolo"); // id 1
+        mappaUtenti.put(g2.getId(), g2);
+        Gestore g3 = new Gestore("Marco"); // id 2
+        mappaUtenti.put(g3.getId(), g3);
+        Artista a1 = new Artista("THEWEEKND"); //id 3
+        mappaUtenti.put(a1.getId(), a1);
+        Artista a2 = new Artista("SZA"); //id 4
+        mappaUtenti.put(a2.getId(), a2);
+        Artista a3 = new Artista("DojaCat"); //id 5
+        mappaUtenti.put(a3.getId(), a3);
+
+        a1.nuovoBrano("Starboy", "Starboy", 3); //id 1
+        a1.nuovoBrano("Sacrifice", "Starboy", 3); //id 2
+        a1.nuovoBrano("Out Of Time", "Dawn FM", 3); //id 3
+        a2.nuovoBrano("Good Days", "SOS", 3); //id 4
+        a2.nuovoBrano("Kill Bill", "SOS", 3); //id 5
+        a3.nuovoBrano("Agora Hills", "Album D", 3); //id 6
+
+
+        // Popola la lista impianti
+        Impianto i1 = new Impianto("San Siro", "Milano", 75000, 700, g1); 
+        listaImpianti.add(i1);
+        Impianto i2 = new Impianto("Pal1", "Catania", 3000, 200, g3);
+        listaImpianti.add(i2);
+        Impianto i3 = new Impianto("Stadio Arena", "Roma", 20000, 500, g2);
+        listaImpianti.add(i3);
+        Impianto i4 = new Impianto("Ippodromo C", "Bari", 45000, 1000, g1);
+        listaImpianti.add(i4);
+
+        // Popola le prenotazioni
+        Prenotazione p0 = new Prenotazione("P0", "d0", 20, LocalDate.now(), LocalTime.now(), a3, i1);
+        Prenotazione p1 = new Prenotazione("P1", "d1", 203, LocalDate.now(), LocalTime.now(), a1, i2);
+        Prenotazione p2 = new Prenotazione("P2", "d2", 120, LocalDate.now(), LocalTime.now(), a2, i3);
+        Prenotazione p3 = new Prenotazione("P3", "d3", 130, LocalDate.now(), LocalTime.now(), a1, i4);
+        Prenotazione p4 = new Prenotazione("P4", "d4", 130, LocalDate.now(), LocalTime.now(), a1, i4);
+        Prenotazione p5 = new Prenotazione("P5", "d5", 130, LocalDate.now(), LocalTime.now(), a1, i1);
+        mappaPrenotazioniPendenti.put(p0.getId(), p0);
+        mappaPrenotazioniPendenti.put(p1.getId(), p1);
+        mappaPrenotazioniAccettate.put(p2.getId(), p2);
+        mappaPrenotazioniAccettate.put(p3.getId(), p3);
+        mappaPrenotazioniAccettate.put(p4.getId(), p4);
+        mappaPrenotazioniAccettate.put(p5.getId(), p5);
+
+        // Inviti (A1 è il mittente di 2 inviti e destinatario di 1 invito)
+        Invito inv1 = new Invito(p3.getEvento(), p3.getArtista(), a3);
+        Invito inv2 = new Invito(p4.getEvento(), p4.getArtista(), a2);
+        Invito inv3 = new Invito(p0.getEvento(), p0.getArtista(), a1);
+        mappaInvitiPendenti.put(inv1.getId(), inv1);
+        mappaInvitiPendenti.put(inv2.getId(), inv2);
+        mappaInvitiPendenti.put(inv3.getId(), inv3);
+
     }
 }
