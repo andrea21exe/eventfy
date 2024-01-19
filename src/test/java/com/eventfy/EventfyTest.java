@@ -219,14 +219,62 @@ public class EventfyTest {
     void invitaArtistaTest() {   
         eventfy.logIn(3);//Artista TheWeeknd
 
-        //Inizialmente non esistono inviti
-        assertEquals(0, eventfy.getMappaInviti().size());
+        int sizeMappaInvitiIniziale = eventfy.getMappaInvitiPendenti().size();
         eventfy.mostraPrenotazioniAccettate();
         eventfy.selezionaPrenotazioneInvito(4);
         eventfy.invitaArtista(0);
         //Deve essere stato registrato un invito
-        assertEquals(1, eventfy.getMappaInviti().size());
+        assertEquals(sizeMappaInvitiIniziale + 1, eventfy.getMappaInvitiPendenti().size());
 
     }
+
+    @Test
+    void gestisciInvitoTest() {   
+        eventfy.logIn(3);//Artista TheWeeknd
+        List<Invito> listaInviti = eventfy.gestisciInvito();
+        assertEquals(1, listaInviti.size());
+
+        eventfy.logIn(4);
+        listaInviti = eventfy.gestisciInvito();
+        assertEquals(1, listaInviti.size());
+
+        //Provo con un nuovo utente creato ad'hoc
+        eventfy.signUpLogIn(new Artista("A11"));
+        listaInviti = eventfy.gestisciInvito();
+        assertEquals(0, listaInviti.size());
+        
+    }
+
+    @Test
+    void selezionaInvitoTest() {   
+        eventfy.logIn(3);//Artista TheWeeknd
+
+        eventfy.gestisciInvito();
+        Evento e = eventfy.selezionaInvito(2);
+        //L'evento relativo all'invito selezionato ha ID = 1
+        assertEquals(0, e.getId());
+        
+    }
+
+    @Test
+    void accettaInvitoTest() {   
+        eventfy.logIn(3);//Artista TheWeeknd
+
+        int numInvitiPendentiIniziale = eventfy.getMappaInvitiPendenti().size();
+        int numInvitiAccettatiIniziale = eventfy.getMappaInvitiAccettati().size();
+
+        eventfy.gestisciInvito();
+        eventfy.selezionaInvito(2);
+        //L'evento relativo all'invito selezionato ha ID = 1
+        eventfy.accettaInvito();
+
+        //Deve esserci un invito accettato in più
+        assertEquals(numInvitiAccettatiIniziale + 1, eventfy.getMappaInvitiAccettati().size());
+
+        //Deve esserci un invito pendente in meno
+        assertEquals(numInvitiPendentiIniziale - 1, eventfy.getMappaInvitiPendenti().size());
+
+    }
+
 
 }

@@ -27,11 +27,6 @@ public class Artista extends Utente{
         return mappaBrani.get(codice_brano);
     }
 
-    @Override
-    public String toString() {
-        return "Artista [ nome= " + nome + "]";
-    }
-
     public void setMappaBrani(List<Brano> lista){
 
         mappaBrani = new HashMap<Integer, Brano>();

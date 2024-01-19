@@ -42,6 +42,7 @@ public class Eventfy {
         mappaPrenotazioniAccettate = new HashMap<Integer, Prenotazione>();
         mappaPrenotazioniPendenti = new HashMap<Integer, Prenotazione>();
         mappaInvitiPendenti = new HashMap<Integer, Invito>();
+        mappaInvitiAccettati = new HashMap<Integer, Invito>();
     }
 
     public static Eventfy getIstanceEventfy() {
@@ -255,7 +256,7 @@ public class Eventfy {
                 mappaPrenotazioniTemp.put(p.getId(), p);
             }
         }
-//da sistemare non ritorna id dell'artista
+
         return new ArrayList<Prenotazione>(mappaPrenotazioniTemp.values());
 
     }
@@ -290,20 +291,22 @@ public class Eventfy {
         return this.invitoCorrente;
     }
 
-    public Map<Integer, Invito> getMappaInviti(){
+    public Map<Integer, Invito> getMappaInvitiPendenti(){
         return mappaInvitiPendenti;
     }
 
-// supponendo che la mappaInvitiPendenti sia popolata
+
+    //UC8 ----------------------------------------------------
     public List<Invito> gestisciInvito(){
+
+        mappaInvitiTemp = new HashMap<Integer, Invito>();
 
         for (int key : mappaInvitiPendenti.keySet()) {
             Invito i = mappaInvitiPendenti.get(key);
-            if(utenteCorrente instanceof Artista){
-                if (i.hasDestinatario((Artista)utenteCorrente)) {
-                    mappaInvitiTemp.put(i.getId(), i);
-                }
+            if (i.hasDestinatario((Artista)utenteCorrente)) {
+                mappaInvitiTemp.put(i.getId(), i);
             }
+            
         }
 
         return new ArrayList<Invito>(mappaInvitiTemp.values());
@@ -326,6 +329,10 @@ public class Eventfy {
         invitoCorrente = null;
         mappaInvitiTemp = null;
     
+    }
+
+    public Map<Integer, Invito> getMappaInvitiAccettati(){
+        return mappaInvitiAccettati;
     }
 
 
