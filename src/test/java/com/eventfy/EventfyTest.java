@@ -55,7 +55,7 @@ public class EventfyTest {
     void testNuovaPrenotazione() {
 
         // Login - SignUp
-        eventfy.signUpLogIn(new Artista("Metro Boomin"));
+        eventfy.logIn(5);;
 
         assertNull(eventfy.getPrenotazioneCorrente());
 
@@ -63,7 +63,6 @@ public class EventfyTest {
         List<Impianto> impiantiDisponibili = eventfy.nuovaPrenotazione("Prenotazione1", "Descrizione 1", 2,
                 15000, LocalDate.now(), LocalTime.now());
         assertEquals(3, impiantiDisponibili.size());
-
         assertNotNull(eventfy.getPrenotazioneCorrente());
 
     }
@@ -121,9 +120,9 @@ public class EventfyTest {
     @Test
     void mostraPrenotazioniPendentiTest() {
         // Facciamo il logIn con un utente già inserito
-        eventfy.logIn(0);
+        eventfy.logIn(2);
         List<Prenotazione> result = eventfy.mostraPrenotazioniPendenti();
-        // L'utente con ID = 0 ha una prenotazione pendente
+        // L'utente con ID = 2 ha una prenotazione pendente
         assertTrue(result.size() > 0);
 
     }
@@ -131,19 +130,19 @@ public class EventfyTest {
     @Test
     void testSelezionaPrenotazionePendente() {
         // Facciamo il logIn con un utente già inserito
-        eventfy.logIn(0);
+        eventfy.logIn(1);
         assertNull(eventfy.getMapPrenotazioniTemp());
         assertNull(eventfy.getPrenotazioneCorrente());
 
         eventfy.mostraPrenotazioniPendenti();
         assertNotNull(eventfy.getMapPrenotazioniTemp());
 
-        // SCELGO il codice di prenotazione 0 già inserito nel sistema
-        Prenotazione pRicercata = eventfy.selezionaPrenotazionePendente(0);
+        // SCELGO il codice di prenotazione 6 già inserito nel sistema
+        Prenotazione pRicercata = eventfy.selezionaPrenotazionePendente(7);
         // Verifica che la prenotazione sia stata selezionata correttamente
         assertNotNull(pRicercata);
         assertNotNull(eventfy.getPrenotazioneCorrente());
-        assertEquals(0, pRicercata.getId());
+        assertEquals(7, pRicercata.getId());
     }
 
     @Test

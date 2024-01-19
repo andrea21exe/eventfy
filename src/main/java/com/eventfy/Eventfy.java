@@ -129,23 +129,15 @@ public class Eventfy {
     }
 
     public List<Impianto> getListaImpianti() {
-        return listaImpianti;
-    }
-
-    public void setImpiantoCorrente(Impianto impianto) {
-        impiantoCorrente = impianto;
+        return this.listaImpianti;
     }
 
     public Utente getUtenteCorrente() {
-        return utenteCorrente;
+        return this.utenteCorrente;
     }
 
     public Prenotazione getPrenotazioneCorrente() {
-        return prenotazioneCorrente;
-    }
-
-    public void setPrenotazioneCorrente(Prenotazione prenotazione) {
-        prenotazioneCorrente = prenotazione;
+        return this.prenotazioneCorrente;
     }
 
     public Map<Integer, Prenotazione> getPrenotazioniPendenti() {
@@ -378,12 +370,17 @@ public class Eventfy {
         Prenotazione p3 = new Prenotazione("P3", "d3", 130, LocalDate.now(), LocalTime.now(), a1, i4);
         Prenotazione p4 = new Prenotazione("P4", "d4", 130, LocalDate.now(), LocalTime.now(), a1, i4);
         Prenotazione p5 = new Prenotazione("P5", "d5", 130, LocalDate.now(), LocalTime.now(), a1, i1);
+        Prenotazione p6 = new Prenotazione("P6", "d6", 320, LocalDate.of(2024, 12, 1), LocalTime.now(), a3, i3);
+        Prenotazione p7 = new Prenotazione("P7", "d7", 320, LocalDate.of(2025, 12, 1), LocalTime.now(), a3, i3);
+
         mappaPrenotazioniPendenti.put(p0.getId(), p0);
         mappaPrenotazioniPendenti.put(p1.getId(), p1);
+        mappaPrenotazioniPendenti.put(p7.getId(), p7);
         mappaPrenotazioniAccettate.put(p2.getId(), p2);
         mappaPrenotazioniAccettate.put(p3.getId(), p3);
         mappaPrenotazioniAccettate.put(p4.getId(), p4);
         mappaPrenotazioniAccettate.put(p5.getId(), p5);
+        mappaPrenotazioniAccettate.put(p6.getId(), p6);
 
         // Inviti (A1 è il mittente di 2 inviti e destinatario di 1 invito)
         Invito inv1 = new Invito(p3.getEvento(), p3.getArtista(), a3);
