@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.Recensione;
+
 
 public class Eventfy {
 
@@ -34,6 +36,9 @@ public class Eventfy {
     //UC8
     private Map<Integer, Invito> mappaInvitiTemp;
     private Map<Integer, Invito> mappaInvitiAccettati;
+
+    //UC9
+    Recensione recensioneCorrente;
 
     // Singleton
     private Eventfy() {
@@ -390,5 +395,34 @@ public class Eventfy {
         mappaInvitiPendenti.put(inv2.getId(), inv2);
         mappaInvitiPendenti.put(inv3.getId(), inv3);
 
+    }
+
+
+    //UC9
+    public Map<Integer,Prenotazione> inserisciPrenotazione(){
+        for (int key : mappaPrenotazioniAccettate.keySet()) {
+            Prenotazione p = mappaPrenotazioniAccettate.get(key);
+            if (p.hasArtista((Artista)utenteCorrente)) {
+                mappaPrenotazioniTemp.put(p.getId(), p);
+            }
+        }
+        return mappaPrenotazioniTemp;
+    }
+
+    //recuperiamo l'impianto a cui vogliamo aggiungere un commento relativo alla prenotazione
+    //inserisco codice prenotazione
+    //ho sostituito l'operazione seleziona evento con recupera impianto
+    public void recuperaImpianto(int codice_prenotazione, String commento, int voto){
+        Prenotazione p = mappaPrenotazioniTemp.get(codice_prenotazione);
+        impiantoCorrente = p.getImpianto();
+        recensioneCorrente = new Recensione(LocalDate.now(), LocalTime.now(), commento, voto);
+    }
+
+
+    public void confermaRecensione(){
+
+        impiantoCorrente.addRecensione(recensioneCorrente.getId(), recensioneCorrente);
+        impiantoCorrente = null;
+        recensioneCorrente = null;
     }
 }

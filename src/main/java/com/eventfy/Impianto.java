@@ -1,5 +1,10 @@
 package com.eventfy;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import com.Recensione;
+
 public class Impianto {
 
     private static int currentId = 0;
@@ -10,6 +15,7 @@ public class Impianto {
     private int capienza;
     private int superficie;
     private Gestore gestore;
+    private Map<Integer, Recensione> mappaRecensioni;
 
     public Impianto(String nome, String luogo, int capienza, int superficie, Utente gestore) {
 
@@ -20,10 +26,12 @@ public class Impianto {
             this.superficie = superficie;
             this.gestore = (Gestore) gestore;
             this.id = currentId++;
+            this.mappaRecensioni = new HashMap<>();
         } else {
             throw new IllegalArgumentException("Il gestore inserito non è di tipo Gestore.");
         }
     }
+
 
     public int getId() {
         return this.id;
@@ -42,6 +50,14 @@ public class Impianto {
 
     public Gestore getGestore(){
         return this.gestore;
+    }
+
+    public void addRecensione(int id, Recensione rec){
+        mappaRecensioni.put(id, rec);
+    }
+
+    public Map<Integer, Recensione> getMappaRecensione(){
+        return this.mappaRecensioni;
     }
 
     @Override
