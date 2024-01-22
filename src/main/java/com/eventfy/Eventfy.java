@@ -399,23 +399,23 @@ public class Eventfy {
 
 
     //UC9
-    public Map<Integer,Prenotazione> inserisciPrenotazione(){
+    public List<Prenotazione> inserisciRecensione(){
         for (int key : mappaPrenotazioniAccettate.keySet()) {
             Prenotazione p = mappaPrenotazioniAccettate.get(key);
             if (p.hasArtista((Artista)utenteCorrente)) {
                 mappaPrenotazioniTemp.put(p.getId(), p);
             }
         }
-        return mappaPrenotazioniTemp;
+        return new ArrayList<Prenotazione>(mappaPrenotazioniTemp.values());
     }
 
     //recuperiamo l'impianto a cui vogliamo aggiungere un commento relativo alla prenotazione
     //inserisco codice prenotazione
-    //ho sostituito l'operazione seleziona evento con recupera impianto
-    public void recuperaImpianto(int codice_prenotazione, String commento, int voto){
+    //ho sostituito l'operazione seleziona evento con creaRecensione
+    public void creaRecensione(int codice_prenotazione, String commento, int voto){
         Prenotazione p = mappaPrenotazioniTemp.get(codice_prenotazione);
         impiantoCorrente = p.getImpianto();
-        recensioneCorrente = new Recensione(LocalDate.now(), LocalTime.now(), commento, voto);
+        recensioneCorrente = new Recensione(LocalDate.now(), LocalTime.now(), commento, voto, (Artista)utenteCorrente);
     }
 
 
@@ -424,5 +424,38 @@ public class Eventfy {
         impiantoCorrente.addRecensione(recensioneCorrente.getId(), recensioneCorrente);
         impiantoCorrente = null;
         recensioneCorrente = null;
+    }
+
+    //UC10
+    public List<Prenotazione> eliminaPrenotazione(){
+        for (int key : mappaPrenotazioniAccettate.keySet()) {
+            Prenotazione p1 = mappaPrenotazioniAccettate.get(key);
+            if (p1.hasArtista((Artista)utenteCorrente)) {
+                mappaPrenotazioniTemp.put(p1.getId(), p1);
+            }
+        }
+        for (int key : mappaPrenotazioniPendenti.keySet()) {
+            Prenotazione p2 = mappaPrenotazioniPendenti.get(key);
+            if (p2.hasArtista((Artista)utenteCorrente)) {
+                mappaPrenotazioniTemp.put(p2.getId(), p2);
+            }
+        }
+
+        return new ArrayList<Prenotazione>(mappaPrenotazioniTemp.values());
+    }
+
+    //supponiamo di aver inserito l'id di una prenotazione ricavato dalla lista delle prenotazioni che ci siamo ritornati
+
+    public void confermaEliminazione(int codice_prenotazione){
+
+        prenotazioneCorrente = mappaPrenotazioniPendenti.get(codice_prenotazione);
+        if(prenotazioneCorrente == null){
+            mappaPrenotazioniAccettate.remove(codice_prenotazione);
+        }
+        else{
+            mappaPrenotazioniPendenti.remove(codice_prenotazione);
+        }
+
+        prenotazioneCorrente = null;
     }
 }
