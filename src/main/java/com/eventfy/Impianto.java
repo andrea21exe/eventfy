@@ -7,8 +7,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.Recensione;
-
 public class Impianto {
 
     private static int currentId = 0;
@@ -60,7 +58,7 @@ public class Impianto {
         listaRecensioni.add(rec);
     }
 
-    public List<Recensione> getListaRecensione(){
+    public List<Recensione> getListaRecensioni(){
         return this.listaRecensioni;
     }
 

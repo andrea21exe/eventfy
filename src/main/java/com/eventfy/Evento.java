@@ -46,7 +46,7 @@ public class Evento {
         return data;
     }
 
-    public void addFan(Utente utenteCorrente){
+    public void addFan(Fan utenteCorrente){
         listaFan.add(utenteCorrente);
     }
 

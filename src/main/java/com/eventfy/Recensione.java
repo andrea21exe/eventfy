@@ -1,9 +1,7 @@
-package com;
+package com.eventfy;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-
-import com.eventfy.Artista;
 
 public class Recensione {
     LocalDate dataCommento;
@@ -37,5 +35,18 @@ public class Recensione {
                 + ", voto=" + voto + ", id=" + id + "]";
     } 
     
+    public String getCommento() {
+        return this.commento;
+    }
+    public int getVoto() {
+        return this.voto;
+    }
 
+    public LocalDate getData(){
+        return this.dataCommento;
+    }
+
+    public Artista getArtista(){
+        return this.artista;
+    }
 }

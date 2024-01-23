@@ -275,5 +275,41 @@ public class EventfyTest {
 
     }
 
+ @Test 
+ void inserisciRecensioneTest(){
+    eventfy.logIn(3);//Artista TheWeeknd
+    List<Prenotazione> prenotazioniArtista = eventfy.inserisciRecensione();
+    assertNotNull(prenotazioniArtista);
+    // Verifica che la lista contenga le prenotazioni dell'artista corrente
+    for (Prenotazione prenotazione : prenotazioniArtista) {
+        assertTrue(prenotazione.hasArtista((Artista)eventfy.getUtenteCorrente()));
+    }
+ }
+
+@Test
+void testCreaRecensione(){
+    eventfy.logIn(3);
+    List<Prenotazione> prenotazioniArtista = eventfy.inserisciRecensione();
+    assertNotNull(prenotazioniArtista);
+    eventfy.creaRecensione(3, "Fantastico evento", 4);
+    assertEquals("Fantastico evento", eventfy.getRecensioneCorrente().getCommento());
+    assertEquals(4, eventfy.getRecensioneCorrente().getVoto());
+    assertEquals((Artista) eventfy.getUtenteCorrente(), eventfy.getRecensioneCorrente().getArtista());
+    assertEquals(LocalDate.now(), eventfy.getRecensioneCorrente().getData());
+}
+
+@Test
+void testConfermaRecensione() {
+    eventfy.logIn(3);//Artista TheWeeknd
+    // Effettua la creazione di una recensione e verifica che sia stata impostata correttamente
+    eventfy.inserisciRecensione();
+    eventfy.creaRecensione(3, "Fantastico evento", 4);
+    assertNotNull(eventfy.getRecensioneCorrente());
+    // Effettua la conferma della recensione
+
+    eventfy.confermaRecensione();
+     // Verifica che le variabili temporanee siano resettate
+     assertNull(eventfy.getRecensioneCorrente());
+}
 
 }

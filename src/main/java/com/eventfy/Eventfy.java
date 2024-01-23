@@ -7,8 +7,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.Recensione;
-
 
 public class Eventfy {
 
@@ -396,12 +394,20 @@ public class Eventfy {
         mappaInvitiPendenti.put(inv1.getId(), inv1);
         mappaInvitiPendenti.put(inv2.getId(), inv2);
         mappaInvitiPendenti.put(inv3.getId(), inv3);
-
+    // Popola le recensioni
+        Recensione rec1 = new Recensione(LocalDate.now(), LocalTime.now(), "Commento 1", 4, a1);
+        Recensione rec2 = new Recensione(LocalDate.now(), LocalTime.now(), "Commento 2", 5, a2);
+        Recensione rec3 = new Recensione(LocalDate.now(), LocalTime.now(), "Commento 3", 3, a3);
+        i1.addRecensione(rec1);
+        i2.addRecensione(rec2);
+        i3.addRecensione(rec3);
+        
     }
 
 
     //UC9
     public List<Prenotazione> inserisciRecensione(){
+        mappaPrenotazioniTemp = new HashMap<Integer, Prenotazione>();
         for (int key : mappaPrenotazioniAccettate.keySet()) {
             Prenotazione p = mappaPrenotazioniAccettate.get(key);
             if (p.hasArtista((Artista)utenteCorrente)) {
@@ -428,6 +434,9 @@ public class Eventfy {
         recensioneCorrente = null;
     }
 
+    public Recensione getRecensioneCorrente() {
+        return recensioneCorrente;
+    }
     //UC10
     public List<Prenotazione> eliminaPrenotazione(){
         for (int key : mappaPrenotazioniAccettate.keySet()) {
