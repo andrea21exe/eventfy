@@ -9,6 +9,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeAll;
@@ -288,10 +289,13 @@ public class EventfyTest {
 
 @Test
 void testCreaRecensione(){
-    eventfy.logIn(3);
+    eventfy.logIn(3);//Artista TheWeeknd
     List<Prenotazione> prenotazioniArtista = eventfy.inserisciRecensione();
+    //Verifica che la lista prenotazioni non è vuota
     assertNotNull(prenotazioniArtista);
+    // Creazione di una recensione 
     eventfy.creaRecensione(3, "Fantastico evento", 4);
+    //Verifiche sulla recensione creata
     assertEquals("Fantastico evento", eventfy.getRecensioneCorrente().getCommento());
     assertEquals(4, eventfy.getRecensioneCorrente().getVoto());
     assertEquals((Artista) eventfy.getUtenteCorrente(), eventfy.getRecensioneCorrente().getArtista());
@@ -306,10 +310,39 @@ void testConfermaRecensione() {
     eventfy.creaRecensione(3, "Fantastico evento", 4);
     assertNotNull(eventfy.getRecensioneCorrente());
     // Effettua la conferma della recensione
-
     eventfy.confermaRecensione();
      // Verifica che le variabili temporanee siano resettate
      assertNull(eventfy.getRecensioneCorrente());
+}
+
+@Test
+void eliminaPrenotazioneTest(){
+    eventfy.logIn(3);//Artista TheWeeknd
+    List<Prenotazione> prenotazioniAccettate=new ArrayList<Prenotazione>(eventfy.getPrenotazioniAccettate().values());
+    List<Prenotazione> prenotazioniPendenti= new ArrayList<Prenotazione>(eventfy.getPrenotazioniPendenti().values());
+    List<Prenotazione> prenotazioni = eventfy.eliminaPrenotazione();
+    
+    //da rivedere gli assert
+    assertTrue(prenotazioni.containsAll(prenotazioniAccettate));
+    assertTrue(prenotazioni.containsAll(prenotazioniPendenti));
+}
+  
+
+@Test
+void confermaEliminazioneTest(){
+    eventfy.logIn(3);//Artista TheWeeknd
+
+    // Eliminazione di una prenotazione pendente
+    int codicePrenotazione=1;
+    eventfy.confermaEliminazione(codicePrenotazione);
+    // Verifica che la prenotazione pendente con il codice 1 sia stata eliminata
+    assertNull(eventfy.getPrenotazioniPendenti().get(codicePrenotazione));
+  
+     // Eliminazione di una prenotazione accettata
+    codicePrenotazione=2;
+    eventfy.confermaEliminazione(codicePrenotazione);
+    // Verifica che la prenotazione accettata con il codice 2 sia stata eliminata
+    assertNull(eventfy.getPrenotazioniAccettate().get(codicePrenotazione));
 }
 
 }

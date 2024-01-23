@@ -439,6 +439,7 @@ public class Eventfy {
     }
     //UC10
     public List<Prenotazione> eliminaPrenotazione(){
+        mappaPrenotazioniTemp = new HashMap<Integer, Prenotazione>();
         for (int key : mappaPrenotazioniAccettate.keySet()) {
             Prenotazione p1 = mappaPrenotazioniAccettate.get(key);
             if (p1.hasArtista((Artista)utenteCorrente)) {
