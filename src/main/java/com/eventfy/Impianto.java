@@ -1,6 +1,8 @@
 package com.eventfy;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.Recensione;
@@ -15,7 +17,7 @@ public class Impianto {
     private int capienza;
     private int superficie;
     private Gestore gestore;
-    private Map<Integer, Recensione> mappaRecensioni;
+    private List<Recensione> listaRecensioni;
 
     public Impianto(String nome, String luogo, int capienza, int superficie, Utente gestore) {
 
@@ -26,7 +28,7 @@ public class Impianto {
             this.superficie = superficie;
             this.gestore = (Gestore) gestore;
             this.id = currentId++;
-            this.mappaRecensioni = new HashMap<>();
+            this.listaRecensioni = new ArrayList<Recensione>();
         } else {
             throw new IllegalArgumentException("Il gestore inserito non è di tipo Gestore.");
         }
@@ -52,12 +54,12 @@ public class Impianto {
         return this.gestore;
     }
 
-    public void addRecensione(int id, Recensione rec){
-        mappaRecensioni.put(id, rec);
+    public void addRecensione(Recensione rec){
+        listaRecensioni.add(rec);
     }
 
-    public Map<Integer, Recensione> getMappaRecensione(){
-        return this.mappaRecensioni;
+    public List<Recensione> getListaRecensione(){
+        return this.listaRecensioni;
     }
 
     @Override

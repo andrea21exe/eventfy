@@ -421,7 +421,7 @@ public class Eventfy {
 
     public void confermaRecensione(){
 
-        impiantoCorrente.addRecensione(recensioneCorrente.getId(), recensioneCorrente);
+        impiantoCorrente.addRecensione(recensioneCorrente);
         impiantoCorrente = null;
         recensioneCorrente = null;
     }
