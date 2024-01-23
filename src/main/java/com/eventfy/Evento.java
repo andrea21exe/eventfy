@@ -14,6 +14,7 @@ public class Evento {
     private LocalDate data;
     private LocalTime ora;
     private List<Brano> listaBrani;
+    private List<Fan> listaFan;
 
     public Evento(int id, String titolo, String descrizione, int durata, LocalDate data, LocalTime ora) {
         this.id = id;
@@ -23,6 +24,7 @@ public class Evento {
         this.data = data;
         this.ora = ora;
         this.listaBrani = new ArrayList<Brano>();
+        this.listaFan = new ArrayList<Fan>();
     }
 
 
@@ -35,8 +37,23 @@ public class Evento {
     }
 
     public List<Brano> getListaBrani(){
-        return listaBrani;
+        return this.listaBrani;
     }
+
+    
+
+    public LocalDate getData() {
+        return data;
+    }
+
+    public void addFan(Utente utenteCorrente){
+        listaFan.add(utenteCorrente);
+    }
+
+    public List<Fan> getListaFan(){
+        return this.listaFan;
+    }
+
 
     @Override
     public String toString() {

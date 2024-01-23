@@ -21,4 +21,10 @@ public  class Utente {
         return this.id;
     }
 
+    public String getNome() {
+        return nome;
+    }
+
+    
+
 }

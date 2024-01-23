@@ -40,5 +40,14 @@ public class Artista extends Utente{
         Brano b = new Brano(titolo, album, durata);
         this.mappaBrani.put(b.getId(), b);
     }
+
+    public Map<Integer, Brano> getMappaBrani() {
+        return mappaBrani;
+    }
+    
+    public String getNome(){
+        return super.getNome();
+    }
+
     
 }

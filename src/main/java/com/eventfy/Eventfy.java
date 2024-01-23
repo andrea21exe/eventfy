@@ -39,6 +39,8 @@ public class Eventfy {
 
     //UC9
     Recensione recensioneCorrente;
+    //UC12
+    private List<Evento> listaEventi;
 
     // Singleton
     private Eventfy() {
@@ -415,7 +417,7 @@ public class Eventfy {
     public void creaRecensione(int codice_prenotazione, String commento, int voto){
         Prenotazione p = mappaPrenotazioniTemp.get(codice_prenotazione);
         impiantoCorrente = p.getImpianto();
-        recensioneCorrente = new Recensione(LocalDate.now(), LocalTime.now(), commento, voto, (Artista)utenteCorrente);
+        recensioneCorrente =impiantoCorrente.creaRecensioneArtista(LocalDate.now(), LocalTime.now(), commento, voto, (Artista)utenteCorrente);
     }
 
 
@@ -457,5 +459,33 @@ public class Eventfy {
         }
 
         prenotazioneCorrente = null;
+    }
+
+    //UC12
+    public List<Evento> partecipaEvento(String nomeArtista){
+        for (int key : mappaPrenotazioniAccettate.keySet()) {
+            Prenotazione p1 = mappaPrenotazioniAccettate.get(key);
+
+            if(nomeArtista.equalsIgnoreCase(p1.getArtista().getNome())){
+                if (LocalDate.now().compareTo(p1.getEvento().getData()) < 0) {
+                    listaEventi.add(p1.getEvento());
+                }
+            }
+        }
+        
+        return listaEventi;
+    }
+
+    //supponiamo di recuperare della lista degli eventi ritornata l'id di un determinato evento
+    public void confermaPartecipazione(int id_evento){
+        for(int i =0; i<listaEventi.size(); i++){
+  
+            if(id_evento == listaEventi.get(i).getId()){
+
+                listaEventi.get(i).addFan((Fan)utenteCorrente);
+                ((Fan)utenteCorrente).addEvento(listaEventi.get(i));
+
+            }
+        }
     }
 }

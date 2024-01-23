@@ -1,5 +1,7 @@
 package com.eventfy;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -60,6 +62,11 @@ public class Impianto {
 
     public List<Recensione> getListaRecensione(){
         return this.listaRecensioni;
+    }
+
+    public Recensione creaRecensioneArtista(LocalDate dataCommento, LocalTime oraCommento, String commento, int voto, Artista artista){
+        Recensione recensione = new Recensione(dataCommento, oraCommento, commento, voto, artista);
+        return recensione;
     }
 
     @Override
