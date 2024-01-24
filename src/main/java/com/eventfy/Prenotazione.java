@@ -14,55 +14,72 @@ public class Prenotazione {
     private Artista artista;
     private Impianto impianto;
 
-    public Prenotazione(String titolo, String descrizione, int durata, LocalDate data, LocalTime ora, Utente artista, Impianto impianto) {
+    public Prenotazione(String titolo, String descrizione, int durata, LocalDate data, LocalTime ora, Utente artista,
+            Impianto impianto) {
         if (artista instanceof Artista) {
             this.id = currentId++;
             this.data = LocalDate.now();
             this.ora = LocalTime.now();
             evento = new Evento(id, titolo, descrizione, durata, data, ora);
             this.impianto = impianto;
-            this.artista = (Artista)artista;
+            this.artista = (Artista) artista;
         } else {
             throw new IllegalArgumentException("Utente non artista");
         }
     }
 
-    public void setImpianto(Impianto impianto){
+    public void setImpianto(Impianto impianto) {
         this.impianto = impianto;
     }
 
-    public int getId(){
+    public int getId() {
         return this.id;
     }
 
-    public Impianto getImpianto(){
+    public Impianto getImpianto() {
         return this.impianto;
     }
 
-    public boolean hasGestore(Gestore gestore){
+    public boolean hasGestore(Gestore gestore) {
         return gestore == this.impianto.getGestore();
     }
 
-
-    public boolean hasArtista(Artista artista){
+    public boolean hasArtista(Artista artista) {
         return artista == this.artista;
     }
 
-    public Artista getArtista(){
+    public Artista getArtista() {
         return this.artista;
     }
 
-    public Evento getEvento(){
+    public Evento getEvento() {
         return this.evento;
     }
 
-    public void addBrano(Brano brano){
+    public void addBrano(Brano brano) {
         evento.addBrano(brano);
+    }
+
+    public boolean isRecensibile() {
+        return LocalDate.now().isAfter(this.evento.getData());
+    }
+
+    public boolean isPartecipabile() {
+        return LocalDate.now().isBefore(this.evento.getData());
+    }
+
+    public String getNomeArtista() {
+        return artista.getNome();
+    }
+
+    public void addPartecipazioneFan(Fan fan) {
+        this.evento.addFan(fan);
     }
 
     @Override
     public String toString() {
-        return "Prenotazione [id=" + id + ", data=" + data + ", ora=" + ora + ", evento=" + evento + ", artista="+ artista + ", impianto=" + impianto + "]";
+        return "Prenotazione [id=" + id + ", data=" + data + ", ora=" + ora + ", evento=" + evento + ", artista="
+                + artista + ", impianto=" + impianto + "]";
     }
-    
+
 }

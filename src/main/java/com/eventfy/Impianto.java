@@ -3,9 +3,7 @@ package com.eventfy;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class Impianto {
 
@@ -34,7 +32,6 @@ public class Impianto {
         }
     }
 
-
     public int getId() {
         return this.id;
     }
@@ -50,26 +47,31 @@ public class Impianto {
         return false;
     }
 
-    public Gestore getGestore(){
+    public Gestore getGestore() {
         return this.gestore;
     }
 
-    public void addRecensione(Recensione rec){
-        listaRecensioni.add(rec);
-    }
+    /*
+     * public void addRecensione(Recensione rec){
+     * listaRecensioni.add(rec);
+     * }
+     */
 
-    public List<Recensione> getListaRecensioni(){
+    public List<Recensione> getListaRecensioni() {
         return this.listaRecensioni;
     }
 
-    public Recensione creaRecensioneArtista(LocalDate dataCommento, LocalTime oraCommento, String commento, int voto, Artista artista){
+    public Recensione creaRecensioneArtista(LocalDate dataCommento, LocalTime oraCommento, String commento, int voto,
+            Artista artista) {
         Recensione recensione = new Recensione(dataCommento, oraCommento, commento, voto, artista);
+        listaRecensioni.add(0, recensione);
         return recensione;
     }
 
     @Override
     public String toString() {
-        return "Impianto [id=" + id + ", nome=" + nome + ", luogo=" + luogo + ", capienza=" + capienza + ", superficie="+ superficie + ", gestore=" + gestore.toString() + "]";
+        return "Impianto [id=" + id + ", nome=" + nome + ", luogo=" + luogo + ", capienza=" + capienza + ", superficie="
+                + superficie + ", gestore=" + gestore.toString() + "]";
     }
 
 }

@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
 public class Eventfy {
 
     private static Eventfy sistema; // Singleton
@@ -23,22 +22,22 @@ public class Eventfy {
 
     private Map<Integer, Utente> mappaUtenti;
 
-    //UC2-UC3
+    // UC2-UC3
     private Map<Integer, Prenotazione> mappaPrenotazioniPendenti;
     private Map<Integer, Prenotazione> mappaPrenotazioniAccettate;
 
-    //UC6-UC7
+    // UC6-UC7
     private Map<Integer, Utente> mappaUtentiTemp;
     private Map<Integer, Invito> mappaInvitiPendenti;
 
-    //UC8
+    // UC8
     private Map<Integer, Invito> mappaInvitiTemp;
     private Map<Integer, Invito> mappaInvitiAccettati;
 
-    //UC9
-    Recensione recensioneCorrente;
-    //UC12
-    private List<Evento> listaEventi;
+    // UC9
+    //Recensione recensioneCorrente;
+    // UC12
+    //private List<Evento> listaEventi;
 
     // Singleton
     private Eventfy() {
@@ -165,7 +164,7 @@ public class Eventfy {
         return mappaPrenotazioniTemp;
     }
 
-    public Utente getUtente(int id){
+    public Utente getUtente(int id) {
         return mappaUtenti.get(id);
     }
 
@@ -184,9 +183,8 @@ public class Eventfy {
         return null;
     }
 
-    
-    //Simile al metodo "mostraprenotazioniaccettate" sotto
-    //UC6-----------------------------------------------------
+    // Simile al metodo "mostraprenotazioniaccettate" sotto
+    // UC6-----------------------------------------------------
     public List<Prenotazione> aggiungiScaletta() {
 
         mappaPrenotazioniTemp = new HashMap<Integer, Prenotazione>();
@@ -210,8 +208,8 @@ public class Eventfy {
         prenotazioneCorrente = mappaPrenotazioniTemp.get(codice_prenotazione);
 
         if (utenteCorrente instanceof Artista) {
-            //L'utente corrente è già quello della prenotazione corrente 
-            //utenteCorrente = prenotazioneCorrente.getArtista();
+            // L'utente corrente è già quello della prenotazione corrente
+            // utenteCorrente = prenotazioneCorrente.getArtista();
             return ((Artista) utenteCorrente).getListaBrani();
         }
 
@@ -224,12 +222,13 @@ public class Eventfy {
     // scegliere un codice di un brano
     public void aggiungiBrano(int codice_brano) {
         if (utenteCorrente instanceof Artista) {
-            prenotazioneCorrente.addBrano(((Artista)utenteCorrente).getBrano(codice_brano));
+            prenotazioneCorrente.addBrano(((Artista) utenteCorrente).getBrano(codice_brano));
         }
     }
 
-    //CI SERVE UN MODO PER METTERE A NULL LA PRENOTAZIONE CORRENTE UNA VOLTA CONCLUSO L'UC6
-    public void setPrenotazioneCorrenteNull(){
+    // CI SERVE UN MODO PER METTERE A NULL LA PRENOTAZIONE CORRENTE UNA VOLTA
+    // CONCLUSO L'UC6
+    public void setPrenotazioneCorrenteNull() {
         prenotazioneCorrente = null;
     }
 
@@ -241,8 +240,9 @@ public class Eventfy {
         return utenteCorrente instanceof Gestore;
     }
 
-    //UC7-------------------------------------------------------
-    //SImile al metodo "aggiungiscaletta" sopra. In astah abbiamo chiamato questo metodo "invitaArtista"
+    // UC7-------------------------------------------------------
+    // SImile al metodo "aggiungiscaletta" sopra. In astah abbiamo chiamato questo
+    // metodo "invitaArtista"
     public List<Prenotazione> mostraPrenotazioniAccettate() {
 
         mappaPrenotazioniTemp = new HashMap<Integer, Prenotazione>();
@@ -260,8 +260,9 @@ public class Eventfy {
 
     public List<Utente> selezionaPrenotazioneInvito(int codice_prenotazione) {
 
-        invitoCorrente = new Invito(mappaPrenotazioniTemp.get(codice_prenotazione).getEvento(), (Artista)utenteCorrente);
-        mappaUtentiTemp = new HashMap<Integer, Utente>(); 
+        invitoCorrente = new Invito(mappaPrenotazioniTemp.get(codice_prenotazione).getEvento(),
+                (Artista) utenteCorrente);
+        mappaUtentiTemp = new HashMap<Integer, Utente>();
 
         for (Utente utente : mappaUtenti.values()) {
             if (utente instanceof Artista) {
@@ -275,7 +276,7 @@ public class Eventfy {
 
     public void invitaArtista(int codice_artista) {
 
-        invitoCorrente.setDestinatario((Artista)mappaUtentiTemp.get(codice_artista));
+        invitoCorrente.setDestinatario((Artista) mappaUtentiTemp.get(codice_artista));
         mappaInvitiPendenti.put(invitoCorrente.getId(), invitoCorrente);
 
         invitoCorrente = null;
@@ -284,26 +285,25 @@ public class Eventfy {
 
     }
 
-    public Invito getInvitoCorrente(){
+    public Invito getInvitoCorrente() {
         return this.invitoCorrente;
     }
 
-    public Map<Integer, Invito> getMappaInvitiPendenti(){
+    public Map<Integer, Invito> getMappaInvitiPendenti() {
         return mappaInvitiPendenti;
     }
 
-
-    //UC8 ----------------------------------------------------
-    public List<Invito> gestisciInvito(){
+    // UC8 ----------------------------------------------------
+    public List<Invito> gestisciInvito() {
 
         mappaInvitiTemp = new HashMap<Integer, Invito>();
 
         for (int key : mappaInvitiPendenti.keySet()) {
             Invito i = mappaInvitiPendenti.get(key);
-            if (i.hasDestinatario((Artista)utenteCorrente)) {
+            if (i.hasDestinatario((Artista) utenteCorrente)) {
                 mappaInvitiTemp.put(i.getId(), i);
             }
-            
+
         }
 
         return new ArrayList<Invito>(mappaInvitiTemp.values());
@@ -311,55 +311,53 @@ public class Eventfy {
     }
 
     // seleziono un id dalla mappa inviti relativa all'artista
-    public Evento selezionaInvito(int codice_invito){
+    public Evento selezionaInvito(int codice_invito) {
 
         invitoCorrente = mappaInvitiTemp.get(codice_invito);
         return invitoCorrente.getEvento();
 
     }
-    
-    public void accettaInvito(){
+
+    public void accettaInvito() {
 
         int codice_invito = invitoCorrente.getId();
         mappaInvitiPendenti.remove(codice_invito);
         mappaInvitiAccettati.put(codice_invito, invitoCorrente);
         invitoCorrente = null;
         mappaInvitiTemp = null;
-    
+
     }
 
-    public Map<Integer, Invito> getMappaInvitiAccettati(){
+    public Map<Integer, Invito> getMappaInvitiAccettati() {
         return mappaInvitiAccettati;
     }
 
-
-     // POPOLA LE MAPPE/LISTE
-     public void populate() {
+    // POPOLA LE MAPPE/LISTE
+    public void populate() {
 
         // Popola la mappa degli utenti
-        Gestore g1 = new Gestore("Gigi"); //id 0
+        Gestore g1 = new Gestore("Gigi"); // id 0
         mappaUtenti.put(g1.getId(), g1);
         Gestore g2 = new Gestore("Paolo"); // id 1
         mappaUtenti.put(g2.getId(), g2);
         Gestore g3 = new Gestore("Marco"); // id 2
         mappaUtenti.put(g3.getId(), g3);
-        Artista a1 = new Artista("THEWEEKND"); //id 3
+        Artista a1 = new Artista("THEWEEKND"); // id 3
         mappaUtenti.put(a1.getId(), a1);
-        Artista a2 = new Artista("SZA"); //id 4
+        Artista a2 = new Artista("SZA"); // id 4
         mappaUtenti.put(a2.getId(), a2);
-        Artista a3 = new Artista("DojaCat"); //id 5
+        Artista a3 = new Artista("DojaCat"); // id 5
         mappaUtenti.put(a3.getId(), a3);
 
-        a1.nuovoBrano("Starboy", "Starboy", 3); //id 1
-        a1.nuovoBrano("Sacrifice", "Starboy", 3); //id 2
-        a1.nuovoBrano("Out Of Time", "Dawn FM", 3); //id 3
-        a2.nuovoBrano("Good Days", "SOS", 3); //id 4
-        a2.nuovoBrano("Kill Bill", "SOS", 3); //id 5
-        a3.nuovoBrano("Agora Hills", "Album D", 3); //id 6
-
+        a1.nuovoBrano("Starboy", "Starboy", 3); // id 1
+        a1.nuovoBrano("Sacrifice", "Starboy", 3); // id 2
+        a1.nuovoBrano("Out Of Time", "Dawn FM", 3); // id 3
+        a2.nuovoBrano("Good Days", "SOS", 3); // id 4
+        a2.nuovoBrano("Kill Bill", "SOS", 3); // id 5
+        a3.nuovoBrano("Agora Hills", "Album D", 3); // id 6
 
         // Popola la lista impianti
-        Impianto i1 = new Impianto("San Siro", "Milano", 75000, 700, g1); 
+        Impianto i1 = new Impianto("San Siro", "Milano", 75000, 700, g1);
         listaImpianti.add(i1);
         Impianto i2 = new Impianto("Pal1", "Catania", 3000, 200, g3);
         listaImpianti.add(i2);
@@ -394,61 +392,79 @@ public class Eventfy {
         mappaInvitiPendenti.put(inv1.getId(), inv1);
         mappaInvitiPendenti.put(inv2.getId(), inv2);
         mappaInvitiPendenti.put(inv3.getId(), inv3);
-    // Popola le recensioni
-        Recensione rec1 = new Recensione(LocalDate.now(), LocalTime.now(), "Commento 1", 4, a1);
-        Recensione rec2 = new Recensione(LocalDate.now(), LocalTime.now(), "Commento 2", 5, a2);
-        Recensione rec3 = new Recensione(LocalDate.now(), LocalTime.now(), "Commento 3", 3, a3);
-        i1.addRecensione(rec1);
-        i2.addRecensione(rec2);
-        i3.addRecensione(rec3);
-        
+
+        // Popola le recensioni
+        i1.creaRecensioneArtista(LocalDate.now(), LocalTime.now(), "Commento 1", 4, a1);
+        i2.creaRecensioneArtista(LocalDate.now(), LocalTime.now(), "Commento 2", 5, a2);
+        i3.creaRecensioneArtista(LocalDate.now(), LocalTime.now(), "Commento 3", 3, a3);
+
     }
 
-
-    //UC9
-    public List<Prenotazione> inserisciRecensione(){
+    // UC9
+    // Non tutte le prenotazioni sono recensibili!!!!! solo quelle per le quali
+    // l'artista si è già esibito
+    public List<Prenotazione> inserisciRecensione() {
         mappaPrenotazioniTemp = new HashMap<Integer, Prenotazione>();
+
         for (int key : mappaPrenotazioniAccettate.keySet()) {
             Prenotazione p = mappaPrenotazioniAccettate.get(key);
-            if (p.hasArtista((Artista)utenteCorrente)) {
+
+            if (p.hasArtista((Artista) utenteCorrente) &&
+                    p.isRecensibile()) {
                 mappaPrenotazioniTemp.put(p.getId(), p);
             }
         }
+
         return new ArrayList<Prenotazione>(mappaPrenotazioniTemp.values());
     }
 
-    //recuperiamo l'impianto a cui vogliamo aggiungere un commento relativo alla prenotazione
-    //inserisco codice prenotazione
-    //ho sostituito l'operazione seleziona evento con creaRecensione
-    public void creaRecensione(int codice_prenotazione, String commento, int voto){
+    // recuperiamo l'impianto a cui vogliamo aggiungere un commento relativo alla
+    // prenotazione
+    // inserisco codice prenotazione
+    // ho sostituito l'operazione seleziona evento con creaRecensione
+    public void creaRecensione(int codice_prenotazione, String commento, int voto) {
+
         Prenotazione p = mappaPrenotazioniTemp.get(codice_prenotazione);
-        impiantoCorrente = p.getImpianto();
-        recensioneCorrente =impiantoCorrente.creaRecensioneArtista(LocalDate.now(), LocalTime.now(), commento, voto, (Artista)utenteCorrente);
+        p.getImpianto().creaRecensioneArtista(LocalDate.now(), LocalTime.now(), commento, voto,
+                (Artista) utenteCorrente);
+
+        mappaPrenotazioniTemp = null;
+
+        /*
+         * impiantoCorrente = p.getImpianto();
+         * recensioneCorrente = impiantoCorrente.creaRecensioneArtista(LocalDate.now(),
+         * LocalTime.now(), commento, voto, (Artista)utenteCorrente);
+         */
     }
 
-
-    public void confermaRecensione(){
-
-        impiantoCorrente.addRecensione(recensioneCorrente);
-        impiantoCorrente = null;
-        recensioneCorrente = null;
-    }
-
+    // Io toglierei questa operazione. Mettiamo tutto nella precedente
+    /*
+     * public void confermaRecensione(){
+     * 
+     * impiantoCorrente.addRecensione(recensioneCorrente);
+     * impiantoCorrente = null;
+     * recensioneCorrente = null;
+     * }
+     */
+    
+    /*
     public Recensione getRecensioneCorrente() {
         return recensioneCorrente;
-    }
-    //UC10
-    public List<Prenotazione> eliminaPrenotazione(){
+    }*/
+
+    // UC10
+    public List<Prenotazione> eliminaPrenotazione() {
         mappaPrenotazioniTemp = new HashMap<Integer, Prenotazione>();
+
         for (int key : mappaPrenotazioniAccettate.keySet()) {
             Prenotazione p1 = mappaPrenotazioniAccettate.get(key);
-            if (p1.hasArtista((Artista)utenteCorrente)) {
+            if (p1.hasArtista((Artista) utenteCorrente)) {
                 mappaPrenotazioniTemp.put(p1.getId(), p1);
             }
         }
         for (int key : mappaPrenotazioniPendenti.keySet()) {
             Prenotazione p2 = mappaPrenotazioniPendenti.get(key);
-            if (p2.hasArtista((Artista)utenteCorrente)) {
+            if (p2.hasArtista((Artista) utenteCorrente)) {
                 mappaPrenotazioniTemp.put(p2.getId(), p2);
             }
         }
@@ -456,46 +472,73 @@ public class Eventfy {
         return new ArrayList<Prenotazione>(mappaPrenotazioniTemp.values());
     }
 
-    //supponiamo di aver inserito l'id di una prenotazione ricavato dalla lista delle prenotazioni che ci siamo ritornati
+    // Supponiamo di aver inserito l'id di una prenotazione ricavato dalla lista
+    // delle prenotazioni che ci siamo ritornati
+    public void confermaEliminazione(int codice_prenotazione) {
 
-    public void confermaEliminazione(int codice_prenotazione){
-
-        prenotazioneCorrente = mappaPrenotazioniPendenti.get(codice_prenotazione);
-        if(prenotazioneCorrente == null){
-            mappaPrenotazioniAccettate.remove(codice_prenotazione);
-        }
-        else{
-            mappaPrenotazioniPendenti.remove(codice_prenotazione);
+        if (mappaPrenotazioniTemp.get(codice_prenotazione) != null) {
+            if (mappaPrenotazioniPendenti.remove(codice_prenotazione) == null) {
+                mappaPrenotazioniAccettate.remove(codice_prenotazione);
+            }
         }
 
-        prenotazioneCorrente = null;
+        mappaPrenotazioniTemp = null;
+
+        /*
+         * prenotazioneCorrente = mappaPrenotazioniPendenti.get(codice_prenotazione);
+         * if(prenotazioneCorrente == null){
+         * mappaPrenotazioniAccettate.remove(codice_prenotazione);
+         * }
+         * else{
+         * mappaPrenotazioniPendenti.remove(codice_prenotazione);
+         * }
+         * 
+         * prenotazioneCorrente = null;
+         */
     }
 
-    //UC12
-    public List<Evento> partecipaEvento(String nomeArtista){
+    // UC12
+    public List<Prenotazione> partecipaEvento(String nomeArtista) {
+
+        // Uso la mappa Prenotazioni in modo da non creare associazioni tra evento e
+        // sistema
+        mappaPrenotazioniTemp = new HashMap<Integer, Prenotazione>();
+
         for (int key : mappaPrenotazioniAccettate.keySet()) {
             Prenotazione p1 = mappaPrenotazioniAccettate.get(key);
 
-            if(nomeArtista.equalsIgnoreCase(p1.getArtista().getNome())){
-                if (LocalDate.now().compareTo(p1.getEvento().getData()) < 0) {
-                    listaEventi.add(p1.getEvento());
+            if (nomeArtista.equalsIgnoreCase(p1.getNomeArtista())) {
+                if (p1.isPartecipabile()) {
+                    mappaPrenotazioniTemp.put(p1.getId(), p1);
+                    // listaEventi.add(p1.getEvento());
                 }
             }
         }
-        
-        return listaEventi;
+
+        return new ArrayList<Prenotazione>(mappaPrenotazioniTemp.values());
     }
 
-    //supponiamo di recuperare della lista degli eventi ritornata l'id di un determinato evento
-    public void confermaPartecipazione(int id_evento){
-        for(int i =0; i<listaEventi.size(); i++){
-  
-            if(id_evento == listaEventi.get(i).getId()){
+    // supponiamo di recuperare della lista degli eventi ritornata l'id di un
+    // determinato evento/prenotazione
+    // prenotazione ed il relativo evento hanno stesso ID
+    public void confermaPartecipazione(int id_evento) {
 
-                listaEventi.get(i).addFan((Fan)utenteCorrente);
-                ((Fan)utenteCorrente).addEvento(listaEventi.get(i));
+        Prenotazione p = mappaPrenotazioniTemp.get(id_evento);
+        p.addPartecipazioneFan((Fan) utenteCorrente);
+        ((Fan) utenteCorrente).addPartecipazione(p.getEvento());
 
-            }
-        }
+        mappaPrenotazioniTemp = null;
+
+        /*
+         * for(int i =0; i<listaEventi.size(); i++){
+         * 
+         * if(id_evento == listaEventi.get(i).getId()){
+         * 
+         * listaEventi.get(i).addFan((Fan)utenteCorrente);
+         * ((Fan)utenteCorrente).addEvento(listaEventi.get(i));
+         * 
+         * }
+         * }
+         */
     }
 }
