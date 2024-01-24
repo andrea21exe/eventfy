@@ -71,6 +71,9 @@ public class Prenotazione {
     public String getNomeArtista() {
         return artista.getNome();
     }
+    public int getIdArtista() {
+        return artista.getId();
+    }
 
     public void addPartecipazioneFan(Fan fan) {
         this.evento.addFan(fan);

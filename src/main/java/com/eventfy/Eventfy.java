@@ -180,14 +180,16 @@ public class Eventfy {
     public Map<Integer, Invito> getMappaInvitiPendenti() {
         return mappaInvitiPendenti;
     }
+
     public Map<Integer, Invito> getMappaInvitiAccettati() {
         return mappaInvitiAccettati;
     }
-    
+
     public Map<Integer, Prenotazione> getMappaPrenotazioniAnnullate() {
         return mappaPrenotazioniAnnullate;
     }
-      // CI SERVE UN MODO PER METTERE A NULL LA PRENOTAZIONE CORRENTE UNA VOLTA
+
+    // CI SERVE UN MODO PER METTERE A NULL LA PRENOTAZIONE CORRENTE UNA VOLTA
     // CONCLUSO L'UC6
     public void setPrenotazioneCorrenteNull() {
         prenotazioneCorrente = null;
@@ -200,6 +202,12 @@ public class Eventfy {
     public boolean hasGestoreCorrente() {
         return utenteCorrente instanceof Gestore;
     }
+
+    public boolean hasFanCorrente() {
+        return utenteCorrente instanceof Fan;
+    }
+
+
     // EFFETTUA LA REGISTRAZIONE ED IL "LOG-IN"
     public void signUpLogIn(Utente utente) {
         mappaUtenti.put(utente.getId(), utente);
@@ -258,8 +266,6 @@ public class Eventfy {
         }
     }
 
-  
-
     // UC7-------------------------------------------------------
     // SImile al metodo "aggiungiscaletta" sopra. In astah abbiamo chiamato questo
     // metodo "invitaArtista"
@@ -305,7 +311,6 @@ public class Eventfy {
 
     }
 
-
     // UC8 ----------------------------------------------------
     public List<Invito> gestisciInvito() {
 
@@ -341,7 +346,6 @@ public class Eventfy {
 
     }
 
-
     // POPOLA LE MAPPE/LISTE
     public void populate() {
 
@@ -358,6 +362,8 @@ public class Eventfy {
         mappaUtenti.put(a2.getId(), a2);
         Artista a3 = new Artista("DojaCat"); // id 5
         mappaUtenti.put(a3.getId(), a3);
+        Fan f1 = new Fan("Max"); // id 6
+        mappaUtenti.put(f1.getId(), f1);
 
         a1.nuovoBrano("Starboy", "Starboy", 3); // id 1
         a1.nuovoBrano("Sacrifice", "Starboy", 3); // id 2
@@ -515,10 +521,22 @@ public class Eventfy {
          */
     }
 
- 
-
     // UC12
-    public List<Prenotazione> partecipaEvento(String nomeArtista) {
+
+    //Da aggiungere questa funzione in astah
+    public List<Utente> mostraArtistiEventi(){
+        mappaUtentiTemp = new HashMap<Integer, Utente>();
+
+        for (Utente utente : mappaUtenti.values()) {
+            if (utente instanceof Artista) {
+                mappaUtentiTemp.put(utente.getId(), utente);
+            }
+        }
+        return new ArrayList<Utente>(mappaUtentiTemp.values());
+    }
+
+
+    public List<Prenotazione> partecipaEvento(int codice_artista) {
 
         // Uso la mappa Prenotazioni in modo da non creare associazioni tra evento e
         // sistema
@@ -526,8 +544,7 @@ public class Eventfy {
 
         for (int key : mappaPrenotazioniAccettate.keySet()) {
             Prenotazione p1 = mappaPrenotazioniAccettate.get(key);
-
-            if (nomeArtista.equalsIgnoreCase(p1.getNomeArtista())) {
+            if (codice_artista==p1.getIdArtista()){
                 if (p1.isPartecipabile()) {
                     mappaPrenotazioniTemp.put(p1.getId(), p1);
                     // listaEventi.add(p1.getEvento());
@@ -548,7 +565,7 @@ public class Eventfy {
         ((Fan) utenteCorrente).addPartecipazione(p.getEvento());
 
         mappaPrenotazioniTemp = null;
-
+        mappaUtentiTemp=null;
         /*
          * for(int i =0; i<listaEventi.size(); i++){
          * 

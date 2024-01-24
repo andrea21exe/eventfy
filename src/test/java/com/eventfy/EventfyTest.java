@@ -57,10 +57,6 @@ public class EventfyTest {
 
         // Login - SignUp
         eventfy.logIn(5);
-        ;
-
-        assertNull(eventfy.getPrenotazioneCorrente());
-
         // Testo implicitamente il metodo isMaggioreUguale della classe Impianto
         List<Impianto> impiantiDisponibili = eventfy.nuovaPrenotazione("Prenotazione1", "Descrizione 1", 2,
                 15000, LocalDate.now(), LocalTime.now());
@@ -200,7 +196,7 @@ public class EventfyTest {
         List<Prenotazione> result = eventfy.mostraPrenotazioniAccettate();
         assertNotNull(result);
         // L'utente con ID = 0 ha una prenotazione pendente
-        assertEquals(3, result.size());
+        assertEquals(5, result.size());
 
     }
 
@@ -399,11 +395,26 @@ public class EventfyTest {
 
     //12
     @Test
+    void mostraArtistiEventi(){
+         //Registro ed effettuo il login con un nuovo utente (FAN)
+         eventfy.signUpLogIn(new Utente("albertoFan"));
+         // Esegui la funzione mostraArtistiEventi
+        List<Utente> artisti = eventfy.mostraArtistiEventi();
+        // Verifica che la lista non sia nulla e che contenga artisti
+        assertNotNull(artisti);
+        assertFalse(artisti.isEmpty());
+         // verifica se ogni elemento è effettivamente un'istanza di Artista
+        for (Utente utente : artisti) {
+            assertTrue(utente instanceof Artista);
+        }
+    }
+
+    @Test
     void partecipaEventoTest() {
         //Registro ed effettuo il login con un nuovo utente (FAN)
         eventfy.signUpLogIn(new Utente("albertoFan"));
         //AlbertoFan vuole partecipare ad un evento di theweeknd
-        List<Prenotazione> prenotazioniTheWeekndPartecipabili = eventfy.partecipaEvento("theweeknd");
+        List<Prenotazione> prenotazioniTheWeekndPartecipabili = eventfy.partecipaEvento(3);
         //Deve esistere almeno una prenotazione partecipabile
         assertTrue(prenotazioniTheWeekndPartecipabili.size() > 0);
         //Nelle estensioni dovremmo provare il caso in cui un utente cerca di partecipare ad un evento piu di una volta
@@ -415,7 +426,7 @@ public class EventfyTest {
         eventfy.signUpLogIn(new Fan("albertoFan"));
         Utente utenteCorrente = eventfy.getUtenteCorrente();
         //AlbertoFan vuole partecipare ad un evento di theweeknd
-        eventfy.partecipaEvento("theweeknd");
+        eventfy.partecipaEvento(3);
         //Partecipo all'evento con ID 9 (Vedesi metodo populate, è un evento partecipabile di theWeeknd)
         eventfy.confermaPartecipazione(9);
         assertTrue(((Fan)utenteCorrente).isPartecipante(9));

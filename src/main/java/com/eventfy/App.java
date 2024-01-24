@@ -32,9 +32,10 @@ public class App {
         System.out.println("4. Aggiungi scaletta ad un evento");
         System.out.println("5. Invita artista");
         System.out.println("6. Gestisci inviti");
-        System.out.println("7. Inserisci recensione");
-        System.out.println("8. Elimina Prenotazione");
-
+        System.out.println("7. Inserisci recensione struttura");
+        System.out.println("8. Elimina prenotazione");
+        System.out.println("9. Partecipa evento");
+        System.out.println("10. Inserisci recensione evento");
 
     }
 
@@ -77,7 +78,7 @@ public class App {
                 System.out.println("Hai selezionato l'Opzione 6");
                 break;
             case 7:
-                inserisciRecensione();
+                inserisciRecensioneStruttura();
                 System.out.println("Hai selezionato l'Opzione 7");
                 break;
             case 8:
@@ -85,7 +86,11 @@ public class App {
                 System.out.println("Hai selezionato l'Opzione 8");
                 break;
             case 9:
-
+                partecipaEvento();
+                System.out.println("Hai selezionato l'Opzione 9");
+                break;
+            case 10:
+                inserisciRecensioneEvento();
                 System.out.println("Hai selezionato l'Opzione 9");
                 break;
             default:
@@ -93,7 +98,7 @@ public class App {
         }
     }
 
-
+   
     private static void inserisciImpianto() {
 
         Scanner input = new Scanner(System.in);
@@ -384,7 +389,7 @@ public class App {
         menu();
     }
 
-    private static void inserisciRecensione() {
+    private static void inserisciRecensioneStruttura() {
         Scanner input = new Scanner(System.in);
         // solo per prova
         sistema.logIn(3);
@@ -403,6 +408,7 @@ public class App {
                 int codice_prenotazione = input.nextInt();
                 System.out.println("Inserisci il commento:");
                 String commento = input.nextLine();
+                //per evitare che il cursore rimane incastrato e non funzioni correttamente
                 input.next();
                 System.out.println("Inserisci il voto (da 1 a 5):");
                 int voto = input.nextInt();
@@ -443,4 +449,36 @@ public class App {
         menu();
     }
     }
+    private static void partecipaEvento() {
+        Scanner input = new Scanner(System.in);
+        // solo per prova
+        sistema.logIn(6);
+        if(sistema.hasFanCorrente()){
+            List<Utente> artisti = sistema.mostraArtistiEventi();
+            System.out.println("Lista degli artisti:");
+            for (Utente artista : artisti) {
+                System.out.println(artista);
+            }
+            System.out.println("Seleziona un artista inserendo il suo codice:");
+            int codice_artista=input.nextInt();
+            //per evitare che il cursore rimane incastrato e non funzioni correttamente
+            input.nextLine();
+            List<Prenotazione> prenotazioniPartecipabili = sistema.partecipaEvento(codice_artista);
+                System.out.println("Prenotazioni partecipabili:");
+                for (Prenotazione p: prenotazioniPartecipabili) {
+                    System.out.println(p);
+                }
+                System.out.println("Inserisci il codice della prenotazione a cui vuoi partecipare:");
+                int codice_prenotazione=input.nextInt();
+                sistema.confermaPartecipazione(codice_prenotazione);
+                System.out.println("Partecipazione confermata con successo!");
+        } else {
+            System.out.println("Solo un fan può esprimere la sua partecipazione");
+        }
+        menu();
+    }
+    private static void inserisciRecensioneEvento() {
+        menu();
+    }
+
 }
