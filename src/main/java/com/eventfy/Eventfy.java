@@ -173,6 +173,33 @@ public class Eventfy {
         return mappaUtenti.get(id);
     }
 
+    public Invito getInvitoCorrente() {
+        return this.invitoCorrente;
+    }
+
+    public Map<Integer, Invito> getMappaInvitiPendenti() {
+        return mappaInvitiPendenti;
+    }
+    public Map<Integer, Invito> getMappaInvitiAccettati() {
+        return mappaInvitiAccettati;
+    }
+    
+    public Map<Integer, Prenotazione> getMappaPrenotazioniAnnullate() {
+        return mappaPrenotazioniAnnullate;
+    }
+      // CI SERVE UN MODO PER METTERE A NULL LA PRENOTAZIONE CORRENTE UNA VOLTA
+    // CONCLUSO L'UC6
+    public void setPrenotazioneCorrenteNull() {
+        prenotazioneCorrente = null;
+    }
+
+    public boolean hasArtistaCorrente() {
+        return utenteCorrente instanceof Artista;
+    }
+
+    public boolean hasGestoreCorrente() {
+        return utenteCorrente instanceof Gestore;
+    }
     // EFFETTUA LA REGISTRAZIONE ED IL "LOG-IN"
     public void signUpLogIn(Utente utente) {
         mappaUtenti.put(utente.getId(), utente);
@@ -231,19 +258,7 @@ public class Eventfy {
         }
     }
 
-    // CI SERVE UN MODO PER METTERE A NULL LA PRENOTAZIONE CORRENTE UNA VOLTA
-    // CONCLUSO L'UC6
-    public void setPrenotazioneCorrenteNull() {
-        prenotazioneCorrente = null;
-    }
-
-    public boolean hasArtistaCorrente() {
-        return utenteCorrente instanceof Artista;
-    }
-
-    public boolean hasGestoreCorrente() {
-        return utenteCorrente instanceof Gestore;
-    }
+  
 
     // UC7-------------------------------------------------------
     // SImile al metodo "aggiungiscaletta" sopra. In astah abbiamo chiamato questo
@@ -290,13 +305,6 @@ public class Eventfy {
 
     }
 
-    public Invito getInvitoCorrente() {
-        return this.invitoCorrente;
-    }
-
-    public Map<Integer, Invito> getMappaInvitiPendenti() {
-        return mappaInvitiPendenti;
-    }
 
     // UC8 ----------------------------------------------------
     public List<Invito> gestisciInvito() {
@@ -333,9 +341,6 @@ public class Eventfy {
 
     }
 
-    public Map<Integer, Invito> getMappaInvitiAccettati() {
-        return mappaInvitiAccettati;
-    }
 
     // POPOLA LE MAPPE/LISTE
     public void populate() {
@@ -510,9 +515,7 @@ public class Eventfy {
          */
     }
 
-    public Map<Integer, Prenotazione> getMappaPrenotazioniAnnullate() {
-        return mappaPrenotazioniAnnullate;
-    }
+ 
 
     // UC12
     public List<Prenotazione> partecipaEvento(String nomeArtista) {
