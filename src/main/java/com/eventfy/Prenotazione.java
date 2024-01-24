@@ -76,8 +76,16 @@ public class Prenotazione {
         this.evento.addFan(fan);
     }
 
-    public void creaRecensioneArtista(String commento, int voto){
-        this.impianto.creaRecensioneArtista(commento, voto, this.artista);
+    public void creaRecensione(String commento, int voto){
+        this.impianto.recensisci(commento, voto, this.artista);
+    }
+
+    public void creaRecensione(String commento, int voto, Fan fan){
+        this.evento.recensisci(commento, voto, fan);
+    }
+
+    public boolean hasPartecipante(Fan fan){
+        return this.evento.hasPartecipante(fan);
     }
 
     @Override

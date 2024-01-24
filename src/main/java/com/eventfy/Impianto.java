@@ -5,7 +5,7 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Impianto {
+public class Impianto implements Recensibile{
 
     private static int currentId = 0;
 
@@ -61,8 +61,8 @@ public class Impianto {
         return this.listaRecensioni;
     }
 
-    public void creaRecensioneArtista(String commento, int voto, Artista artista) {
-        Recensione recensione = new Recensione(LocalDate.now(), LocalTime.now(), commento, voto, artista);
+    public void recensisci(String commento, int voto, Utente artista) {
+        Recensione recensione = new Recensione(commento, voto, artista);
         listaRecensioni.add(0, recensione);
     }
 

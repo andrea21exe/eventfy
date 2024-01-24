@@ -302,7 +302,7 @@ public class EventfyTest {
         Recensione r8 = p8.getImpianto().getListaRecensioni().get(0);
         assertEquals("Impianto al top, bravi", r8.getCommento());
         assertEquals(5, r8.getVoto());
-        assertEquals(eventfy.getUtenteCorrente(), r8.getArtista());
+        assertEquals(eventfy.getUtenteCorrente(), r8.getUtente());
 
         assertNull(eventfy.getMapPrenotazioniTemp());
         /*
@@ -396,6 +396,34 @@ public class EventfyTest {
         // Verifica la presenza della prenotazione cancellata nella mappa delle pr. annullate
         assertNotNull(eventfy.getMappaPrenotazioniAnnullate().get(codicePrenotazione));
     }
+
+    //12
+    @Test
+    void partecipaEventoTest() {
+        //Registro ed effettuo il login con un nuovo utente (FAN)
+        eventfy.signUpLogIn(new Utente("albertoFan"));
+        //AlbertoFan vuole partecipare ad un evento di theweeknd
+        List<Prenotazione> prenotazioniTheWeekndPartecipabili = eventfy.partecipaEvento("theweeknd");
+        //Deve esistere almeno una prenotazione partecipabile
+        assertTrue(prenotazioniTheWeekndPartecipabili.size() > 0);
+        //Nelle estensioni dovremmo provare il caso in cui un utente cerca di partecipare ad un evento piu di una volta
+    }
     
+    @Test
+    void confermaPartecipazioneTest() {
+        //Registro ed effettuo il login con un nuovo utente (FAN)
+        eventfy.signUpLogIn(new Fan("albertoFan"));
+        Utente utenteCorrente = eventfy.getUtenteCorrente();
+        //AlbertoFan vuole partecipare ad un evento di theweeknd
+        eventfy.partecipaEvento("theweeknd");
+        //Partecipo all'evento con ID 9 (Vedesi metodo populate, è un evento partecipabile di theWeeknd)
+        eventfy.confermaPartecipazione(9);
+        assertTrue(((Fan)utenteCorrente).isPartecipante(9));
+        assertTrue(eventfy.getPrenotazione(9).hasPartecipante((Fan)utenteCorrente));
+        
+        assertNull(eventfy.getMapPrenotazioniTemp());
+        //Nelle estensioni dovremmo provare il caso in cui un utente cerca di partecipare ad un evento piu di una volta
+
+    }
 
 }

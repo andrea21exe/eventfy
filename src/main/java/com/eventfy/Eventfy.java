@@ -1,5 +1,6 @@
 package com.eventfy;
 
+import java.io.StringBufferInputStream;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -35,12 +36,12 @@ public class Eventfy {
     private Map<Integer, Invito> mappaInvitiAccettati;
 
     // UC9
-    //Recensione recensioneCorrente;
+    // Recensione recensioneCorrente;
 
     // UC10
     private Map<Integer, Prenotazione> mappaPrenotazioniAnnullate;
     // UC12
-    //private List<Evento> listaEventi;
+    // private List<Evento> listaEventi;
 
     // Singleton
     private Eventfy() {
@@ -380,7 +381,7 @@ public class Eventfy {
         Prenotazione p6 = new Prenotazione("P6", "d6", 320, LocalDate.of(2022, 12, 1), LocalTime.now(), a3, i3);
         Prenotazione p7 = new Prenotazione("P7", "d7", 320, LocalDate.of(2025, 12, 1), LocalTime.now(), a3, i3);
         Prenotazione p8 = new Prenotazione("P8", "d8", 320, LocalDate.of(2021, 12, 1), LocalTime.now(), a1, i3);
-        
+        Prenotazione p9 = new Prenotazione("P8", "d8", 320, LocalDate.of(2025, 12, 1), LocalTime.now(), a1, i3);
 
         mappaPrenotazioniPendenti.put(p0.getId(), p0);
         mappaPrenotazioniPendenti.put(p1.getId(), p1);
@@ -391,6 +392,7 @@ public class Eventfy {
         mappaPrenotazioniAccettate.put(p5.getId(), p5);
         mappaPrenotazioniAccettate.put(p6.getId(), p6);
         mappaPrenotazioniAccettate.put(p8.getId(), p8);
+        mappaPrenotazioniAccettate.put(p9.getId(), p9);
 
         // Inviti (A1 è il mittente di 2 inviti e destinatario di 1 invito)
         Invito inv1 = new Invito(p3.getEvento(), p3.getArtista(), a3);
@@ -401,9 +403,9 @@ public class Eventfy {
         mappaInvitiPendenti.put(inv3.getId(), inv3);
 
         // Popola le recensioni
-        i1.creaRecensioneArtista("Commento 1", 4, a1);
-        i2.creaRecensioneArtista("Commento 2", 5, a2);
-        i3.creaRecensioneArtista("Commento 3", 3, a3);
+        i1.recensisci("Commento 1", 4, a1);
+        i2.recensisci("Commento 2", 5, a2);
+        i3.recensisci("Commento 3", 3, a3);
 
     }
 
@@ -432,7 +434,7 @@ public class Eventfy {
     public void creaRecensione(int codice_prenotazione, String commento, int voto) {
 
         Prenotazione p = mappaPrenotazioniTemp.get(codice_prenotazione);
-        p.creaRecensioneArtista(commento, voto);
+        p.creaRecensione(commento, voto);
 
         mappaPrenotazioniTemp = null;
 
@@ -454,9 +456,10 @@ public class Eventfy {
      */
 
     /*
-    public Recensione getRecensioneCorrente() {
-        return recensioneCorrente;
-    }*/
+     * public Recensione getRecensioneCorrente() {
+     * return recensioneCorrente;
+     * }
+     */
 
     // UC10
     public List<Prenotazione> eliminaPrenotazione() {
@@ -507,7 +510,7 @@ public class Eventfy {
          */
     }
 
-    public Map<Integer, Prenotazione> getMappaPrenotazioniAnnullate(){
+    public Map<Integer, Prenotazione> getMappaPrenotazioniAnnullate() {
         return mappaPrenotazioniAnnullate;
     }
 
@@ -556,12 +559,33 @@ public class Eventfy {
          */
     }
 
-    public Prenotazione getPrenotazione(int codice_prenotazione){
-        
+    public Prenotazione getPrenotazione(int codice_prenotazione) {
+
         Prenotazione p = mappaPrenotazioniAccettate.get(codice_prenotazione);
-        if(p == null){
+        if (p == null) {
             p = mappaPrenotazioniPendenti.get(codice_prenotazione);
         }
         return p;
     }
+
+    // UC13
+    public List<Evento> inserisciRecensioneEvento() {
+        if (utenteCorrente instanceof Fan) {
+            return ((Fan) utenteCorrente).getListaEventi();
+        }
+        return null;
+    }
+
+    public void confermaRecensioneEvento(int id_evento, String commento, int voto) {
+        Prenotazione p = mappaPrenotazioniAccettate.get(id_evento);
+
+        // Se la prenotazione è tra quelle accettate e l'utente "è partecipante..."
+        // Viene creata la recensione
+        if (utenteCorrente instanceof Fan) {
+            if (p != null && ((Fan) utenteCorrente).isPartecipante(p.getEvento())) {
+                p.creaRecensione(commento, voto, (Fan) utenteCorrente);
+            }
+        }
+    }
+
 }

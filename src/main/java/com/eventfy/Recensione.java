@@ -11,19 +11,19 @@ public class Recensione {
     private LocalTime oraCommento;
     private String commento;
     private int voto;
-    private Artista artista;
+    private Utente utente;
 
-    public Recensione(LocalDate dataCommento, LocalTime oraCommento, String commento, int voto, Artista artista) {
+    public Recensione(String commento, int voto, Utente utente) {
 
         if (voto < 0 || voto > 5) {
             throw new IllegalArgumentException("Il valore deve essere compreso tra 0 a 5");
         }
 
-        this.dataCommento = dataCommento;
-        this.oraCommento = oraCommento;
+        this.dataCommento = LocalDate.now();
+        this.oraCommento = LocalTime.now();
         this.commento = commento;
         this.id = currentId++;
-        this.artista = artista;
+        this.utente = utente;
         this.voto = voto;
     }
 
@@ -31,10 +31,12 @@ public class Recensione {
         return id;
     }
 
+    
+
     @Override
     public String toString() {
-        return "Recensione [dataCommento=" + dataCommento + ", oraCommento=" + oraCommento + ", commento=" + commento
-                + ", voto=" + voto + ", id=" + id + "]";
+        return "Recensione [id=" + id + ", dataCommento=" + dataCommento + ", oraCommento=" + oraCommento
+                + ", commento=" + commento + ", voto=" + voto + ", utente=" + utente + "]";
     }
 
     public String getCommento() {
@@ -49,7 +51,7 @@ public class Recensione {
         return this.dataCommento;
     }
 
-    public Artista getArtista() {
-        return this.artista;
+    public Utente getUtente() {
+        return this.utente;
     }
 }

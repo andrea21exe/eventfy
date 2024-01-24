@@ -39,15 +39,14 @@ public class PrenotazioneTest {
 
     @Test
     void testCreaRecensioneArtista(){
-        p.creaRecensioneArtista("Impianto bello", 4);
+        p.creaRecensione("Impianto bello", 4);
 
         //Prendo il commento appena inserito
         Recensione r = p.getImpianto().getListaRecensioni().get(0);
         assertEquals("Impianto bello", r.getCommento());
         assertEquals(4, r.getVoto());
-        assertEquals(p.getArtista(), r.getArtista());
+        assertEquals(p.getArtista(), r.getUtente());
 
-        
     }
 
 }
