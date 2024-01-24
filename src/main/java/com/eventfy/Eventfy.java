@@ -36,6 +36,9 @@ public class Eventfy {
 
     // UC9
     //Recensione recensioneCorrente;
+
+    // UC10
+    private Map<Integer, Prenotazione> mappaPrenotazioniAnnullate;
     // UC12
     //private List<Evento> listaEventi;
 
@@ -47,6 +50,7 @@ public class Eventfy {
         mappaPrenotazioniPendenti = new HashMap<Integer, Prenotazione>();
         mappaInvitiPendenti = new HashMap<Integer, Invito>();
         mappaInvitiAccettati = new HashMap<Integer, Invito>();
+        mappaPrenotazioniAnnullate = new HashMap<Integer, Prenotazione>();
     }
 
     public static Eventfy getIstanceEventfy() {
@@ -373,8 +377,10 @@ public class Eventfy {
         Prenotazione p3 = new Prenotazione("P3", "d3", 130, LocalDate.now(), LocalTime.now(), a1, i4);
         Prenotazione p4 = new Prenotazione("P4", "d4", 130, LocalDate.now(), LocalTime.now(), a1, i4);
         Prenotazione p5 = new Prenotazione("P5", "d5", 130, LocalDate.now(), LocalTime.now(), a1, i1);
-        Prenotazione p6 = new Prenotazione("P6", "d6", 320, LocalDate.of(2024, 12, 1), LocalTime.now(), a3, i3);
+        Prenotazione p6 = new Prenotazione("P6", "d6", 320, LocalDate.of(2022, 12, 1), LocalTime.now(), a3, i3);
         Prenotazione p7 = new Prenotazione("P7", "d7", 320, LocalDate.of(2025, 12, 1), LocalTime.now(), a3, i3);
+        Prenotazione p8 = new Prenotazione("P8", "d8", 320, LocalDate.of(2021, 12, 1), LocalTime.now(), a1, i3);
+        
 
         mappaPrenotazioniPendenti.put(p0.getId(), p0);
         mappaPrenotazioniPendenti.put(p1.getId(), p1);
@@ -384,6 +390,7 @@ public class Eventfy {
         mappaPrenotazioniAccettate.put(p4.getId(), p4);
         mappaPrenotazioniAccettate.put(p5.getId(), p5);
         mappaPrenotazioniAccettate.put(p6.getId(), p6);
+        mappaPrenotazioniAccettate.put(p8.getId(), p8);
 
         // Inviti (A1 è il mittente di 2 inviti e destinatario di 1 invito)
         Invito inv1 = new Invito(p3.getEvento(), p3.getArtista(), a3);
@@ -394,9 +401,9 @@ public class Eventfy {
         mappaInvitiPendenti.put(inv3.getId(), inv3);
 
         // Popola le recensioni
-        i1.creaRecensioneArtista(LocalDate.now(), LocalTime.now(), "Commento 1", 4, a1);
-        i2.creaRecensioneArtista(LocalDate.now(), LocalTime.now(), "Commento 2", 5, a2);
-        i3.creaRecensioneArtista(LocalDate.now(), LocalTime.now(), "Commento 3", 3, a3);
+        i1.creaRecensioneArtista("Commento 1", 4, a1);
+        i2.creaRecensioneArtista("Commento 2", 5, a2);
+        i3.creaRecensioneArtista("Commento 3", 3, a3);
 
     }
 
@@ -425,8 +432,7 @@ public class Eventfy {
     public void creaRecensione(int codice_prenotazione, String commento, int voto) {
 
         Prenotazione p = mappaPrenotazioniTemp.get(codice_prenotazione);
-        p.getImpianto().creaRecensioneArtista(LocalDate.now(), LocalTime.now(), commento, voto,
-                (Artista) utenteCorrente);
+        p.creaRecensioneArtista(commento, voto);
 
         mappaPrenotazioniTemp = null;
 
@@ -446,7 +452,7 @@ public class Eventfy {
      * recensioneCorrente = null;
      * }
      */
-    
+
     /*
     public Recensione getRecensioneCorrente() {
         return recensioneCorrente;
@@ -476,10 +482,14 @@ public class Eventfy {
     // delle prenotazioni che ci siamo ritornati
     public void confermaEliminazione(int codice_prenotazione) {
 
-        if (mappaPrenotazioniTemp.get(codice_prenotazione) != null) {
+        Prenotazione daEliminare = mappaPrenotazioniTemp.get(codice_prenotazione);
+        if (daEliminare != null) {
             if (mappaPrenotazioniPendenti.remove(codice_prenotazione) == null) {
                 mappaPrenotazioniAccettate.remove(codice_prenotazione);
             }
+
+            mappaPrenotazioniAnnullate.put(daEliminare.getId(), daEliminare);
+
         }
 
         mappaPrenotazioniTemp = null;
@@ -495,6 +505,10 @@ public class Eventfy {
          * 
          * prenotazioneCorrente = null;
          */
+    }
+
+    public Map<Integer, Prenotazione> getMappaPrenotazioniAnnullate(){
+        return mappaPrenotazioniAnnullate;
     }
 
     // UC12
@@ -540,5 +554,14 @@ public class Eventfy {
          * }
          * }
          */
+    }
+
+    public Prenotazione getPrenotazione(int codice_prenotazione){
+        
+        Prenotazione p = mappaPrenotazioniAccettate.get(codice_prenotazione);
+        if(p == null){
+            p = mappaPrenotazioniPendenti.get(codice_prenotazione);
+        }
+        return p;
     }
 }

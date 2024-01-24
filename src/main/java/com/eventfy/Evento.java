@@ -58,7 +58,7 @@ public class Evento {
     @Override
     public String toString() {
         return "Evento [id=" + id + ", titolo=" + titolo + ", descrizione=" + descrizione + ", durata=" + durata
-                + ", data=" + data + ", ora=" + ora + "brani="+listaBrani +"]";
+                + ", data=" + data + ", ora=" + ora + ", brani="+listaBrani + ", partecipanti=" + listaFan.size() + "]" ;
     }
 
 }

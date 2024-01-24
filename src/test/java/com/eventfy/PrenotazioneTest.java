@@ -1,5 +1,6 @@
 package com.eventfy;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDate;
@@ -27,7 +28,6 @@ public class PrenotazioneTest {
 
     }
 
-
     @Test
     void testAddBrano() {
 
@@ -36,4 +36,18 @@ public class PrenotazioneTest {
         assertTrue(p.getEvento().getListaBrani().contains(b));  
 
     }
+
+    @Test
+    void testCreaRecensioneArtista(){
+        p.creaRecensioneArtista("Impianto bello", 4);
+
+        //Prendo il commento appena inserito
+        Recensione r = p.getImpianto().getListaRecensioni().get(0);
+        assertEquals("Impianto bello", r.getCommento());
+        assertEquals(4, r.getVoto());
+        assertEquals(p.getArtista(), r.getArtista());
+
+        
+    }
+
 }

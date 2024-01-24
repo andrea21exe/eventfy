@@ -76,6 +76,10 @@ public class Prenotazione {
         this.evento.addFan(fan);
     }
 
+    public void creaRecensioneArtista(String commento, int voto){
+        this.impianto.creaRecensioneArtista(commento, voto, this.artista);
+    }
+
     @Override
     public String toString() {
         return "Prenotazione [id=" + id + ", data=" + data + ", ora=" + ora + ", evento=" + evento + ", artista="

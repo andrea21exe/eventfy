@@ -56,7 +56,8 @@ public class EventfyTest {
     void testNuovaPrenotazione() {
 
         // Login - SignUp
-        eventfy.logIn(5);;
+        eventfy.logIn(5);
+        ;
 
         assertNull(eventfy.getPrenotazioneCorrente());
 
@@ -155,7 +156,8 @@ public class EventfyTest {
         Prenotazione pRicercata = eventfy.selezionaPrenotazionePendente(0);
         // Accetta la prenotazione selezionata
         eventfy.accettaPrenotazione();
-        // Verifica che la prenotazione sia stata spostata correttamente da pendente ad accettata
+        // Verifica che la prenotazione sia stata spostata correttamente da pendente ad
+        // accettata
         assertTrue(eventfy.getPrenotazioniAccettate().containsValue(pRicercata));
         // Verifica che la prenotazione sia stata tolta da pendente
         assertFalse(eventfy.getPrenotazioniPendenti().containsValue(pRicercata));
@@ -187,12 +189,12 @@ public class EventfyTest {
         eventfy.aggiungiBrano(2);
 
         assertEquals(2, eventfy.getPrenotazioneCorrente().getEvento().getListaBrani().size());
-        
+
     }
 
     @Test
     void mostraPrenotazioniAccettateTest() {
-        eventfy.logIn(3);//Artista TheWeeknd
+        eventfy.logIn(3);// Artista TheWeeknd
 
         // Chiamata al metodo mostraPrenotazioniAccettate
         List<Prenotazione> result = eventfy.mostraPrenotazioniAccettate();
@@ -203,8 +205,8 @@ public class EventfyTest {
     }
 
     @Test
-    void  SelezionaPrenotazioneInvito() {
-        eventfy.logIn(3);//Artista TheWeeknd
+    void SelezionaPrenotazioneInvito() {
+        eventfy.logIn(3);// Artista TheWeeknd
 
         assertNull(eventfy.getInvitoCorrente());
         eventfy.mostraPrenotazioniAccettate();
@@ -216,21 +218,21 @@ public class EventfyTest {
     }
 
     @Test
-    void invitaArtistaTest() {   
-        eventfy.logIn(3);//Artista TheWeeknd
+    void invitaArtistaTest() {
+        eventfy.logIn(3);// Artista TheWeeknd
 
         int sizeMappaInvitiIniziale = eventfy.getMappaInvitiPendenti().size();
         eventfy.mostraPrenotazioniAccettate();
         eventfy.selezionaPrenotazioneInvito(4);
         eventfy.invitaArtista(0);
-        //Deve essere stato registrato un invito
+        // Deve essere stato registrato un invito
         assertEquals(sizeMappaInvitiIniziale + 1, eventfy.getMappaInvitiPendenti().size());
 
     }
 
     @Test
-    void gestisciInvitoTest() {   
-        eventfy.logIn(3);//Artista TheWeeknd
+    void gestisciInvitoTest() {
+        eventfy.logIn(3);// Artista TheWeeknd
         List<Invito> listaInviti = eventfy.gestisciInvito();
         assertEquals(1, listaInviti.size());
 
@@ -238,111 +240,162 @@ public class EventfyTest {
         listaInviti = eventfy.gestisciInvito();
         assertEquals(1, listaInviti.size());
 
-        //Provo con un nuovo utente creato ad'hoc
+        // Provo con un nuovo utente creato ad'hoc
         eventfy.signUpLogIn(new Artista("A11"));
         listaInviti = eventfy.gestisciInvito();
         assertEquals(0, listaInviti.size());
-        
+
     }
 
     @Test
-    void selezionaInvitoTest() {   
-        eventfy.logIn(3);//Artista TheWeeknd
+    void selezionaInvitoTest() {
+        eventfy.logIn(3);// Artista TheWeeknd
 
         eventfy.gestisciInvito();
         Evento e = eventfy.selezionaInvito(2);
-        //L'evento relativo all'invito selezionato ha ID = 1
+        // L'evento relativo all'invito selezionato ha ID = 1
         assertEquals(0, e.getId());
-        
+
     }
 
     @Test
-    void accettaInvitoTest() {   
-        eventfy.logIn(3);//Artista TheWeeknd
+    void accettaInvitoTest() {
+        eventfy.logIn(3);// Artista TheWeeknd
 
         int numInvitiPendentiIniziale = eventfy.getMappaInvitiPendenti().size();
         int numInvitiAccettatiIniziale = eventfy.getMappaInvitiAccettati().size();
 
         eventfy.gestisciInvito();
         eventfy.selezionaInvito(2);
-        //L'evento relativo all'invito selezionato ha ID = 1
+        // L'evento relativo all'invito selezionato ha ID = 1
         eventfy.accettaInvito();
 
-        //Deve esserci un invito accettato in più
+        // Deve esserci un invito accettato in più
         assertEquals(numInvitiAccettatiIniziale + 1, eventfy.getMappaInvitiAccettati().size());
 
-        //Deve esserci un invito pendente in meno
+        // Deve esserci un invito pendente in meno
         assertEquals(numInvitiPendentiIniziale - 1, eventfy.getMappaInvitiPendenti().size());
 
     }
 
- @Test 
- void inserisciRecensioneTest(){
-    eventfy.logIn(3);//Artista TheWeeknd
-    List<Prenotazione> prenotazioniArtista = eventfy.inserisciRecensione();
-    assertNotNull(prenotazioniArtista);
-    // Verifica che la lista contenga le prenotazioni dell'artista corrente
-    for (Prenotazione prenotazione : prenotazioniArtista) {
-        assertTrue(prenotazione.hasArtista((Artista)eventfy.getUtenteCorrente()));
+    @Test
+    void inserisciRecensioneTest() {
+        eventfy.logIn(3);// Artista TheWeeknd
+        List<Prenotazione> prenotazioniArtista = eventfy.inserisciRecensione();
+        assertNotNull(prenotazioniArtista);
+        // Verifica che la lista contenga le prenotazioni dell'artista corrente
+        for (Prenotazione prenotazione : prenotazioniArtista) {
+            assertTrue(prenotazione.hasArtista((Artista) eventfy.getUtenteCorrente()));
+        }
+        assertTrue(prenotazioniArtista.size() > 0);
     }
- }
 
-@Test
-void testCreaRecensione(){
-    eventfy.logIn(3);//Artista TheWeeknd
-    List<Prenotazione> prenotazioniArtista = eventfy.inserisciRecensione();
-    //Verifica che la lista prenotazioni non è vuota
-    assertNotNull(prenotazioniArtista);
-    // Creazione di una recensione 
-    eventfy.creaRecensione(3, "Fantastico evento", 4);
-    //Verifiche sulla recensione creata
-    assertEquals("Fantastico evento", eventfy.getRecensioneCorrente().getCommento());
-    assertEquals(4, eventfy.getRecensioneCorrente().getVoto());
-    assertEquals((Artista) eventfy.getUtenteCorrente(), eventfy.getRecensioneCorrente().getArtista());
-    assertEquals(LocalDate.now(), eventfy.getRecensioneCorrente().getData());
-}
+    //----- Sono qui
+    @Test
+    void testCreaRecensione() {
+        eventfy.logIn(3);// Artista TheWeeknd
+        List<Prenotazione> prenotazioniArtista = eventfy.inserisciRecensione();
+        eventfy.creaRecensione(8, "Impianto al top, bravi", 5);
 
-@Test
-void testConfermaRecensione() {
-    eventfy.logIn(3);//Artista TheWeeknd
-    // Effettua la creazione di una recensione e verifica che sia stata impostata correttamente
-    eventfy.inserisciRecensione();
-    eventfy.creaRecensione(3, "Fantastico evento", 4);
-    assertNotNull(eventfy.getRecensioneCorrente());
-    // Effettua la conferma della recensione
-    eventfy.confermaRecensione();
-     // Verifica che le variabili temporanee siano resettate
-     assertNull(eventfy.getRecensioneCorrente());
-}
+        //Non so se questa cosa si può fare
+        Prenotazione p8 = eventfy.getPrenotazione(8);
+        Recensione r8 = p8.getImpianto().getListaRecensioni().get(0);
+        assertEquals("Impianto al top, bravi", r8.getCommento());
+        assertEquals(5, r8.getVoto());
+        assertEquals(eventfy.getUtenteCorrente(), r8.getArtista());
 
-@Test
-void eliminaPrenotazioneTest(){
-    eventfy.logIn(3);//Artista TheWeeknd
-    List<Prenotazione> prenotazioniAccettate=new ArrayList<Prenotazione>(eventfy.getPrenotazioniAccettate().values());
-    List<Prenotazione> prenotazioniPendenti= new ArrayList<Prenotazione>(eventfy.getPrenotazioniPendenti().values());
-    List<Prenotazione> prenotazioni = eventfy.eliminaPrenotazione();
+        assertNull(eventfy.getMapPrenotazioniTemp());
+        /*
+        eventfy.logIn(3);// Artista TheWeeknd
+        List<Prenotazione> prenotazioniArtista = eventfy.inserisciRecensione();
+        // Verifica che la lista prenotazioni non è vuota
+        assertNotNull(prenotazioniArtista);
+        // Creazione di una recensione
+        eventfy.creaRecensione(3, "Fantastico evento", 4);
+        // Verifiche sulla recensione creata
+        assertEquals("Fantastico evento",
+                eventfy.getRecensioneCorrente().getCommento());
+        assertEquals(4, eventfy.getRecensioneCorrente().getVoto());
+        assertEquals((Artista) eventfy.getUtenteCorrente(),
+                eventfy.getRecensioneCorrente().getArtista());
+        assertEquals(LocalDate.now(), eventfy.getRecensioneCorrente().getData());
+    */
+    }
+
+    /*
+    @Test
+      void testConfermaRecensione() {
+      eventfy.logIn(3);//Artista TheWeeknd
+      // Effettua la creazione di una recensione e verifica che sia stata impostata
+      correttamente
+      eventfy.inserisciRecensione();
+      eventfy.creaRecensione(3, "Fantastico evento", 4);
+      assertNotNull(eventfy.getRecensioneCorrente());
+      // Effettua la conferma della recensione
+      eventfy.confermaRecensione();
+      // Verifica che le variabili temporanee siano resettate
+      assertNull(eventfy.getRecensioneCorrente());
+      }
+
+      */
+
+    @Test
+    void eliminaPrenotazioneTest() {
+        eventfy.logIn(3);// Artista TheWeeknd
+        //Inserisco tutte le prenotazioni accettate e pendenti in una lista "tuttePrenotazioni"
+        List<Prenotazione> tuttePrenotazioni = new ArrayList<Prenotazione>(
+                eventfy.getPrenotazioniAccettate().values());
+        List<Prenotazione> prenotazioniPendenti = new ArrayList<Prenotazione>(
+                eventfy.getPrenotazioniPendenti().values());
+
+        tuttePrenotazioni.addAll(prenotazioniPendenti);
+
+        //richiamo il metodo da testare
+        List<Prenotazione> prenotazioni = eventfy.eliminaPrenotazione();
+
+        //controllo se tutte le prenotazioni all'interno della lista fornita dal metodo sono dell'artista corrente
+        for(Prenotazione p : prenotazioni){
+            assertTrue(p.hasArtista((Artista)eventfy.getUtenteCorrente()));
+        }
+        //Controllo se in "prenotazioni" sono presenti tutte le prenotazioni dell'artista corrente
+        assertTrue(tuttePrenotazioni.containsAll(prenotazioni));
+    }
+
     
-    //da rivedere gli assert
-    assertTrue(prenotazioni.containsAll(prenotazioniAccettate));
-    assertTrue(prenotazioni.containsAll(prenotazioniPendenti));
-}
-  
+    @Test
+    void confermaEliminazioneTest() {
+        eventfy.logIn(3);// Artista TheWeeknd
 
-@Test
-void confermaEliminazioneTest(){
-    eventfy.logIn(3);//Artista TheWeeknd
+        // Eliminazione di una prenotazione pendente
+        int codicePrenotazione = 1;
+        // Verifica l'esistenza della prenotazione pendente
+        assertNotNull(eventfy.getPrenotazioniPendenti().get(codicePrenotazione));
+        //Verifica l'assenza nella mappa delle prenotazioni annullate
+        assertNull(eventfy.getMappaPrenotazioniAnnullate().get(codicePrenotazione));
 
-    // Eliminazione di una prenotazione pendente
-    int codicePrenotazione=1;
-    eventfy.confermaEliminazione(codicePrenotazione);
-    // Verifica che la prenotazione pendente con il codice 1 sia stata eliminata
-    assertNull(eventfy.getPrenotazioniPendenti().get(codicePrenotazione));
-  
-     // Eliminazione di una prenotazione accettata
-    codicePrenotazione=2;
-    eventfy.confermaEliminazione(codicePrenotazione);
-    // Verifica che la prenotazione accettata con il codice 2 sia stata eliminata
-    assertNull(eventfy.getPrenotazioniAccettate().get(codicePrenotazione));
-}
+        eventfy.eliminaPrenotazione();
+        eventfy.confermaEliminazione(codicePrenotazione);
+        // Verifica che la prenotazione pendente con il codice 1 sia stata eliminata
+        assertNull(eventfy.getPrenotazioniPendenti().get(codicePrenotazione));
+        // Verifica la presenza della prenotazione cancellata nella mappa delle pr. annullate
+        assertNotNull(eventfy.getMappaPrenotazioniAnnullate().get(codicePrenotazione));
+
+
+
+        // Eliminazione di una prenotazione pendente
+        codicePrenotazione = 5;
+        // Verifica l'esistenza della prenotazione pendente
+        assertNotNull(eventfy.getPrenotazioniAccettate().get(codicePrenotazione));
+        //Verifica l'assenza nella mappa delle prenotazioni annullate
+        assertNull(eventfy.getMappaPrenotazioniAnnullate().get(codicePrenotazione));
+
+        eventfy.eliminaPrenotazione();
+        eventfy.confermaEliminazione(codicePrenotazione);
+        // Verifica che la prenotazione pendente con il codice 1 sia stata eliminata
+        assertNull(eventfy.getPrenotazioniAccettate().get(codicePrenotazione));
+        // Verifica la presenza della prenotazione cancellata nella mappa delle pr. annullate
+        assertNotNull(eventfy.getMappaPrenotazioniAnnullate().get(codicePrenotazione));
+    }
+    
 
 }

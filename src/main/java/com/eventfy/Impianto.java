@@ -61,11 +61,9 @@ public class Impianto {
         return this.listaRecensioni;
     }
 
-    public Recensione creaRecensioneArtista(LocalDate dataCommento, LocalTime oraCommento, String commento, int voto,
-            Artista artista) {
-        Recensione recensione = new Recensione(dataCommento, oraCommento, commento, voto, artista);
+    public void creaRecensioneArtista(String commento, int voto, Artista artista) {
+        Recensione recensione = new Recensione(LocalDate.now(), LocalTime.now(), commento, voto, artista);
         listaRecensioni.add(0, recensione);
-        return recensione;
     }
 
     @Override
