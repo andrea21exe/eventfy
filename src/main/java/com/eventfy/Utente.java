@@ -1,13 +1,13 @@
 package com.eventfy;
 
-public  class Utente {
-    
+public class Utente {
+
     private static int currentId = 0;
 
     private int id;
     protected String nome;
 
-    public Utente(String nome){
+    public Utente(String nome) {
         this.nome = nome;
         this.id = currentId++;
     }
@@ -17,14 +17,12 @@ public  class Utente {
         return "Utente [id=" + id + ", nome=" + nome + "]";
     }
 
-    public int getId(){
+    public int getId() {
         return this.id;
     }
 
     public String getNome() {
         return nome;
     }
-
-    
 
 }

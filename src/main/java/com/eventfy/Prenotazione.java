@@ -71,6 +71,7 @@ public class Prenotazione {
     public String getNomeArtista() {
         return artista.getNome();
     }
+
     public int getIdArtista() {
         return artista.getId();
     }
@@ -79,21 +80,22 @@ public class Prenotazione {
         this.evento.addFan(fan);
     }
 
-    public void creaRecensione(String commento, int voto){
+    public void creaRecensione(String commento, int voto) {
         this.impianto.recensisci(commento, voto, this.artista);
     }
 
-    public void creaRecensione(String commento, int voto, Fan fan){
+    public void creaRecensione(String commento, int voto, Fan fan) {
         this.evento.recensisci(commento, voto, fan);
     }
 
-    public boolean hasPartecipante(Fan fan){
+    public boolean hasPartecipante(Fan fan) {
         return this.evento.hasPartecipante(fan);
     }
 
     @Override
     public String toString() {
-        return "-- Prenotazione [id=" + id + ", data=" + data + ", ora=" + ora + ", \nevento=" + evento + ",\nartista="+ artista + ", \nimpianto=" + impianto + "]";
+        return "-- Prenotazione [id=" + id + ", data=" + data + ", ora=" + ora + ", \nevento=" + evento + ",\nartista="
+                + artista + ", \nimpianto=" + impianto + "]";
     }
 
 }

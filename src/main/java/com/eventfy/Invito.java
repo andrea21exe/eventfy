@@ -3,8 +3,6 @@ package com.eventfy;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-
-
 public class Invito {
     private static int currentId = 0;
     private int id;
@@ -18,39 +16,36 @@ public class Invito {
         this.id = currentId++;
         this.data = LocalDate.now();
         this.ora = LocalTime.now();
-        this.evento=evento;
-        this.artistaMittente=artistaMittente;
-        this.artistaDestinatario=artistaDestinatario;
+        this.evento = evento;
+        this.artistaMittente = artistaMittente;
+        this.artistaDestinatario = artistaDestinatario;
     }
 
     public Invito(Evento evento, Artista artistaMittente) {
         this.id = currentId++;
         this.data = LocalDate.now();
         this.ora = LocalTime.now();
-        this.evento=evento;
-        this.artistaMittente=artistaMittente;
+        this.evento = evento;
+        this.artistaMittente = artistaMittente;
     }
 
-    public void setDestinatario(Artista destinatario){
+    public void setDestinatario(Artista destinatario) {
         this.artistaDestinatario = destinatario;
     }
-
 
     public int getId() {
         return this.id;
     }
 
-
-    public Artista getArtistaDestinatario(){
+    public Artista getArtistaDestinatario() {
         return this.artistaDestinatario;
     }
 
-
-    public Evento getEvento(){
+    public Evento getEvento() {
         return this.evento;
     }
 
-    public boolean hasDestinatario(Artista artista){
+    public boolean hasDestinatario(Artista artista) {
         return artista == this.artistaDestinatario;
     }
 

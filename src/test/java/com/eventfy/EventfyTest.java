@@ -286,14 +286,14 @@ public class EventfyTest {
         assertTrue(prenotazioniArtista.size() > 0);
     }
 
-    //----- Sono qui
+    // ----- Sono qui
     @Test
     void testCreaRecensione() {
         eventfy.logIn(3);// Artista TheWeeknd
         List<Prenotazione> prenotazioniArtista = eventfy.inserisciRecensione();
         eventfy.creaRecensione(8, "Impianto al top, bravi", 5);
 
-        //Non so se questa cosa si può fare
+        // Non so se questa cosa si può fare
         Prenotazione p8 = eventfy.getPrenotazione(8);
         Recensione r8 = p8.getImpianto().getListaRecensioni().get(0);
         assertEquals("Impianto al top, bravi", r8.getCommento());
@@ -301,44 +301,13 @@ public class EventfyTest {
         assertEquals(eventfy.getUtenteCorrente(), r8.getUtente());
 
         assertNull(eventfy.getMapPrenotazioniTemp());
-        /*
-        eventfy.logIn(3);// Artista TheWeeknd
-        List<Prenotazione> prenotazioniArtista = eventfy.inserisciRecensione();
-        // Verifica che la lista prenotazioni non è vuota
-        assertNotNull(prenotazioniArtista);
-        // Creazione di una recensione
-        eventfy.creaRecensione(3, "Fantastico evento", 4);
-        // Verifiche sulla recensione creata
-        assertEquals("Fantastico evento",
-                eventfy.getRecensioneCorrente().getCommento());
-        assertEquals(4, eventfy.getRecensioneCorrente().getVoto());
-        assertEquals((Artista) eventfy.getUtenteCorrente(),
-                eventfy.getRecensioneCorrente().getArtista());
-        assertEquals(LocalDate.now(), eventfy.getRecensioneCorrente().getData());
-    */
     }
-
-    /*
-    @Test
-      void testConfermaRecensione() {
-      eventfy.logIn(3);//Artista TheWeeknd
-      // Effettua la creazione di una recensione e verifica che sia stata impostata
-      correttamente
-      eventfy.inserisciRecensione();
-      eventfy.creaRecensione(3, "Fantastico evento", 4);
-      assertNotNull(eventfy.getRecensioneCorrente());
-      // Effettua la conferma della recensione
-      eventfy.confermaRecensione();
-      // Verifica che le variabili temporanee siano resettate
-      assertNull(eventfy.getRecensioneCorrente());
-      }
-
-      */
 
     @Test
     void eliminaPrenotazioneTest() {
         eventfy.logIn(3);// Artista TheWeeknd
-        //Inserisco tutte le prenotazioni accettate e pendenti in una lista "tuttePrenotazioni"
+        // Inserisco tutte le prenotazioni accettate e pendenti in una lista
+        // "tuttePrenotazioni"
         List<Prenotazione> tuttePrenotazioni = new ArrayList<Prenotazione>(
                 eventfy.getPrenotazioniAccettate().values());
         List<Prenotazione> prenotazioniPendenti = new ArrayList<Prenotazione>(
@@ -346,18 +315,19 @@ public class EventfyTest {
 
         tuttePrenotazioni.addAll(prenotazioniPendenti);
 
-        //richiamo il metodo da testare
+        // richiamo il metodo da testare
         List<Prenotazione> prenotazioni = eventfy.eliminaPrenotazione();
 
-        //controllo se tutte le prenotazioni all'interno della lista fornita dal metodo sono dell'artista corrente
-        for(Prenotazione p : prenotazioni){
-            assertTrue(p.hasArtista((Artista)eventfy.getUtenteCorrente()));
+        // controllo se tutte le prenotazioni all'interno della lista fornita dal metodo
+        // sono dell'artista corrente
+        for (Prenotazione p : prenotazioni) {
+            assertTrue(p.hasArtista((Artista) eventfy.getUtenteCorrente()));
         }
-        //Controllo se in "prenotazioni" sono presenti tutte le prenotazioni dell'artista corrente
+        // Controllo se in "prenotazioni" sono presenti tutte le prenotazioni
+        // dell'artista corrente
         assertTrue(tuttePrenotazioni.containsAll(prenotazioni));
     }
 
-    
     @Test
     void confermaEliminazioneTest() {
         eventfy.logIn(3);// Artista TheWeeknd
@@ -366,44 +336,44 @@ public class EventfyTest {
         int codicePrenotazione = 1;
         // Verifica l'esistenza della prenotazione pendente
         assertNotNull(eventfy.getPrenotazioniPendenti().get(codicePrenotazione));
-        //Verifica l'assenza nella mappa delle prenotazioni annullate
+        // Verifica l'assenza nella mappa delle prenotazioni annullate
         assertNull(eventfy.getMappaPrenotazioniAnnullate().get(codicePrenotazione));
 
         eventfy.eliminaPrenotazione();
         eventfy.confermaEliminazione(codicePrenotazione);
         // Verifica che la prenotazione pendente con il codice 1 sia stata eliminata
         assertNull(eventfy.getPrenotazioniPendenti().get(codicePrenotazione));
-        // Verifica la presenza della prenotazione cancellata nella mappa delle pr. annullate
+        // Verifica la presenza della prenotazione cancellata nella mappa delle pr.
+        // annullate
         assertNotNull(eventfy.getMappaPrenotazioniAnnullate().get(codicePrenotazione));
-
-
 
         // Eliminazione di una prenotazione pendente
         codicePrenotazione = 5;
         // Verifica l'esistenza della prenotazione pendente
         assertNotNull(eventfy.getPrenotazioniAccettate().get(codicePrenotazione));
-        //Verifica l'assenza nella mappa delle prenotazioni annullate
+        // Verifica l'assenza nella mappa delle prenotazioni annullate
         assertNull(eventfy.getMappaPrenotazioniAnnullate().get(codicePrenotazione));
 
         eventfy.eliminaPrenotazione();
         eventfy.confermaEliminazione(codicePrenotazione);
         // Verifica che la prenotazione pendente con il codice 1 sia stata eliminata
         assertNull(eventfy.getPrenotazioniAccettate().get(codicePrenotazione));
-        // Verifica la presenza della prenotazione cancellata nella mappa delle pr. annullate
+        // Verifica la presenza della prenotazione cancellata nella mappa delle pr.
+        // annullate
         assertNotNull(eventfy.getMappaPrenotazioniAnnullate().get(codicePrenotazione));
     }
 
-    //12
+    // 12
     @Test
-    void mostraArtistiEventi(){
-         //Registro ed effettuo il login con un nuovo utente (FAN)
-         eventfy.signUpLogIn(new Utente("albertoFan"));
-         // Esegui la funzione mostraArtistiEventi
+    void mostraArtistiEventi() {
+        // Registro ed effettuo il login con un nuovo utente (FAN)
+        eventfy.signUpLogIn(new Utente("albertoFan"));
+        // Esegui la funzione mostraArtistiEventi
         List<Utente> artisti = eventfy.mostraArtistiEventi();
         // Verifica che la lista non sia nulla e che contenga artisti
         assertNotNull(artisti);
         assertFalse(artisti.isEmpty());
-         // verifica se ogni elemento è effettivamente un'istanza di Artista
+        // verifica se ogni elemento è effettivamente un'istanza di Artista
         for (Utente utente : artisti) {
             assertTrue(utente instanceof Artista);
         }
@@ -411,29 +381,68 @@ public class EventfyTest {
 
     @Test
     void partecipaEventoTest() {
-        //Registro ed effettuo il login con un nuovo utente (FAN)
+        // Registro ed effettuo il login con un nuovo utente (FAN)
         eventfy.signUpLogIn(new Utente("albertoFan"));
-        //AlbertoFan vuole partecipare ad un evento di theweeknd
+        // AlbertoFan vuole partecipare ad un evento di theweeknd
         List<Prenotazione> prenotazioniTheWeekndPartecipabili = eventfy.partecipaEvento(3);
-        //Deve esistere almeno una prenotazione partecipabile
+        // Deve esistere almeno una prenotazione partecipabile
         assertTrue(prenotazioniTheWeekndPartecipabili.size() > 0);
-        //Nelle estensioni dovremmo provare il caso in cui un utente cerca di partecipare ad un evento piu di una volta
+        // Nelle estensioni dovremmo provare il caso in cui un utente cerca di
+        // partecipare ad un evento piu di una volta
     }
-    
+
     @Test
     void confermaPartecipazioneTest() {
-        //Registro ed effettuo il login con un nuovo utente (FAN)
+        // Registro ed effettuo il login con un nuovo utente (FAN)
         eventfy.signUpLogIn(new Fan("albertoFan"));
         Utente utenteCorrente = eventfy.getUtenteCorrente();
-        //AlbertoFan vuole partecipare ad un evento di theweeknd
+        // AlbertoFan vuole partecipare ad un evento di theweeknd
         eventfy.partecipaEvento(3);
-        //Partecipo all'evento con ID 9 (Vedesi metodo populate, è un evento partecipabile di theWeeknd)
+        // Partecipo all'evento con ID 9 (Vedesi metodo populate, è un evento
+        // partecipabile di theWeeknd)
         eventfy.confermaPartecipazione(9);
-        assertTrue(((Fan)utenteCorrente).isPartecipante(9));
-        assertTrue(eventfy.getPrenotazione(9).hasPartecipante((Fan)utenteCorrente));
-        
+        assertTrue(((Fan) utenteCorrente).isPartecipante(9));
+        assertTrue(eventfy.getPrenotazione(9).hasPartecipante((Fan) utenteCorrente));
+
         assertNull(eventfy.getMapPrenotazioniTemp());
-        //Nelle estensioni dovremmo provare il caso in cui un utente cerca di partecipare ad un evento piu di una volta
+        // Nelle estensioni dovremmo provare il caso in cui un utente cerca di
+        // partecipare ad un evento piu di una volta
+
+    }
+
+    // 13
+    @Test
+    void inserisciRecensioneEvento() {
+        // Effettuo il login con un utente (FAN)
+        eventfy.logIn(6);
+        // Chiamo il metodo e verifica il risultato
+        List<Evento> listaEventi = eventfy.inserisciRecensioneEvento();
+        // Assicurati che la lista non sia nulla
+        assertNotNull(listaEventi);
+        // Verifica se ogni elemento nella lista è effettivamente un'istanza di Evento
+        for (Evento evento : listaEventi) {
+            assertTrue(evento instanceof Evento);
+        }
+    }
+
+    // da completare
+    @Test
+    void confermaRecensioneEvento() {
+        // Registro ed effettuo il login con un nuovo utente (FAN)
+        eventfy.signUpLogIn(new Fan("albertoFan"));
+        Utente utenteCorrente = eventfy.getUtenteCorrente();
+        eventfy.partecipaEvento(3);
+        int codice_evento = 9;
+        eventfy.confermaPartecipazione(codice_evento);
+        assertTrue(eventfy.getPrenotazione(9).hasPartecipante((Fan) utenteCorrente));
+        assertTrue(((Fan) eventfy.getUtenteCorrente()).isPartecipante(codice_evento));
+        String commento = "Evento fantastico!";
+        int voto = 5;
+        // Conferma la recensione
+        eventfy.confermaRecensioneEvento(codice_evento, commento, voto);
+
+        assertNull(eventfy.getPrenotazioneCorrente());
+        assertNull(eventfy.getMapPrenotazioniTemp());
 
     }
 

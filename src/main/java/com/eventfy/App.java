@@ -91,14 +91,13 @@ public class App {
                 break;
             case 10:
                 inserisciRecensioneEvento();
-                System.out.println("Hai selezionato l'Opzione 9");
+                System.out.println("Hai selezionato l'Opzione 10");
                 break;
             default:
                 System.out.println("Opzione non valida");
         }
     }
 
-   
     private static void inserisciImpianto() {
 
         Scanner input = new Scanner(System.in);
@@ -365,6 +364,7 @@ public class App {
     private static void gestisciInvito() {
 
         Scanner input = new Scanner(System.in);
+        // solo per provare il corretto funzionamento
         sistema.logIn(3);
 
         if ((sistema.hasArtistaCorrente())) {
@@ -408,7 +408,7 @@ public class App {
                 int codice_prenotazione = input.nextInt();
                 System.out.println("Inserisci il commento:");
                 String commento = input.nextLine();
-                //per evitare che il cursore rimane incastrato e non funzioni correttamente
+                // per evitare che il cursore rimane incastrato e non funzioni correttamente
                 input.next();
                 System.out.println("Inserisci il voto (da 1 a 5):");
                 int voto = input.nextInt();
@@ -427,7 +427,7 @@ public class App {
 
     private static void eliminaPrenotazione() {
         Scanner input = new Scanner(System.in);
-        // solo per prova
+        // solo per provare il corretto funzionamento
         sistema.logIn(3);
         if ((sistema.hasArtistaCorrente())) {
             List<Prenotazione> prenotazioniEliminabili = sistema.eliminaPrenotazione();
@@ -436,48 +436,75 @@ public class App {
                 for (Prenotazione p : prenotazioniEliminabili) {
                     System.out.println(p);
                 }
-                
-             System.out.println("Inserisci il codice della prenotazione che vuoi eliminare:");
-             int codice_prenotazione = input.nextInt();
-             
-            sistema.confermaEliminazione(codice_prenotazione);
-            System.out.println("Prenotazione eliminata con successo!");
 
-        } else {
-            System.out.println("Solo un artista può eliminare una prenotazione di una struttura");
+                System.out.println("Inserisci il codice della prenotazione che vuoi eliminare:");
+                int codice_prenotazione = input.nextInt();
+
+                sistema.confermaEliminazione(codice_prenotazione);
+                System.out.println("Prenotazione eliminata con successo!");
+
+            } else {
+                System.out.println("Solo un artista può eliminare una prenotazione di una struttura");
+            }
+            menu();
         }
-        menu();
     }
-    }
+
     private static void partecipaEvento() {
         Scanner input = new Scanner(System.in);
-        // solo per prova
+        // solo per provare il corretto funzionamento
         sistema.logIn(6);
-        if(sistema.hasFanCorrente()){
+        if (sistema.hasFanCorrente()) {
             List<Utente> artisti = sistema.mostraArtistiEventi();
             System.out.println("Lista degli artisti:");
             for (Utente artista : artisti) {
                 System.out.println(artista);
             }
             System.out.println("Seleziona un artista inserendo il suo codice:");
-            int codice_artista=input.nextInt();
-            //per evitare che il cursore rimane incastrato e non funzioni correttamente
+            int codice_artista = input.nextInt();
+            // per evitare che il cursore rimane incastrato e non funzioni correttamente
             input.nextLine();
             List<Prenotazione> prenotazioniPartecipabili = sistema.partecipaEvento(codice_artista);
-                System.out.println("Prenotazioni partecipabili:");
-                for (Prenotazione p: prenotazioniPartecipabili) {
-                    System.out.println(p);
-                }
-                System.out.println("Inserisci il codice della prenotazione a cui vuoi partecipare:");
-                int codice_prenotazione=input.nextInt();
-                sistema.confermaPartecipazione(codice_prenotazione);
-                System.out.println("Partecipazione confermata con successo!");
+            System.out.println("Prenotazioni partecipabili:");
+            for (Prenotazione p : prenotazioniPartecipabili) {
+                System.out.println(p);
+            }
+            System.out.println("Inserisci il codice della prenotazione a cui vuoi partecipare:");
+            int codice_prenotazione = input.nextInt();
+            sistema.confermaPartecipazione(codice_prenotazione);
+            System.out.println("Partecipazione confermata con successo!");
         } else {
             System.out.println("Solo un fan può esprimere la sua partecipazione");
         }
         menu();
     }
+
     private static void inserisciRecensioneEvento() {
+        Scanner input = new Scanner(System.in);
+        // solo per provare il corretto funzionamento
+        sistema.logIn(6);
+        if (sistema.hasFanCorrente()) {
+            // Ottiene la lista degli eventi disponibili per la recensione
+            List<Evento> eventi = sistema.inserisciRecensioneEvento();
+            System.out.println("Eventi disponibili per recensione:");
+            for (Evento e : eventi) {
+                System.out.println(e);
+            }
+            System.out.print("Inserisci l'id dell'evento per cui vuoi scrivere una recensione: ");
+            int codice_evento = input.nextInt();
+            // Richiede all'utente di inserire il commento per la recensione
+            System.out.print("Inserisci il commento: ");
+            String commento = input.nextLine();
+            input.nextLine();
+            // Richiede all'utente di inserire il voto per l'evento
+            System.out.print("Inserisci il voto (da 1 a 5): ");
+            int voto = input.nextInt();
+            // Conferma la recensione
+            sistema.confermaRecensioneEvento(codice_evento, commento, voto);
+            System.out.println("Recensione inserita");
+        } else {
+            System.out.println("Solo un fan può recensire un evento");
+        }
         menu();
     }
 

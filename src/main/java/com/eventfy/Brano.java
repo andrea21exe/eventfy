@@ -8,14 +8,14 @@ public class Brano {
     private String album;
     private int durata;
 
-     public Brano(String titolo, String album, int durata) {
+    public Brano(String titolo, String album, int durata) {
         this.titolo = titolo;
         this.album = album;
         this.durata = durata;
         this.id = currentId++;
     }
 
-    public int getId(){
+    public int getId() {
         return this.id;
     }
 

@@ -207,7 +207,6 @@ public class Eventfy {
         return utenteCorrente instanceof Fan;
     }
 
-
     // EFFETTUA LA REGISTRAZIONE ED IL "LOG-IN"
     public void signUpLogIn(Utente utente) {
         mappaUtenti.put(utente.getId(), utente);
@@ -364,6 +363,8 @@ public class Eventfy {
         mappaUtenti.put(a3.getId(), a3);
         Fan f1 = new Fan("Max"); // id 6
         mappaUtenti.put(f1.getId(), f1);
+        Fan f2 = new Fan("giulio"); // id 6
+        mappaUtenti.put(f2.getId(), f2);
 
         a1.nuovoBrano("Starboy", "Starboy", 3); // id 1
         a1.nuovoBrano("Sacrifice", "Starboy", 3); // id 2
@@ -417,7 +418,8 @@ public class Eventfy {
         i1.recensisci("Commento 1", 4, a1);
         i2.recensisci("Commento 2", 5, a2);
         i3.recensisci("Commento 3", 3, a3);
-
+        f1.addPartecipazione(p1.getEvento());
+        f2.addPartecipazione(p2.getEvento());
     }
 
     // UC9
@@ -523,8 +525,8 @@ public class Eventfy {
 
     // UC12
 
-    //Da aggiungere questa funzione in astah
-    public List<Utente> mostraArtistiEventi(){
+    // Da aggiungere questa funzione in astah
+    public List<Utente> mostraArtistiEventi() {
         mappaUtentiTemp = new HashMap<Integer, Utente>();
 
         for (Utente utente : mappaUtenti.values()) {
@@ -535,7 +537,6 @@ public class Eventfy {
         return new ArrayList<Utente>(mappaUtentiTemp.values());
     }
 
-
     public List<Prenotazione> partecipaEvento(int codice_artista) {
 
         // Uso la mappa Prenotazioni in modo da non creare associazioni tra evento e
@@ -544,7 +545,7 @@ public class Eventfy {
 
         for (int key : mappaPrenotazioniAccettate.keySet()) {
             Prenotazione p1 = mappaPrenotazioniAccettate.get(key);
-            if (codice_artista==p1.getIdArtista()){
+            if (codice_artista == p1.getIdArtista()) {
                 if (p1.isPartecipabile()) {
                     mappaPrenotazioniTemp.put(p1.getId(), p1);
                     // listaEventi.add(p1.getEvento());
@@ -565,7 +566,7 @@ public class Eventfy {
         ((Fan) utenteCorrente).addPartecipazione(p.getEvento());
 
         mappaPrenotazioniTemp = null;
-        mappaUtentiTemp=null;
+        mappaUtentiTemp = null;
         /*
          * for(int i =0; i<listaEventi.size(); i++){
          * 
@@ -606,6 +607,7 @@ public class Eventfy {
                 p.creaRecensione(commento, voto, (Fan) utenteCorrente);
             }
         }
+
     }
 
 }

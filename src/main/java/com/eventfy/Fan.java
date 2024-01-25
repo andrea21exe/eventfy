@@ -21,13 +21,13 @@ public class Fan extends Utente {
         return this.listaEventi;
     }
 
-    public boolean isPartecipante(Evento e){
+    public boolean isPartecipante(Evento e) {
         return this.listaEventi.contains(e);
     }
 
-    public boolean isPartecipante(int id_evento){
-        for(Evento evento : listaEventi){
-            if(evento.getId() == id_evento){
+    public boolean isPartecipante(int id_evento) {
+        for (Evento evento : listaEventi) {
+            if (evento.getId() == id_evento) {
                 return true;
             }
         }

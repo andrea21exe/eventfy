@@ -31,8 +31,6 @@ public class Recensione {
         return id;
     }
 
-    
-
     @Override
     public String toString() {
         return "Recensione [id=" + id + ", dataCommento=" + dataCommento + ", oraCommento=" + oraCommento
