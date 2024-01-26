@@ -357,7 +357,7 @@ public class Eventfy {
         mappaUtenti.put(g3.getId(), g3);
         Artista a1 = new Artista("THEWEEKND"); // id 3
         mappaUtenti.put(a1.getId(), a1);
-        Artista a2 = new Artista("SZA"); // id 4
+        Artista a2 = new Artista("SZA"); // id 4S
         mappaUtenti.put(a2.getId(), a2);
         Artista a3 = new Artista("DojaCat"); // id 5
         mappaUtenti.put(a3.getId(), a3);
@@ -525,13 +525,18 @@ public class Eventfy {
 
     // UC12
 
-    // Da aggiungere questa funzione in astah
+    // Da aggiungere questa funzione in astah, mostra gli artisti che hanno almeno una prenotazione accettata e di conseguenza un evento
     public List<Utente> mostraArtistiEventi() {
         mappaUtentiTemp = new HashMap<Integer, Utente>();
 
         for (Utente utente : mappaUtenti.values()) {
             if (utente instanceof Artista) {
-                mappaUtentiTemp.put(utente.getId(), utente);
+                for (int key : mappaPrenotazioniAccettate.keySet()) {
+                    Prenotazione p = mappaPrenotazioniAccettate.get(key);
+                    if (utente.getId() == p.getIdArtista()) {
+                        mappaUtentiTemp.put(utente.getId(), utente);
+                    }
+                }
             }
         }
         return new ArrayList<Utente>(mappaUtentiTemp.values());

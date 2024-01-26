@@ -203,7 +203,7 @@ public class EventfyTest {
     @Test
     void SelezionaPrenotazioneInvito() {
         eventfy.logIn(3);// Artista TheWeeknd
-
+        
         assertNull(eventfy.getInvitoCorrente());
         eventfy.mostraPrenotazioniAccettate();
         // Chiamata al metodo selezionaArtista
@@ -216,7 +216,7 @@ public class EventfyTest {
     @Test
     void invitaArtistaTest() {
         eventfy.logIn(3);// Artista TheWeeknd
-
+        //Prendo la lunghezza della lista per andarla a confrontare sucessivamente
         int sizeMappaInvitiIniziale = eventfy.getMappaInvitiPendenti().size();
         eventfy.mostraPrenotazioniAccettate();
         eventfy.selezionaPrenotazioneInvito(4);
@@ -403,7 +403,6 @@ public class EventfyTest {
         eventfy.confermaPartecipazione(9);
         assertTrue(((Fan) utenteCorrente).isPartecipante(9));
         assertTrue(eventfy.getPrenotazione(9).hasPartecipante((Fan) utenteCorrente));
-
         assertNull(eventfy.getMapPrenotazioniTemp());
         // Nelle estensioni dovremmo provare il caso in cui un utente cerca di
         // partecipare ad un evento piu di una volta

@@ -14,7 +14,7 @@ public class Fan extends Utente {
     }
 
     public void addPartecipazione(Evento e) {
-        listaEventi.add(0, e);
+        listaEventi.add(e);
     }
 
     public List<Evento> getListaEventi() {
