@@ -510,17 +510,6 @@ public class Eventfy {
 
         mappaPrenotazioniTemp = null;
 
-        /*
-         * prenotazioneCorrente = mappaPrenotazioniPendenti.get(codice_prenotazione);
-         * if(prenotazioneCorrente == null){
-         * mappaPrenotazioniAccettate.remove(codice_prenotazione);
-         * }
-         * else{
-         * mappaPrenotazioniPendenti.remove(codice_prenotazione);
-         * }
-         * 
-         * prenotazioneCorrente = null;
-         */
     }
 
     // UC12
@@ -572,17 +561,7 @@ public class Eventfy {
 
         mappaPrenotazioniTemp = null;
         mappaUtentiTemp = null;
-        /*
-         * for(int i =0; i<listaEventi.size(); i++){
-         * 
-         * if(id_evento == listaEventi.get(i).getId()){
-         * 
-         * listaEventi.get(i).addFan((Fan)utenteCorrente);
-         * ((Fan)utenteCorrente).addEvento(listaEventi.get(i));
-         * 
-         * }
-         * }
-         */
+
     }
 
     public Prenotazione getPrenotazione(int codice_prenotazione) {

@@ -424,22 +424,21 @@ public class EventfyTest {
         }
     }
 
-    // da completare
     @Test
     void confermaRecensioneEvento() {
         // Registro ed effettuo il login con un nuovo utente (FAN)
         eventfy.signUpLogIn(new Fan("albertoFan"));
-        Utente utenteCorrente = eventfy.getUtenteCorrente();
+        Fan utenteCorrente = (Fan)eventfy.getUtenteCorrente();
         eventfy.partecipaEvento(3);
         int codice_evento = 9;
         eventfy.confermaPartecipazione(codice_evento);
-        assertTrue(eventfy.getPrenotazione(9).hasPartecipante((Fan) utenteCorrente));
+        assertTrue(eventfy.getPrenotazione(9).hasPartecipante(utenteCorrente));
         assertTrue(((Fan) eventfy.getUtenteCorrente()).isPartecipante(codice_evento));
         String commento = "Evento fantastico!";
         int voto = 5;
         // Conferma la recensione
         eventfy.confermaRecensioneEvento(codice_evento, commento, voto);
-
+        assertTrue(utenteCorrente.getListaEventi().size()>0);
         assertNull(eventfy.getPrenotazioneCorrente());
         assertNull(eventfy.getMapPrenotazioniTemp());
 
