@@ -481,7 +481,9 @@ public class Eventfy {
         for (int key : mappaPrenotazioniAccettate.keySet()) {
             Prenotazione p1 = mappaPrenotazioniAccettate.get(key);
             if (p1.hasArtista((Artista) utenteCorrente)) {
-                mappaPrenotazioniTemp.put(p1.getId(), p1);
+                if(p1.getEvento().confrontaData(LocalDate.now())){
+                    mappaPrenotazioniTemp.put(p1.getId(), p1);
+                }
             }
         }
         for (int key : mappaPrenotazioniPendenti.keySet()) {
@@ -524,6 +526,7 @@ public class Eventfy {
                     Prenotazione p = mappaPrenotazioniAccettate.get(key);
                     if (utente.getId() == p.getIdArtista()) {
                         mappaUtentiTemp.put(utente.getId(), utente);
+                        break;
                     }
                 }
             }

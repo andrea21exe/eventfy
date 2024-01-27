@@ -62,6 +62,10 @@ public class Evento implements Recensibile {
         return this.listaPartecipanti.contains(fan);
     }
 
+    public boolean confrontaData(LocalDate date){
+        return date.isBefore(this.data);
+    }
+
     @Override
     public String toString() {
         return "Evento [id=" + id + ", titolo=" + titolo + ", descrizione=" + descrizione + ", durata=" + durata
