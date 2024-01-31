@@ -517,6 +517,7 @@ public class Eventfy {
     // UC12
 
     // Da aggiungere questa funzione in astah, mostra gli artisti che hanno almeno una prenotazione accettata e di conseguenza un evento
+    // ritorna solo gli artisti che hanno almeno una prenotazione accettata
     public List<Utente> mostraArtistiEventi() {
         mappaUtentiTemp = new HashMap<Integer, Utente>();
 
