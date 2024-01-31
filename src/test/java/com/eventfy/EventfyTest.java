@@ -347,16 +347,16 @@ public class EventfyTest {
         // annullate
         assertNotNull(eventfy.getMappaPrenotazioniAnnullate().get(codicePrenotazione));
 
-        // Eliminazione di una prenotazione pendente
-        codicePrenotazione = 5;
-        // Verifica l'esistenza della prenotazione pendente
+        // Eliminazione di una prenotazione accettata
+        codicePrenotazione = 9;
+        // Verifica l'esistenza della prenotazione accettata
         assertNotNull(eventfy.getPrenotazioniAccettate().get(codicePrenotazione));
         // Verifica l'assenza nella mappa delle prenotazioni annullate
         assertNull(eventfy.getMappaPrenotazioniAnnullate().get(codicePrenotazione));
 
         eventfy.eliminaPrenotazione();
         eventfy.confermaEliminazione(codicePrenotazione);
-        // Verifica che la prenotazione pendente con il codice 1 sia stata eliminata
+        // Verifica che la prenotazione pendente con il codice 5 sia stata eliminata dalla mappa pr. accettate
         assertNull(eventfy.getPrenotazioniAccettate().get(codicePrenotazione));
         // Verifica la presenza della prenotazione cancellata nella mappa delle pr.
         // annullate
@@ -395,14 +395,17 @@ public class EventfyTest {
     void confermaPartecipazioneTest() {
         // Registro ed effettuo il login con un nuovo utente (FAN)
         eventfy.signUpLogIn(new Fan("albertoFan"));
+
+        int codice_prenotazione = 10;
+
         Utente utenteCorrente = eventfy.getUtenteCorrente();
         // AlbertoFan vuole partecipare ad un evento di theweeknd
         eventfy.partecipaEvento(3);
-        // Partecipo all'evento con ID 9 (Vedesi metodo populate, è un evento
+        // Partecipo all'evento con ID 10 (Vedesi metodo populate, è un evento
         // partecipabile di theWeeknd)
-        eventfy.confermaPartecipazione(9);
-        assertTrue(((Fan) utenteCorrente).isPartecipante(9));
-        assertTrue(eventfy.getPrenotazione(9).hasPartecipante((Fan) utenteCorrente));
+        eventfy.confermaPartecipazione(codice_prenotazione);
+        assertTrue(((Fan) utenteCorrente).isPartecipante(codice_prenotazione));
+        assertTrue(eventfy.getPrenotazione(codice_prenotazione).hasPartecipante((Fan) utenteCorrente));
         assertNull(eventfy.getMapPrenotazioniTemp());
         // Nelle estensioni dovremmo provare il caso in cui un utente cerca di
         // partecipare ad un evento piu di una volta
@@ -430,9 +433,9 @@ public class EventfyTest {
         eventfy.signUpLogIn(new Fan("albertoFan"));
         Fan utenteCorrente = (Fan)eventfy.getUtenteCorrente();
         eventfy.partecipaEvento(3);
-        int codice_evento = 9;
+        int codice_evento = 10;
         eventfy.confermaPartecipazione(codice_evento);
-        assertTrue(eventfy.getPrenotazione(9).hasPartecipante(utenteCorrente));
+        assertTrue(eventfy.getPrenotazione(codice_evento).hasPartecipante(utenteCorrente));
         assertTrue(((Fan) eventfy.getUtenteCorrente()).isPartecipante(codice_evento));
         String commento = "Evento fantastico!";
         int voto = 5;

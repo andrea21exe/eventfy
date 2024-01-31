@@ -61,11 +61,15 @@ public class Prenotazione {
     }
 
     public boolean isRecensibile() {
-        return LocalDate.now().isAfter(this.evento.getData());
+        return this.evento.isRecensibile();
     }
 
+    public boolean isEliminabile(){
+        return this.evento.isEliminabile();
+    }
+    //uguali
     public boolean isPartecipabile() {
-        return LocalDate.now().isBefore(this.evento.getData());
+        return this.evento.isPartecipabile();
     }
 
     public String getNomeArtista() {

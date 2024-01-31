@@ -384,8 +384,8 @@ public class Eventfy {
         listaImpianti.add(i4);
 
         // Popola le prenotazioni
-        Prenotazione p0 = new Prenotazione("P0", "d0", 20, LocalDate.now(), LocalTime.now(), a3, i1);
-        Prenotazione p1 = new Prenotazione("P1", "d1", 203, LocalDate.now(), LocalTime.now(), a1, i2);
+        Prenotazione p0 = new Prenotazione("P0", "d0", 20, LocalDate.of(2029, 12, 1), LocalTime.now(), a3, i1);
+        Prenotazione p1 = new Prenotazione("P1", "d1", 203, LocalDate.of(2028, 12, 1), LocalTime.now(), a1, i2);
         Prenotazione p2 = new Prenotazione("P2", "d2", 120, LocalDate.now(), LocalTime.now(), a2, i3);
         Prenotazione p3 = new Prenotazione("P3", "d3", 130, LocalDate.now(), LocalTime.now(), a1, i4);
         Prenotazione p4 = new Prenotazione("P4", "d4", 130, LocalDate.now(), LocalTime.now(), a1, i4);
@@ -393,7 +393,9 @@ public class Eventfy {
         Prenotazione p6 = new Prenotazione("P6", "d6", 320, LocalDate.of(2022, 12, 1), LocalTime.now(), a3, i3);
         Prenotazione p7 = new Prenotazione("P7", "d7", 320, LocalDate.of(2025, 12, 1), LocalTime.now(), a3, i3);
         Prenotazione p8 = new Prenotazione("P8", "d8", 320, LocalDate.of(2021, 12, 1), LocalTime.now(), a1, i3);
-        Prenotazione p9 = new Prenotazione("P8", "d8", 320, LocalDate.of(2025, 12, 1), LocalTime.now(), a1, i3);
+        //la p9 verrà eliminata nel test
+        Prenotazione p9 = new Prenotazione("P9", "d9", 320, LocalDate.of(2025, 12, 1), LocalTime.now(), a1, i3);
+        Prenotazione p10 = new Prenotazione("P10", "d10", 320, LocalDate.of(2024, 11, 11), LocalTime.now(), a1, i3);
 
         mappaPrenotazioniPendenti.put(p0.getId(), p0);
         mappaPrenotazioniPendenti.put(p1.getId(), p1);
@@ -405,6 +407,7 @@ public class Eventfy {
         mappaPrenotazioniAccettate.put(p6.getId(), p6);
         mappaPrenotazioniAccettate.put(p8.getId(), p8);
         mappaPrenotazioniAccettate.put(p9.getId(), p9);
+        mappaPrenotazioniAccettate.put(p10.getId(), p10);
 
         // Inviti (A1 è il mittente di 2 inviti e destinatario di 1 invito)
         Invito inv1 = new Invito(p3.getEvento(), p3.getArtista(), a3);
@@ -480,15 +483,13 @@ public class Eventfy {
 
         for (int key : mappaPrenotazioniAccettate.keySet()) {
             Prenotazione p1 = mappaPrenotazioniAccettate.get(key);
-            if (p1.hasArtista((Artista) utenteCorrente)) {
-                if(p1.getEvento().confrontaData(LocalDate.now())){
+            if (p1.hasArtista((Artista) utenteCorrente) && p1.isEliminabile()) {
                     mappaPrenotazioniTemp.put(p1.getId(), p1);
-                }
             }
         }
         for (int key : mappaPrenotazioniPendenti.keySet()) {
             Prenotazione p2 = mappaPrenotazioniPendenti.get(key);
-            if (p2.hasArtista((Artista) utenteCorrente)) {
+            if (p2.hasArtista((Artista) utenteCorrente) && p2.isEliminabile()) {
                 mappaPrenotazioniTemp.put(p2.getId(), p2);
             }
         }
@@ -580,7 +581,7 @@ public class Eventfy {
     // UC13
     public List<Evento> inserisciRecensioneEvento() {
         if (utenteCorrente instanceof Fan) {
-            return ((Fan) utenteCorrente).getListaEventi();
+            return ((Fan) utenteCorrente).getListaEventiRecensibili();
         }
         return null;
     }
@@ -588,14 +589,17 @@ public class Eventfy {
     public void confermaRecensioneEvento(int id_evento, String commento, int voto) {
         Prenotazione p = mappaPrenotazioniAccettate.get(id_evento);
 
-        // Se la prenotazione è tra quelle accettate e l'utente "è partecipante..."
-        // Viene creata la recensione
+        // Se:
+        // 1. la prenotazione è tra quelle accettate 
+        // 2. l'utente "è partecipante..."
+        // 3. la prenotazione/evento è recensibile --->
+        // ---> Viene creata la recensione
+
         if (utenteCorrente instanceof Fan) {
-            if (p != null && ((Fan) utenteCorrente).isPartecipante(p.getEvento())) {
+            if (p != null && ((Fan) utenteCorrente).isPartecipante(p.getEvento()) && p.isRecensibile()) {
                 p.creaRecensione(commento, voto, (Fan) utenteCorrente);
             }
         }
-
     }
 
 }

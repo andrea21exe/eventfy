@@ -62,8 +62,16 @@ public class Evento {
         return this.listaPartecipanti.contains(fan);
     }
 
-    public boolean confrontaData(LocalDate date){
-        return date.isBefore(this.data);
+    public boolean isRecensibile(){
+        return LocalDate.now().isAfter(this.data);
+    }
+
+    public boolean isEliminabile(){
+        return LocalDate.now().isBefore(this.data);
+    }
+    //uguali
+    public boolean isPartecipabile(){
+        return LocalDate.now().isBefore(this.data);
     }
 
     @Override

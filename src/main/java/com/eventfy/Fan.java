@@ -21,6 +21,18 @@ public class Fan extends Utente {
         return this.listaEventi;
     }
 
+    public List<Evento> getListaEventiRecensibili(){
+        List<Evento> listaEventiRecensibili = new ArrayList<Evento>();
+
+        for(Evento evento : this.listaEventi){
+            if(evento.isRecensibile()){
+                listaEventiRecensibili.add(evento);
+            }
+        }
+
+        return listaEventiRecensibili;
+    }
+
     public boolean isPartecipante(Evento e) {
         return this.listaEventi.contains(e);
     }
