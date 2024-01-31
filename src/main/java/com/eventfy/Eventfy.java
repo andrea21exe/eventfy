@@ -244,7 +244,7 @@ public class Eventfy {
     // ho sostituito la seconda operazione aggiungiScaletta2 con questa
     public List<Brano> recuperaBraniArtista(int codice_prenotazione) {
 
-        prenotazioneCorrente = mappaPrenotazioniTemp.get(codice_prenotazione);
+        prenotazioneCorrente = mappaPrenotazioniAccettate.get(codice_prenotazione);
 
         if (utenteCorrente instanceof Artista) {
             // L'utente corrente è già quello della prenotazione corrente
