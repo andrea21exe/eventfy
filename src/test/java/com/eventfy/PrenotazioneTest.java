@@ -42,7 +42,7 @@ public class PrenotazioneTest {
         p.creaRecensione("Impianto bello", 4);
 
         //Prendo il commento appena inserito
-        Recensione r = p.getImpianto().getListaRecensioni().get(0);
+        RecensioneImpianto r = p.getImpianto().getListaRecensioni().get(0);
         assertEquals("Impianto bello", r.getCommento());
         assertEquals(4, r.getVoto());
         assertEquals(p.getArtista(), r.getUtente());

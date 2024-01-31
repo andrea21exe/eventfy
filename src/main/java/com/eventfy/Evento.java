@@ -5,7 +5,7 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Evento implements Recensibile {
+public class Evento {
 
     private final int id;
     private String titolo;
@@ -15,7 +15,7 @@ public class Evento implements Recensibile {
     private LocalTime ora;
     private List<Brano> listaBrani;
     private List<Fan> listaPartecipanti;
-    private List<Recensione> listaRecensioni;
+    private List<RecensioneEvento> listaRecensioni;
 
     public Evento(int id, String titolo, String descrizione, int durata, LocalDate data, LocalTime ora) {
         this.id = id;
@@ -26,7 +26,7 @@ public class Evento implements Recensibile {
         this.ora = ora;
         this.listaBrani = new ArrayList<Brano>();
         this.listaPartecipanti = new ArrayList<Fan>();
-        this.listaRecensioni = new ArrayList<Recensione>();
+        this.listaRecensioni = new ArrayList<RecensioneEvento>();
     }
 
     public void addBrano(Brano b) {
@@ -53,8 +53,8 @@ public class Evento implements Recensibile {
         return this.listaPartecipanti;
     }
 
-    public void recensisci(String commento, int voto, Utente fan) {
-        Recensione recensione = new Recensione(commento, voto, fan);
+    public void recensisci(String commento, int voto, Fan fan) {
+        RecensioneEvento recensione = new RecensioneEvento(commento, voto, fan);
         this.listaRecensioni.add(0, recensione);
     }
 

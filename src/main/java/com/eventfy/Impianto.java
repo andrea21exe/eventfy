@@ -1,11 +1,9 @@
 package com.eventfy;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Impianto implements Recensibile {
+public class Impianto{
 
     private static int currentId = 0;
 
@@ -15,7 +13,7 @@ public class Impianto implements Recensibile {
     private int capienza;
     private int superficie;
     private Gestore gestore;
-    private List<Recensione> listaRecensioni;
+    private List<RecensioneImpianto> listaRecensioni;
 
     public Impianto(String nome, String luogo, int capienza, int superficie, Utente gestore) {
 
@@ -26,7 +24,7 @@ public class Impianto implements Recensibile {
             this.superficie = superficie;
             this.gestore = (Gestore) gestore;
             this.id = currentId++;
-            this.listaRecensioni = new ArrayList<Recensione>();
+            this.listaRecensioni = new ArrayList<RecensioneImpianto>();
         } else {
             throw new IllegalArgumentException("Il gestore inserito non è di tipo Gestore.");
         }
@@ -57,12 +55,12 @@ public class Impianto implements Recensibile {
      * }
      */
 
-    public List<Recensione> getListaRecensioni() {
+    public List<RecensioneImpianto> getListaRecensioni() {
         return this.listaRecensioni;
     }
 
-    public void recensisci(String commento, int voto, Utente artista) {
-        Recensione recensione = new Recensione(commento, voto, artista);
+    public void recensisci(String commento, int voto, Artista artista) {
+        RecensioneImpianto recensione = new RecensioneImpianto(commento, voto, artista);
         listaRecensioni.add(0, recensione);
     }
 

@@ -295,7 +295,7 @@ public class EventfyTest {
 
         // Non so se questa cosa si può fare
         Prenotazione p8 = eventfy.getPrenotazione(8);
-        Recensione r8 = p8.getImpianto().getListaRecensioni().get(0);
+        RecensioneImpianto r8 = p8.getImpianto().getListaRecensioni().get(0);
         assertEquals("Impianto al top, bravi", r8.getCommento());
         assertEquals(5, r8.getVoto());
         assertEquals(eventfy.getUtenteCorrente(), r8.getUtente());

@@ -3,7 +3,7 @@ package com.eventfy;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-public class Recensione {
+public abstract class Recensione {
     private static int currentId = 0;
 
     private int id;
@@ -11,9 +11,8 @@ public class Recensione {
     private LocalTime oraCommento;
     private String commento;
     private int voto;
-    private Utente utente;
 
-    public Recensione(String commento, int voto, Utente utente) {
+    public Recensione(String commento, int voto) {
 
         if (voto < 0 || voto > 5) {
             throw new IllegalArgumentException("Il valore deve essere compreso tra 0 a 5");
@@ -23,7 +22,6 @@ public class Recensione {
         this.oraCommento = LocalTime.now();
         this.commento = commento;
         this.id = currentId++;
-        this.utente = utente;
         this.voto = voto;
     }
 
@@ -34,7 +32,7 @@ public class Recensione {
     @Override
     public String toString() {
         return "Recensione [id=" + id + ", dataCommento=" + dataCommento + ", oraCommento=" + oraCommento
-                + ", commento=" + commento + ", voto=" + voto + ", utente=" + utente + "]";
+                + ", commento=" + commento + ", voto=" + voto + "]";
     }
 
     public String getCommento() {
@@ -49,7 +47,5 @@ public class Recensione {
         return this.dataCommento;
     }
 
-    public Utente getUtente() {
-        return this.utente;
-    }
+    public abstract Utente getUtente();
 }
