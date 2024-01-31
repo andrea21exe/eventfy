@@ -396,6 +396,9 @@ public class Eventfy {
         //la p9 verrà eliminata nel test
         Prenotazione p9 = new Prenotazione("P9", "d9", 320, LocalDate.of(2025, 12, 1), LocalTime.now(), a1, i3);
         Prenotazione p10 = new Prenotazione("P10", "d10", 320, LocalDate.of(2024, 11, 11), LocalTime.now(), a1, i3);
+        Prenotazione p11 = new Prenotazione("P11", "d11", 120, LocalDate.of(2022, 11, 11), LocalTime.now(), a1, i3);
+        Prenotazione p12 = new Prenotazione("P12", "d12", 40, LocalDate.of(2025, 1, 11), LocalTime.now(), a1, i3);
+        
 
         mappaPrenotazioniPendenti.put(p0.getId(), p0);
         mappaPrenotazioniPendenti.put(p1.getId(), p1);
@@ -408,6 +411,8 @@ public class Eventfy {
         mappaPrenotazioniAccettate.put(p8.getId(), p8);
         mappaPrenotazioniAccettate.put(p9.getId(), p9);
         mappaPrenotazioniAccettate.put(p10.getId(), p10);
+        mappaPrenotazioniAccettate.put(p11.getId(), p11);
+        mappaPrenotazioniAccettate.put(p12.getId(), p12);
 
         // Inviti (A1 è il mittente di 2 inviti e destinatario di 1 invito)
         Invito inv1 = new Invito(p3.getEvento(), p3.getArtista(), a3);
@@ -423,6 +428,8 @@ public class Eventfy {
         i3.recensisci("Commento 3", 3, a3);
         f1.addPartecipazione(p1.getEvento());
         f2.addPartecipazione(p2.getEvento());
+        f1.addPartecipazione(p11.getEvento());
+        f1.addPartecipazione(p12.getEvento());
     }
 
     // UC9

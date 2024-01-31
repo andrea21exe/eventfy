@@ -96,6 +96,10 @@ public class Prenotazione {
         return this.evento.hasPartecipante(fan);
     }
 
+    public int getNumRecensioniEvento(){
+        return this.evento.getNumRecensioni();
+    }
+
     @Override
     public String toString() {
         return "-- Prenotazione [id=" + id + ", data=" + data + ", ora=" + ora + ", \nevento=" + evento + ",\nartista="

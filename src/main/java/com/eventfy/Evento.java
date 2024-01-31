@@ -74,6 +74,10 @@ public class Evento {
         return LocalDate.now().isBefore(this.data);
     }
 
+    public int getNumRecensioni(){
+        return this.listaRecensioni.size();
+    }
+
     @Override
     public String toString() {
         return "Evento [id=" + id + ", titolo=" + titolo + ", descrizione=" + descrizione + ", durata=" + durata

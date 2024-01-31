@@ -196,7 +196,7 @@ public class EventfyTest {
         List<Prenotazione> result = eventfy.mostraPrenotazioniAccettate();
         assertNotNull(result);
         // L'utente con ID = 0 ha una prenotazione pendente
-        assertEquals(5, result.size());
+        assertEquals(7, result.size());
 
     }
 
@@ -429,21 +429,28 @@ public class EventfyTest {
 
     @Test
     void confermaRecensioneEvento() {
-        // Registro ed effettuo il login con un nuovo utente (FAN)
-        eventfy.signUpLogIn(new Fan("albertoFan"));
-        Fan utenteCorrente = (Fan)eventfy.getUtenteCorrente();
-        eventfy.partecipaEvento(3);
-        int codice_evento = 10;
-        eventfy.confermaPartecipazione(codice_evento);
-        assertTrue(eventfy.getPrenotazione(codice_evento).hasPartecipante(utenteCorrente));
-        assertTrue(((Fan) eventfy.getUtenteCorrente()).isPartecipante(codice_evento));
-        String commento = "Evento fantastico!";
+        // Registro ed effettuo il login con il fan id=6
+        // l'utente partecipa all'evento(/prenotazione) id=11
+        // Confronto il numero di recensioni di un evento prima e dopo la conferma di una nuova recensione
+        int id_utente = 6;
+        int id_prenotazione = 11;
+        eventfy.logIn(id_utente);
+
+        int numRecensioniIniziali = eventfy.getPrenotazione(id_prenotazione).getNumRecensioniEvento();
+
         int voto = 5;
-        // Conferma la recensione
-        eventfy.confermaRecensioneEvento(codice_evento, commento, voto);
-        assertTrue(utenteCorrente.getListaEventi().size()>0);
-        assertNull(eventfy.getPrenotazioneCorrente());
-        assertNull(eventfy.getMapPrenotazioniTemp());
+        String commento = "Bello";
+        eventfy.confermaRecensioneEvento(id_prenotazione, commento, voto);
+        //il numero di recensioni iniziale e finale deve differire di 1
+        assertEquals(numRecensioniIniziali + 1, eventfy.getPrenotazione(id_prenotazione).getNumRecensioniEvento());
+
+        //Provo a rieffettuare la procedura con una prenotazione non recensibile
+        id_prenotazione = 12;
+        numRecensioniIniziali = eventfy.getPrenotazione(id_prenotazione).getNumRecensioniEvento();
+        eventfy.confermaRecensioneEvento(id_prenotazione, commento, voto);
+        //Il numero di recensioni prima e dopo deve essere uguale
+        assertEquals(numRecensioniIniziali, eventfy.getPrenotazione(id_prenotazione).getNumRecensioniEvento());
+
 
     }
 
