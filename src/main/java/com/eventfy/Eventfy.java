@@ -609,4 +609,67 @@ public class Eventfy {
         }
     }
 
+    // UC4
+
+    public List<Prenotazione> mostraPrenotazioniAccettateGestore(){
+
+        ArrayList<Prenotazione> prenotazioniAccettate = new ArrayList<Prenotazione>();
+
+        for (int key : mappaPrenotazioniAccettate.keySet()) {
+            Prenotazione p1 = mappaPrenotazioniAccettate.get(key);
+            if(p1.hasGestore((Gestore)utenteCorrente)){
+
+                prenotazioniAccettate.add(p1);
+            }
+        }
+
+        return prenotazioniAccettate;
+    }
+
+    //UC5
+
+    public List<Evento> visualizzaEventiOrganizzati(){
+        ArrayList<Evento> eventiArtista = new ArrayList<Evento>();
+        for (int key : mappaPrenotazioniAccettate.keySet()) {
+            Prenotazione p1 = mappaPrenotazioniAccettate.get(key);
+            if(p1.hasArtista((Artista)utenteCorrente)){
+                eventiArtista.add(p1.getEvento());
+            }
+        }
+
+        return eventiArtista;
+    }
+
+    //UC11
+    public List<Evento> mostraEventiArtista(String nomeArtista){
+
+        ArrayList<Evento> eventiArtista = new ArrayList<Evento>();
+
+        for (int key : mappaPrenotazioniAccettate.keySet()) {
+            Prenotazione p1 = mappaPrenotazioniAccettate.get(key);
+            if(nomeArtista.equalsIgnoreCase(p1.getArtista().getNome())){
+                eventiArtista.add(p1.getEvento());
+            }
+        }
+
+        return eventiArtista;
+    }
+
+    //UC14
+
+    public List<Prenotazione> mostraPrenotazioniPendentiGestore(){
+        ArrayList<Prenotazione> prenotazioniPendenti = new ArrayList<Prenotazione>();
+
+        for (int key : mappaPrenotazioniPendenti.keySet()) {
+            Prenotazione p1 = mappaPrenotazioniPendenti.get(key);
+            if(p1.hasGestore((Gestore)utenteCorrente)){
+
+                prenotazioniPendenti.add(p1);
+            }
+        }
+
+        return prenotazioniPendenti;
+
+    }
+
 }
