@@ -459,7 +459,7 @@ public class EventfyTest {
     void mostraPrenotazioniAccettateGestoreTest(){
 
         //faccio il login con un gestore
-        eventfy.logIn(0);
+        eventfy.logIn(1);
 
         List<Prenotazione> prenotazioniAccettate = eventfy.mostraPrenotazioniAccettateGestore();
 
@@ -467,7 +467,7 @@ public class EventfyTest {
         assertNotNull(prenotazioniAccettate);
 
         //controllo che la lsuat ritornata sia della dimensione esatta
-        assertEquals(3, prenotazioniAccettate.size());
+        assertEquals(7, prenotazioniAccettate.size());
     }
 
     @Test
