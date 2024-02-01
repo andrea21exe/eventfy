@@ -454,4 +454,64 @@ public class EventfyTest {
 
     }
 
+
+    @Test
+    void mostraPrenotazioniAccettateGestoreTest(){
+
+        //faccio il login con un gestore
+        eventfy.logIn(0);
+
+        List<Prenotazione> prenotazioniAccettate = eventfy.mostraPrenotazioniAccettateGestore();
+
+        //verifico che mi venga ritornata una lista 
+        assertNotNull(prenotazioniAccettate);
+
+        //controllo che la lsuat ritornata sia della dimensione esatta
+        assertEquals(3, prenotazioniAccettate.size());
+    }
+
+    @Test
+    void visualizzaEventiOrganizzatiTest(){
+
+        //faccio il login con un'artista
+        eventfy.logIn(3);
+
+        List<Evento> eventiOrganizzati = eventfy.visualizzaEventiOrganizzati();
+
+        //verifico che mi venga ritornata una lista 
+        assertNotNull(eventiOrganizzati);
+
+        assertEquals(8, eventiOrganizzati.size());
+    }
+
+
+    @Test
+    void mostraEventiArtistaTest(){
+
+
+        List<Evento> eventiOrganizzatiArtista = eventfy.mostraEventiArtista("theweeknd");
+
+        //verifico che mi venga ritornata una lista 
+        assertNotNull(eventiOrganizzatiArtista);
+
+        assertEquals(8, eventiOrganizzatiArtista.size());
+    }
+
+
+    @Test
+    void mostraPrenotazioniPendentiGestoreTest(){
+
+        //faccio il login con un gestore
+        eventfy.logIn(1);
+
+        List<Prenotazione> prenotazioniPendenti = eventfy.mostraPrenotazioniPendentiGestore();
+
+        //verifico che mi venga ritornata una lista 
+        assertNotNull(prenotazioniPendenti);
+
+        //verifico che la dimensione della lista sia corretta
+        assertEquals(1, prenotazioniPendenti.size());
+    }
+
+
 }
