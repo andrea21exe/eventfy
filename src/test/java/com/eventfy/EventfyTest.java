@@ -42,12 +42,14 @@ public class EventfyTest {
 
         // Login - SignUp
         eventfy.signUpLogIn(new Gestore("Carlo"));
+        // Ottengo il numero di impianti iniziale
+        int numImpiantiIniziale = eventfy.getListaImpianti().size();
 
         Impianto nuovoImpianto = eventfy.nuovoImpianto("Metro Stad", "Milano", 80000, 100);
         eventfy.confermaImpianto();
 
         assertNull(eventfy.getImpiantoCorrente());
-        assertEquals(5, eventfy.getListaImpianti().size());
+        assertEquals(numImpiantiIniziale + 1, eventfy.getListaImpianti().size());
         assertTrue(eventfy.getListaImpianti().contains(nuovoImpianto));
 
     }
@@ -57,6 +59,7 @@ public class EventfyTest {
 
         // Login - SignUp
         eventfy.logIn(5);
+        assertNull(eventfy.getPrenotazioneCorrente());
         // Testo implicitamente il metodo isMaggioreUguale della classe Impianto
         List<Impianto> impiantiDisponibili = eventfy.nuovaPrenotazione("Prenotazione1", "Descrizione 1", 2,
                 15000, LocalDate.now(), LocalTime.now());
@@ -77,21 +80,12 @@ public class EventfyTest {
         // L'impianto scelto deve essere associato alla prenotazione corrente
         assertEquals(eventfy.getImpianto(0), eventfy.getPrenotazioneCorrente().getImpianto());
 
-        // QUANDO FAREMO LE ESTENSIONI PROVEREMO A SELEZIONARE UN IMPIANTO CHE
-        // NON E' NELLA MAPPA TEMPORANEA (CHE NON ESISTE O NON SODDISFA I REQUISITI DI
-        // CAPIENZA)
-        /*
-         * impiantiDisponibili = eventfy.nuovaPrenotazione("P2", "d2", 329, 10000,
-         * LocalDate.now(), LocalTime.now());
-         * //SCELGO L'IMPIANTO CON ID = 0
-         * eventfy.prenotaImpianto(1);
-         */
     }
 
     @Test
     void testConfermaPrenotazione() {
 
-        eventfy.signUpLogIn(new Artista("Dua Lipa"));
+        eventfy.signUpLogIn(new Artista("21 savage"));
 
         // Ottengo la dimensione della mappa delle prenotazioni pendenti prima di
         // confermare una nuova prenotazione
@@ -117,7 +111,7 @@ public class EventfyTest {
 
     @Test
     void mostraPrenotazioniPendentiTest() {
-        // Facciamo il logIn con un utente già inserito
+        // Facciamo il logIn con un utente (gestore) già inserito
         eventfy.logIn(2);
         List<Prenotazione> result = eventfy.mostraPrenotazioniPendenti();
         // L'utente con ID = 2 ha una prenotazione pendente
@@ -135,7 +129,7 @@ public class EventfyTest {
         eventfy.mostraPrenotazioniPendenti();
         assertNotNull(eventfy.getMapPrenotazioniTemp());
 
-        // SCELGO il codice di prenotazione 6 già inserito nel sistema
+        // SCELGO il codice di prenotazione 7 già inserito nel sistema
         Prenotazione pRicercata = eventfy.selezionaPrenotazionePendente(7);
         // Verifica che la prenotazione sia stata selezionata correttamente
         assertNotNull(pRicercata);
