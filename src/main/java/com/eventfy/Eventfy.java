@@ -263,6 +263,7 @@ public class Eventfy {
         if (utenteCorrente instanceof Artista) {
             prenotazioneCorrente.addBrano(((Artista) utenteCorrente).getBrano(codice_brano));
         }
+        prenotazioneCorrente = null;
     }
 
     // UC7-------------------------------------------------------
