@@ -208,9 +208,10 @@ public class Eventfy {
     }
 
     // EFFETTUA LA REGISTRAZIONE ED IL "LOG-IN"
-    public void signUpLogIn(Utente utente) {
+    public int signUpLogIn(Utente utente) {
         mappaUtenti.put(utente.getId(), utente);
         utenteCorrente = utente;
+        return utente.getId();
     }
 
     public Impianto getImpianto(int id) {
@@ -672,5 +673,7 @@ public class Eventfy {
         return prenotazioniPendenti;
 
     }
+
+
 
 }
