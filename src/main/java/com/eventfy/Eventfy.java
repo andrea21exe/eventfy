@@ -611,7 +611,7 @@ public class Eventfy {
         // ---> Viene creata la recensione
 
         if (utenteCorrente instanceof Fan) {
-            if (p != null && ((Fan) utenteCorrente).isPartecipante(p.getEvento()) && p.isRecensibile()) {
+            if (p != null && p.hasPartecipante((Fan)utenteCorrente) && p.isRecensibile()) {
                 p.creaRecensione(commento, voto, (Fan) utenteCorrente);
             }
         }
@@ -680,6 +680,11 @@ public class Eventfy {
 
     }
 
+    //ricerca utente
 
+    public Utente ricercaUtente(int id){
+
+        return mappaUtenti.get(id);
+    }
 
 }

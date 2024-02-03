@@ -13,6 +13,115 @@ public class App {
 
         sistema = Eventfy.getIstanceEventfy();
         sistema.populate();
+
+        // Scelta dell'utente
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Benvenuto! Seleziona un'opzione:");
+        System.out.println("1. Accedi");
+        System.out.println("2. Registrati");
+        int scelta = scanner.nextInt();
+
+        Utente utenteCorrente = null;
+
+        switch (scelta) {
+            case 1:
+                System.out.println("Inserisci il tuo identificativo:");
+                int id = scanner.nextInt();
+
+                // Cerca l'utente con l'identificativo fornito
+
+                utenteCorrente = sistema.getUtente(id);
+    
+                if (utenteCorrente == null) {
+                    System.out.println("Utente non trovato.");
+                    return;
+                }
+
+                break;
+            case 2:
+                registrati();
+                break;
+            default:
+                System.out.println("Scelta non valida.");
+                return;
+
+        }
+
+        menu(utenteCorrente);
+
+    }
+
+    private static void registrati(){
+
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("Inserisci il tuo nome:");
+        String nome = scanner.nextLine();
+
+        System.out.println("Seleziona il tipo di utente:");
+        System.out.println("1. Artista");
+        System.out.println("2. Fan");
+        System.out.println("3. Gestore");
+
+        int iden;
+
+        int tipoUtente = scanner.nextInt();
+
+        switch (tipoUtente) {
+            case 1:
+                iden = sistema.signUpLogIn(new Artista(nome));
+                System.out.println("Il tuo identificativo e':"+iden);
+                break;
+            case 2:
+                iden = sistema.signUpLogIn(new Fan(nome));
+                System.out.println("Il tuo identificativo e':"+iden);
+                break;
+            case 3:
+                iden = sistema.signUpLogIn(new Gestore(nome));
+                System.out.println("Il tuo identificativo e':"+iden);
+                break;
+            default:
+                System.out.println("Tipo di utente non valido.");
+                return;
+        }
+
+        System.out.println("Registrazione avvenuta con successo!");
+
+        Utente utenteCorrente = sistema.ricercaUtente(iden);
+
+        menu(utenteCorrente);
+    }
+
+    private static void menu(Utente utente){
+        if (utente instanceof Gestore) {
+            menuGestore();
+        } else if (utente instanceof Artista) {
+            menuArtista();
+        } else if (utente instanceof Fan) {
+            menuFan();
+        }
+    }
+
+    private static void menuGestore() {
+        System.out.println("Benvenuto Gestore!");
+        // Implementa le funzionalità specifiche per il Gestore
+    }
+
+    private static void menuArtista() {
+        System.out.println("Benvenuto Artista!");
+        // Implementa le funzionalità specifiche per l'Artista
+    }
+
+    private static void menuFan() {
+        System.out.println("Benvenuto Fan!");
+        // Implementa le funzionalità specifiche per il Fan
+    }
+    
+/* 
+    public static void main(String[] args) {
+
+        sistema = Eventfy.getIstanceEventfy();
+        sistema.populate();
         sistema.signUpLogIn(new Gestore("Andrea"));
 
         menu();
@@ -507,5 +616,5 @@ public class App {
         }
         menu();
     }
-
+*/
 }
