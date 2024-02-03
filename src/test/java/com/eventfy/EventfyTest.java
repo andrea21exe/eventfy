@@ -164,21 +164,23 @@ public class EventfyTest {
 
         eventfy.aggiungiScaletta();
         List<Brano> brani = eventfy.recuperaBraniArtista(5);
+        assertNotNull(eventfy.getPrenotazioneCorrente());
         assertEquals(3, brani.size());
 
     }
 
     @Test
     void testAggiungiBrano() {
-        // Facciamo il logIn con un gestore esistente
+        // Facciamo il logIn con un artista esistente
         eventfy.logIn(3);
+
+        int lunghezzaScalettaIniziale = eventfy.getPrenotazione(5).getEvento().getListaBrani().size();
 
         eventfy.aggiungiScaletta();
         eventfy.recuperaBraniArtista(5);
         eventfy.aggiungiBrano(0);
-        eventfy.aggiungiBrano(2);
 
-        assertEquals(2, eventfy.getPrenotazioneCorrente().getEvento().getListaBrani().size());
+        assertEquals(lunghezzaScalettaIniziale + 1, eventfy.getPrenotazione(5).getEvento().getListaBrani().size());
 
     }
 
@@ -214,7 +216,7 @@ public class EventfyTest {
         int sizeMappaInvitiIniziale = eventfy.getMappaInvitiPendenti().size();
         eventfy.mostraPrenotazioniAccettate();
         eventfy.selezionaPrenotazioneInvito(4);
-        eventfy.invitaArtista(0);
+        eventfy.invitaArtista(4);
         // Deve essere stato registrato un invito
         assertEquals(sizeMappaInvitiIniziale + 1, eventfy.getMappaInvitiPendenti().size());
 
@@ -378,6 +380,7 @@ public class EventfyTest {
         // Registro ed effettuo il login con un nuovo utente (FAN)
         eventfy.signUpLogIn(new Utente("albertoFan"));
         // AlbertoFan vuole partecipare ad un evento di theweeknd
+        eventfy.mostraArtistiEventi();
         List<Prenotazione> prenotazioniTheWeekndPartecipabili = eventfy.partecipaEvento(3);
         // Deve esistere almeno una prenotazione partecipabile
         assertTrue(prenotazioniTheWeekndPartecipabili.size() > 0);
@@ -394,6 +397,7 @@ public class EventfyTest {
 
         Utente utenteCorrente = eventfy.getUtenteCorrente();
         // AlbertoFan vuole partecipare ad un evento di theweeknd
+        eventfy.mostraArtistiEventi();
         eventfy.partecipaEvento(3);
         // Partecipo all'evento con ID 10 (Vedesi metodo populate, è un evento
         // partecipabile di theWeeknd)

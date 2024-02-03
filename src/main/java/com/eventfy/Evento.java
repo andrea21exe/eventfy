@@ -47,6 +47,7 @@ public class Evento {
 
     public void addFan(Fan utenteCorrente) {
         this.listaPartecipanti.add(utenteCorrente);
+        utenteCorrente.addPartecipazione(this);
     }
 
     public List<Fan> getListaFan() {
