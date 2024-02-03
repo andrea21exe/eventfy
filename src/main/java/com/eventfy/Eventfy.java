@@ -1,6 +1,5 @@
 package com.eventfy;
 
-import java.io.StringBufferInputStream;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -678,13 +677,6 @@ public class Eventfy {
 
         return prenotazioniPendenti;
 
-    }
-
-    //ricerca utente
-
-    public Utente ricercaUtente(int id){
-
-        return mappaUtenti.get(id);
     }
 
 }
