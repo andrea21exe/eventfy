@@ -365,7 +365,7 @@ public class Eventfy {
         mappaUtenti.put(a3.getId(), a3);
         Fan f1 = new Fan("Max"); // id 6
         mappaUtenti.put(f1.getId(), f1);
-        Fan f2 = new Fan("giulio"); // id 6
+        Fan f2 = new Fan("giulio"); // id 7
         mappaUtenti.put(f2.getId(), f2);
 
         a1.nuovoBrano("Starboy", "Starboy", 3); // id 1
