@@ -135,6 +135,8 @@ public class EventfyTest {
         assertNotNull(pRicercata);
         assertNotNull(eventfy.getPrenotazioneCorrente());
         assertEquals(7, pRicercata.getId());
+
+        eventfy.setPrenotazioneCorrenteNull();
     }
 
     @Test

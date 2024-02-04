@@ -10,6 +10,9 @@ public class MenuGestore extends MenuStrategy {
         System.out.println("Seleziona un'opzione:");
         System.out.println("1. Inserisci un nuovo impianto");
         System.out.println("2. Gestisci prenotazione");
+        System.out.println("3. Visualizza prenotazioni accettate");
+        System.out.println("4. Visualizza prenotazioni pendenti");
+
     }
 
     @Override
@@ -22,6 +25,15 @@ public class MenuGestore extends MenuStrategy {
                 gestisciPrenotazioni();
                 System.out.println("Hai selezionato l'Opzione 2");
                 break;
+            case 3:
+                visualizzaPrenotazioniAccettate();
+                System.out.println("Hai selezionato l'Opzione 3");
+                break;
+            case 4:
+                visualizzaPrenotazioniPendenti();
+                System.out.println("Hai selezionato l'Opzione 4");
+                break;
+                
             default:
                 System.out.println("Opzione non valida");
         }
@@ -72,7 +84,7 @@ public class MenuGestore extends MenuStrategy {
 
     }
 
-    public void gestisciPrenotazioni() {
+    private void gestisciPrenotazioni() {
 
         Scanner input = new Scanner(System.in);
         // Ottiene la lista delle prenotazioni pendenti dal sistema
@@ -104,6 +116,42 @@ public class MenuGestore extends MenuStrategy {
             System.out.println("Prenotazione non valida.");
             // CONSIDERARE IL CASO IN CUI NON VENGONO ACCETTATE LE PRENOTAZIONI NELLE
             // ESTENSIONI
+        }
+
+    }
+
+    private void visualizzaPrenotazioniAccettate(){
+        //stampa le prenotazioni
+
+        List<Prenotazione> listaPrenotazioniAccettate = sistema.mostraPrenotazioniAccettateGestore();
+
+        if (listaPrenotazioniAccettate == null || listaPrenotazioniAccettate.isEmpty()) {
+            System.out.println("Nessuna prenotazione accettata.");
+            return;
+        }
+
+        // Stampa le prenotazioni pendenti
+        System.out.println("Prenotazioni accettate");
+        for (Prenotazione p : listaPrenotazioniAccettate) {
+            System.out.println(p);
+            System.out.println("\n\n");
+        }
+    }
+
+    private void visualizzaPrenotazioniPendenti(){
+
+        List<Prenotazione> prenotazioniPendenti = sistema.mostraPrenotazioniPendentiGestore();
+
+        if (prenotazioniPendenti == null || prenotazioniPendenti.isEmpty()) {
+            System.out.println("Nessuna richiesta di prenotazione.");
+            return;
+        }
+
+        // Stampa le prenotazioni pendenti
+        System.out.println("Prenotazioni accettate");
+        for (Prenotazione p : prenotazioniPendenti) {
+            System.out.println(p);
+            System.out.println("\n\n");
         }
 
     }

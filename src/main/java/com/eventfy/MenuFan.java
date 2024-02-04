@@ -10,6 +10,8 @@ public class MenuFan extends MenuStrategy {
         System.out.println("Seleziona un'opzione:");
         System.out.println("1. Partecipa ad un evento");
         System.out.println("2. Scrivi una recensione per un evento a cui hai partecipato");
+        System.out.println("3. Visualizza eventi di un dato artista");
+
     }
 
     @Override
@@ -20,6 +22,9 @@ public class MenuFan extends MenuStrategy {
                 break;
             case 2:
                 inserisciRecensioneEvento();
+                break;
+            case 3:
+                visualizzaEventiArtista();
                 break;
             default:
                 System.out.println("Opzione non valida");
@@ -77,6 +82,28 @@ public class MenuFan extends MenuStrategy {
             System.out.println("Recensione inserita");
         } else {
             System.out.println("Solo un fan può recensire un evento");
+        }
+    }
+
+
+    private void visualizzaEventiArtista(){
+
+        Scanner input = new Scanner(System.in);
+        System.out.print("Inserisci il nome dell'artista di cui vuoi vedere eventi disponibili: ");
+        String nomeArtista = input.nextLine();
+
+        List<Evento> eventiArtista = sistema.mostraEventiArtista(nomeArtista);
+
+        if (eventiArtista == null || eventiArtista.isEmpty()) {
+            System.out.println("Nessuna evento presente dell' artista: "+nomeArtista);
+            return;
+        }
+
+        // Stampa gli eventi
+        System.out.println("eventi artista "+nomeArtista);
+        for (Evento e : eventiArtista) {
+            System.out.println(e);
+            System.out.println("\n\n");
         }
     }
 

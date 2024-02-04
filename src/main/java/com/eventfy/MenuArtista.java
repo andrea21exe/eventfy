@@ -16,6 +16,7 @@ public class MenuArtista extends MenuStrategy {
         System.out.println("4. Gestisci Inviti");
         System.out.println("5. Inserisci una recensione per una struttura");
         System.out.println("6. Elimina prenotazione");
+        System.out.println("7. visualizza eventi organizzati");
     }
 
     @Override
@@ -44,6 +45,10 @@ public class MenuArtista extends MenuStrategy {
             case 6:
                 System.out.println("Hai selezionato l'Opzione 6");
                 eliminaPrenotazione();
+                break;
+            case 7:
+                System.out.println("Hai selezionato l'Opzione 7");
+                visualizzaEventi();
                 break;
             default:
                 System.out.println("Opzione non valida");
@@ -298,6 +303,24 @@ public class MenuArtista extends MenuStrategy {
                 System.out.println("Solo un artista può eliminare una prenotazione di una struttura");
             }
         }
+    }
+
+    private void visualizzaEventi(){
+
+        List<Evento> eventiOrganizzati = sistema.visualizzaEventiOrganizzati();
+
+        if (eventiOrganizzati == null || eventiOrganizzati.isEmpty()) {
+            System.out.println("Nessuna evento organizzato.");
+            return;
+        }
+
+         // Stampa gli eventi
+         System.out.println("Prenotazioni accettate");
+         for (Evento e : eventiOrganizzati) {
+             System.out.println(e);
+             System.out.println("\n\n");
+         }
+
     }
 
 }
