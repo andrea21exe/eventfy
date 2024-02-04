@@ -46,7 +46,6 @@ public class App {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Inserisci il tuo identificativo:");
         int id = scanner.nextInt();
-
         // Cerca l'utente con l'identificativo fornito
         Utente user = sistema.getUtente(id);
         if (user == null) {
@@ -81,7 +80,6 @@ public class App {
         int iden;
 
         int tipoUtente = scanner.nextInt();
-
         switch (tipoUtente) {
             case 1:
                 iden = sistema.signUpLogIn(new Artista(nome));
@@ -102,9 +100,11 @@ public class App {
             default:
                 System.out.println("Tipo di utente non valido.");
                 return;
-        }
+        }        
+
 
         System.out.println("Registrazione avvenuta con successo!");
 
     }
+
 }

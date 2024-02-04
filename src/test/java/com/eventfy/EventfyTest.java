@@ -201,7 +201,7 @@ public class EventfyTest {
     @Test
     void SelezionaPrenotazioneInvito() {
         eventfy.logIn(3);// Artista TheWeeknd
-        
+
         assertNull(eventfy.getInvitoCorrente());
         eventfy.mostraPrenotazioniAccettate();
         // Chiamata al metodo selezionaArtista
@@ -214,7 +214,7 @@ public class EventfyTest {
     @Test
     void invitaArtistaTest() {
         eventfy.logIn(3);// Artista TheWeeknd
-        //Prendo la lunghezza della lista per andarla a confrontare sucessivamente
+        // Prendo la lunghezza della lista per andarla a confrontare sucessivamente
         int sizeMappaInvitiIniziale = eventfy.getMappaInvitiPendenti().size();
         eventfy.mostraPrenotazioniAccettate();
         eventfy.selezionaPrenotazioneInvito(4);
@@ -354,7 +354,8 @@ public class EventfyTest {
 
         eventfy.eliminaPrenotazione();
         eventfy.confermaEliminazione(codicePrenotazione);
-        // Verifica che la prenotazione pendente con il codice 5 sia stata eliminata dalla mappa pr. accettate
+        // Verifica che la prenotazione pendente con il codice 5 sia stata eliminata
+        // dalla mappa pr. accettate
         assertNull(eventfy.getPrenotazioniAccettate().get(codicePrenotazione));
         // Verifica la presenza della prenotazione cancellata nella mappa delle pr.
         // annullate
@@ -431,7 +432,8 @@ public class EventfyTest {
     void confermaRecensioneEvento() {
         // Registro ed effettuo il login con il fan id=6
         // l'utente partecipa all'evento(/prenotazione) id=11
-        // Confronto il numero di recensioni di un evento prima e dopo la conferma di una nuova recensione
+        // Confronto il numero di recensioni di un evento prima e dopo la conferma di
+        // una nuova recensione
         int id_utente = 6;
         int id_prenotazione = 11;
         eventfy.logIn(id_utente);
@@ -441,77 +443,71 @@ public class EventfyTest {
         int voto = 5;
         String commento = "Bello";
         eventfy.confermaRecensioneEvento(id_prenotazione, commento, voto);
-        //il numero di recensioni iniziale e finale deve differire di 1
+        // il numero di recensioni iniziale e finale deve differire di 1
         assertEquals(numRecensioniIniziali + 1, eventfy.getPrenotazione(id_prenotazione).getNumRecensioniEvento());
 
-        //Provo a rieffettuare la procedura con una prenotazione non recensibile
+        // Provo a rieffettuare la procedura con una prenotazione non recensibile
         id_prenotazione = 12;
         numRecensioniIniziali = eventfy.getPrenotazione(id_prenotazione).getNumRecensioniEvento();
         eventfy.confermaRecensioneEvento(id_prenotazione, commento, voto);
-        //Il numero di recensioni prima e dopo deve essere uguale
+        // Il numero di recensioni prima e dopo deve essere uguale
         assertEquals(numRecensioniIniziali, eventfy.getPrenotazione(id_prenotazione).getNumRecensioniEvento());
-
 
     }
 
-
     @Test
-    void mostraPrenotazioniAccettateGestoreTest(){
+    void mostraPrenotazioniAccettateGestoreTest() {
 
-        //faccio il login con un gestore
+        // faccio il login con un gestore
         eventfy.logIn(1);
 
         List<Prenotazione> prenotazioniAccettate = eventfy.mostraPrenotazioniAccettateGestore();
 
-        //verifico che mi venga ritornata una lista 
+        // verifico che mi venga ritornata una lista
         assertNotNull(prenotazioniAccettate);
 
-        //controllo che la lsuat ritornata sia della dimensione esatta
+        // controllo che la lsuat ritornata sia della dimensione esatta
         assertEquals(7, prenotazioniAccettate.size());
     }
 
     @Test
-    void visualizzaEventiOrganizzatiTest(){
+    void visualizzaEventiOrganizzatiTest() {
 
-        //faccio il login con un'artista
+        // faccio il login con un'artista
         eventfy.logIn(3);
 
         List<Evento> eventiOrganizzati = eventfy.visualizzaEventiOrganizzati();
 
-        //verifico che mi venga ritornata una lista 
+        // verifico che mi venga ritornata una lista
         assertNotNull(eventiOrganizzati);
 
         assertEquals(8, eventiOrganizzati.size());
     }
 
-
     @Test
-    void mostraEventiArtistaTest(){
-
+    void mostraEventiArtistaTest() {
 
         List<Evento> eventiOrganizzatiArtista = eventfy.mostraEventiArtista("theweeknd");
 
-        //verifico che mi venga ritornata una lista 
+        // verifico che mi venga ritornata una lista
         assertNotNull(eventiOrganizzatiArtista);
 
         assertEquals(8, eventiOrganizzatiArtista.size());
     }
 
-
     @Test
-    void mostraPrenotazioniPendentiGestoreTest(){
+    void mostraPrenotazioniPendentiGestoreTest() {
 
-        //faccio il login con un gestore
+        // faccio il login con un gestore
         eventfy.logIn(1);
 
         List<Prenotazione> prenotazioniPendenti = eventfy.mostraPrenotazioniPendentiGestore();
 
-        //verifico che mi venga ritornata una lista 
+        // verifico che mi venga ritornata una lista
         assertNotNull(prenotazioniPendenti);
 
-        //verifico che la dimensione della lista sia corretta
+        // verifico che la dimensione della lista sia corretta
         assertEquals(1, prenotazioniPendenti.size());
     }
-
 
 }

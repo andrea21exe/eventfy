@@ -1,6 +1,6 @@
 package com.eventfy;
 
-public class RecensioneImpianto extends Recensione{
+public class RecensioneImpianto extends Recensione {
 
     private Artista artista;
 

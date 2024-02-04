@@ -194,18 +194,6 @@ public class Eventfy {
         prenotazioneCorrente = null;
     }
 
-    public boolean hasArtistaCorrente() {
-        return utenteCorrente instanceof Artista;
-    }
-
-    public boolean hasGestoreCorrente() {
-        return utenteCorrente instanceof Gestore;
-    }
-
-    public boolean hasFanCorrente() {
-        return utenteCorrente instanceof Fan;
-    }
-
     // EFFETTUA LA REGISTRAZIONE ED IL "LOG-IN"
     public int signUpLogIn(Utente utente) {
         mappaUtenti.put(utente.getId(), utente);
@@ -374,7 +362,7 @@ public class Eventfy {
         a2.nuovoBrano("Good Days", "SOS", 3); // id 4
         a2.nuovoBrano("Kill Bill", "SOS", 3); // id 5
         a3.nuovoBrano("Agora Hills", "Album D", 3); // id 6
-
+        
         // Popola la lista impianti
         Impianto i1 = new Impianto("San Siro", "Milano", 75000, 700, g1);
         listaImpianti.add(i1);
@@ -433,12 +421,7 @@ public class Eventfy {
         p2.addPartecipazioneFan(f2);
         p11.addPartecipazioneFan(f1);
         p12.addPartecipazioneFan(f1);
-        /*
-        f1.addPartecipazione(p1.getEvento());
-        f2.addPartecipazione(p2.getEvento());
-        f1.addPartecipazione(p11.getEvento());
-        f1.addPartecipazione(p12.getEvento());
-        */
+        
     }
 
     // UC9

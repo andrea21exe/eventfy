@@ -6,7 +6,7 @@ public abstract class MenuStrategy {
 
     protected static Eventfy sistema;
 
-    public MenuStrategy(){
+    public MenuStrategy() {
         sistema = Eventfy.getIstanceEventfy();
     }
 
@@ -19,19 +19,17 @@ public abstract class MenuStrategy {
     abstract void displayMenu();
 
     protected int getOperazioneUtente() {
-        Scanner scanner = new Scanner(System.in);
+        Scanner input = new Scanner(System.in);
         System.out.print("Inserisci il numero dell'opzione desiderata: ");
-        while (!scanner.hasNextInt()) {
+        while (!input.hasNextInt()) {
             System.out.println("Inserisci un numero valido.");
-            scanner.next();
+            input.next();
         }
 
-        int i = scanner.nextInt();
-        // scanner.close();
+        int i = input.nextInt();
         return i;
+
     }
 
     abstract void processaScelta(int scelta);
 }
-
-   

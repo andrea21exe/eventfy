@@ -22,9 +22,9 @@ public class PrenotazioneTest {
 
         Utente a = eventfy.getUtente(3);
         Impianto i = eventfy.getImpianto(0);
- 
-        p = new Prenotazione("Evento Prova", "Un evento di prova ", 10, LocalDate.now(), 
-                                LocalTime.now(), (Artista)a, i);
+
+        p = new Prenotazione("Evento Prova", "Un evento di prova ", 10, LocalDate.now(),
+                LocalTime.now(), (Artista) a, i);
 
     }
 
@@ -32,16 +32,16 @@ public class PrenotazioneTest {
     void testAddBrano() {
 
         Brano b = new Brano("Take My Breath", "Dawn FM", 4);
-        p.addBrano(b);     
-        assertTrue(p.getEvento().getListaBrani().contains(b));  
+        p.addBrano(b);
+        assertTrue(p.getEvento().getListaBrani().contains(b));
 
     }
 
     @Test
-    void testCreaRecensioneArtista(){
+    void testCreaRecensioneArtista() {
         p.creaRecensione("Impianto bello", 4);
 
-        //Prendo il commento appena inserito
+        // Prendo il commento appena inserito
         RecensioneImpianto r = p.getImpianto().getListaRecensioni().get(0);
         assertEquals("Impianto bello", r.getCommento());
         assertEquals(4, r.getVoto());

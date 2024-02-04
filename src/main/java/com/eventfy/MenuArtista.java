@@ -147,40 +147,35 @@ public class MenuArtista extends MenuStrategy {
 
         Scanner input = new Scanner(System.in);
 
-        if ((sistema.hasArtistaCorrente())) {
-            List<Prenotazione> prenotazioni = sistema.aggiungiScaletta();
+        List<Prenotazione> prenotazioni = sistema.aggiungiScaletta();
 
-            if (!prenotazioni.isEmpty()) {
-                System.out.println("Prenotazioni accettate per questo artista:");
-                for (Prenotazione prenotazione : prenotazioni) {
-                    System.out.println(prenotazione);
+        if (!prenotazioni.isEmpty()) {
+            System.out.println("Prenotazioni accettate per questo artista:");
+            for (Prenotazione prenotazione : prenotazioni) {
+                System.out.println(prenotazione);
+            }
+            System.out.print("Inserisci il codice della prenotazione: ");
+            int codice_prenotazione = input.nextInt();
+            List<Brano> listaBrani = sistema.recuperaBraniArtista(codice_prenotazione);
+            // Se trova brani da aggiungere
+            if (listaBrani != null) {
+                System.out.println("Brani dell'artista :");
+                for (Brano brano : listaBrani) {
+                    System.out.println(brano);
                 }
-                System.out.print("Inserisci il codice della prenotazione: ");
-                int codice_prenotazione = input.nextInt();
-                List<Brano> listaBrani = sistema.recuperaBraniArtista(codice_prenotazione);
-                // Se trova brani da aggiungere
-                if (listaBrani != null) {
-                    System.out.println("Brani dell'artista :");
-                    for (Brano brano : listaBrani) {
-                        System.out.println(brano);
-                    }
-                    // Aggiungi il brano alla scaletta
-                    System.out.println("Inserisci il codice del brano da aggiungere: ");
-                    int codice_brano = input.nextInt();
-                    sistema.aggiungiBrano(codice_brano);
-                    System.out.println("Brano aggiunto alla scaletta");
-                } else {
-                    // Nel caso in cui non abbia brani da poter inserire
-                    System.out.println("Errore nel recupero dei brani.");
-                }
-
+                // Aggiungi il brano alla scaletta
+                System.out.println("Inserisci il codice del brano da aggiungere: ");
+                int codice_brano = input.nextInt();
+                sistema.aggiungiBrano(codice_brano);
+                System.out.println("Brano aggiunto alla scaletta");
             } else {
-                // Se l'artista non ha prenotazioni accettate
-                System.out.println("Nessuna prenotazione accettata per questo artista. ");
+                // Nel caso in cui non abbia brani da poter inserire
+                System.out.println("Errore nel recupero dei brani.");
             }
 
         } else {
-            System.out.println("Solo un artista può inserire una scaletta di brani ");
+            // Se l'artista non ha prenotazioni accettate
+            System.out.println("Nessuna prenotazione accettata per questo artista. ");
         }
 
     }
@@ -189,123 +184,102 @@ public class MenuArtista extends MenuStrategy {
 
         Scanner input = new Scanner(System.in);
 
-        if ((sistema.hasArtistaCorrente())) {
-            // Mostra prenotazioni accettate
-            List<Prenotazione> prenotazioni = sistema.mostraPrenotazioniAccettate();
-            if (!prenotazioni.isEmpty()) {
-                System.out.println("Prenotazioni accettate:");
-                for (Prenotazione p : prenotazioni) {
-                    System.out.println(p);
-                }
-                System.out.println("Inserisci il codice della prenotazione per cui desideri inviare un invito:");
-                int codice_prenotazione = input.nextInt();
-                input.nextLine();
-                List<Utente> artistiDisponibili = sistema.selezionaPrenotazioneInvito(codice_prenotazione);
-                System.out.println("Artisti disponibili per l'invito:");
-                for (Utente artista : artistiDisponibili) {
-                    System.out.println(artista);
-                }
-                // Invita artista
-                System.out.println("Inserisci il codice dell'artista che desideri invitare:");
-                int codice_artista = input.nextInt();
-                input.nextLine();
-                sistema.invitaArtista(codice_artista);
-
-                System.out.println("Invito inviato con successo!");
-
-            } else {
-                // Se l'artista non ha prenotazioni accettate
-
-                System.out.println("Nessuna prenotazione accettata per questo artista. ");
+        // Mostra prenotazioni accettate
+        List<Prenotazione> prenotazioni = sistema.mostraPrenotazioniAccettate();
+        if (!prenotazioni.isEmpty()) {
+            System.out.println("Prenotazioni accettate:");
+            for (Prenotazione p : prenotazioni) {
+                System.out.println(p);
             }
+            System.out.println("Inserisci il codice della prenotazione per cui desideri inviare un invito:");
+            int codice_prenotazione = input.nextInt();
+            input.nextLine();
+            List<Utente> artistiDisponibili = sistema.selezionaPrenotazioneInvito(codice_prenotazione);
+            System.out.println("Artisti disponibili per l'invito:");
+            for (Utente artista : artistiDisponibili) {
+                System.out.println(artista);
+            }
+            // Invita artista
+            System.out.println("Inserisci il codice dell'artista che desideri invitare:");
+            int codice_artista = input.nextInt();
+            input.nextLine();
+            sistema.invitaArtista(codice_artista);
+            System.out.println("Invito inviato con successo!");
+
         } else {
-            System.out.println("Solo un artista può invitare ");
+            // Se l'artista non ha prenotazioni accettate
+
+            System.out.println("Nessuna prenotazione accettata per questo artista. ");
         }
     }
 
     private void gestisciInvito() {
 
         Scanner input = new Scanner(System.in);
-        // solo per provare il corretto funzionamento
-
-        if ((sistema.hasArtistaCorrente())) {
-            List<Invito> invitiPendenti = sistema.gestisciInvito();
-            if (!invitiPendenti.isEmpty()) {
-                System.out.println("Inviti Pendenti:");
-                for (Invito invito : invitiPendenti) {
-                    System.out.println(invito);
-                }
-                System.out.println("Inserisci il codice dell'invito che vuoi accettare:");
-                int codice_invito = input.nextInt();
-                Evento invito = sistema.selezionaInvito(codice_invito);
-                System.out.println("Hai selezionato l'invito per l'evento: " + invito);
-                sistema.accettaInvito();
-            } else {
-                System.out.println("Nessun invito pendente.");
+        List<Invito> invitiPendenti = sistema.gestisciInvito();
+        if (!invitiPendenti.isEmpty()) {
+            System.out.println("Inviti Pendenti:");
+            for (Invito invito : invitiPendenti) {
+                System.out.println(invito);
             }
+            System.out.println("Inserisci il codice dell'invito che vuoi accettare:");
+            int codice_invito = input.nextInt();
+            Evento invito = sistema.selezionaInvito(codice_invito);
+            System.out.println("Hai selezionato l'invito per l'evento: " + invito);
+            sistema.accettaInvito();
+            System.out.println("invito accettato");
         } else {
-            System.out.println("Solo un artista può gestire gli inviti");
+            System.out.println("Nessun invito pendente.");
         }
     }
 
     private void inserisciRecensioneStruttura() {
         Scanner input = new Scanner(System.in);
-        // solo per prova
-
-        if ((sistema.hasArtistaCorrente())) {
-            List<Prenotazione> prenotazioniRecensibili = sistema.inserisciRecensione();
-            // Ottiene la lista delle prenotazioni accettate e svolte da poter recensire
-            if (!prenotazioniRecensibili.isEmpty()) {
-                System.out.println("Prenotazioni recensibili:");
-                for (Prenotazione p : prenotazioniRecensibili) {
-                    System.out.println(p);
-                }
-                // Chiede all'utente di inserire il codice della prenotazione per cui vuole
-                // scrivere una recensione
-                System.out.println("Inserisci il codice della prenotazione per cui vuoi scrivere una recensione:");
-                int codice_prenotazione = input.nextInt();
-                System.out.println("Inserisci il commento:");
-                String commento = input.nextLine();
-                // per evitare che il cursore rimane incastrato e non funzioni correttamente
-                input.nextLine();
-                System.out.println("Inserisci il voto (da 0 a 5):");
-                int voto = input.nextInt();
-                // Chiama il metodo per creare la recensione
-                sistema.creaRecensione(codice_prenotazione, commento, voto);
-                System.out.println("Recensione inserita ");
-            } else {
-                System.out.println("Non hai prenotazioni da poter recensire");
+        List<Prenotazione> prenotazioniRecensibili = sistema.inserisciRecensione();
+        // Ottiene la lista delle prenotazioni accettate e svolte da poter recensire
+        if (!prenotazioniRecensibili.isEmpty()) {
+            System.out.println("Prenotazioni recensibili:");
+            for (Prenotazione p : prenotazioniRecensibili) {
+                System.out.println(p);
             }
+            // Chiede all'utente di inserire il codice della prenotazione per cui vuole
+            // scrivere una recensione
+            System.out.println("Inserisci il codice della prenotazione per cui vuoi scrivere una recensione:");
+            int codice_prenotazione = input.nextInt();
+            System.out.println("Inserisci il commento:");
+            String commento = input.nextLine();
+            // per evitare che il cursore rimanga incastrato e non funzioni correttamente
+            input.nextLine();
+            System.out.println("Inserisci il voto (da 0 a 5):");
+            int voto = input.nextInt();
+            // Chiama il metodo per creare la recensione
+            sistema.creaRecensione(codice_prenotazione, commento, voto);
+            System.out.println("Recensione inserita ");
         } else {
-            System.out.println("Solo un artista può recensire una struttura");
+            System.out.println("Non hai prenotazioni da poter recensire");
         }
 
     }
 
     private void eliminaPrenotazione() {
         Scanner input = new Scanner(System.in);
-        // solo per provare il corretto funzionamento
-        if ((sistema.hasArtistaCorrente())) {
-            List<Prenotazione> prenotazioniEliminabili = sistema.eliminaPrenotazione();
-            if (!prenotazioniEliminabili.isEmpty()) {
-                System.out.println("Prenotazioni eliminabili:");
-                for (Prenotazione p : prenotazioniEliminabili) {
-                    System.out.println(p);
-                }
-
-                System.out.println("Inserisci il codice della prenotazione che vuoi eliminare:");
-                int codice_prenotazione = input.nextInt();
-
-                sistema.confermaEliminazione(codice_prenotazione);
-                System.out.println("Prenotazione eliminata con successo!");
-
-            } else {
-                System.out.println("Solo un artista può eliminare una prenotazione di una struttura");
+        List<Prenotazione> prenotazioniEliminabili = sistema.eliminaPrenotazione();
+        if (!prenotazioniEliminabili.isEmpty()) {
+            System.out.println("Prenotazioni eliminabili:");
+            for (Prenotazione p : prenotazioniEliminabili) {
+                System.out.println(p);
             }
+
+            System.out.println("Inserisci il codice della prenotazione che vuoi eliminare:");
+            int codice_prenotazione = input.nextInt();
+
+            sistema.confermaEliminazione(codice_prenotazione);
+            System.out.println("Prenotazione eliminata con successo!");
+
         }
     }
 
-    private void visualizzaEventi(){
+    private void visualizzaEventi() {
 
         List<Evento> eventiOrganizzati = sistema.visualizzaEventiOrganizzati();
 
@@ -314,12 +288,12 @@ public class MenuArtista extends MenuStrategy {
             return;
         }
 
-         // Stampa gli eventi
-         System.out.println("Prenotazioni accettate");
-         for (Evento e : eventiOrganizzati) {
-             System.out.println(e);
-             System.out.println("\n\n");
-         }
+        // Stampa gli eventi
+        System.out.println("Prenotazioni accettate");
+        for (Evento e : eventiOrganizzati) {
+            System.out.println(e);
+            System.out.println("\n\n");
+        }
 
     }
 

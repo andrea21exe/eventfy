@@ -33,7 +33,7 @@ public class MenuGestore extends MenuStrategy {
                 visualizzaPrenotazioniPendenti();
                 System.out.println("Hai selezionato l'Opzione 4");
                 break;
-                
+
             default:
                 System.out.println("Opzione non valida");
         }
@@ -50,7 +50,8 @@ public class MenuGestore extends MenuStrategy {
 
         System.out.println("Inserisci il luogo dell'impianto");
         String luogo = input.nextLine(); // luogo
-
+        // per evitare che il cursore rimanga incastrato e non funzioni correttamente
+        input.nextLine();
         // capienza (int)
         System.out.println("Inserisci la capienza (intero)");
         while (!input.hasNextInt()) {
@@ -65,6 +66,8 @@ public class MenuGestore extends MenuStrategy {
             System.out.println("Superficie deve essere un numero intero, riprova");
             input.next();
         }
+        // per evitare che il cursore rimanga incastrato e non funzioni correttamente
+        input.nextLine();
         int superficie = input.nextInt();
         input.nextLine();
 
@@ -120,8 +123,8 @@ public class MenuGestore extends MenuStrategy {
 
     }
 
-    private void visualizzaPrenotazioniAccettate(){
-        //stampa le prenotazioni
+    private void visualizzaPrenotazioniAccettate() {
+        // stampa le prenotazioni
 
         List<Prenotazione> listaPrenotazioniAccettate = sistema.mostraPrenotazioniAccettateGestore();
 
@@ -138,7 +141,7 @@ public class MenuGestore extends MenuStrategy {
         }
     }
 
-    private void visualizzaPrenotazioniPendenti(){
+    private void visualizzaPrenotazioniPendenti() {
 
         List<Prenotazione> prenotazioniPendenti = sistema.mostraPrenotazioniPendentiGestore();
 
