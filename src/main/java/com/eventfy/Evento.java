@@ -79,6 +79,12 @@ public class Evento {
         return this.listaRecensioni.size();
     }
 
+    
+
+    public List<RecensioneEvento> getListaRecensioni() {
+        return listaRecensioni;
+    }
+
     @Override
     public String toString() {
         return "-- Evento [id=" + id + ", titolo=" + titolo + ", descrizione=" + descrizione + ", durata=" + durata

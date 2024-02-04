@@ -49,6 +49,10 @@ public class Impianto{
         return this.gestore;
     }
 
+    public boolean hasGestore(Gestore gestore) {
+        return gestore == this.gestore;
+    }
+
     /*
      * public void addRecensione(Recensione rec){
      * listaRecensioni.add(rec);

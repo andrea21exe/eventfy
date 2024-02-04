@@ -510,4 +510,25 @@ public class EventfyTest {
         assertEquals(1, prenotazioniPendenti.size());
     }
 
+    @Test
+    void mostraRecensioneImpiantiTest() {
+
+        // faccio il login con un gestore
+        eventfy.logIn(1);
+
+        List<RecensioneImpianto> recensioneImpianto = eventfy.mostraRecensioneImpianti();
+
+    }
+
+    @Test
+    void mostraRecensioneEventoTest() {
+
+        // faccio il login con un artista
+        eventfy.logIn(3);
+
+        List<RecensioneEvento> recensioneEvento = eventfy.mostraRecensioneEvento();
+
+    }
+
+
 }

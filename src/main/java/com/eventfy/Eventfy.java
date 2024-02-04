@@ -662,4 +662,40 @@ public class Eventfy {
 
     }
 
+    //UC15
+
+    public List<RecensioneImpianto> mostraRecensioneImpianti(){
+
+        ArrayList<RecensioneImpianto> listaRecensioni = new ArrayList<RecensioneImpianto>();
+
+        for(Impianto im: listaImpianti){
+            if(im.hasGestore((Gestore)utenteCorrente)){
+                listaRecensioni.addAll(im.getListaRecensioni());
+            }
+        }
+
+        return listaRecensioni;
+    }
+
+    //UC16
+    public List<RecensioneEvento> mostraRecensioneEvento(){
+
+        ArrayList<RecensioneEvento> listaRecensioni = new ArrayList<RecensioneEvento>();
+
+        for (int key : mappaPrenotazioniAccettate.keySet()) {
+            Prenotazione p1 = mappaPrenotazioniAccettate.get(key);
+            if(p1.hasArtista((Artista)utenteCorrente)){
+                listaRecensioni.addAll(p1.getEvento().getListaRecensioni());
+            }
+        }
+
+
+        return listaRecensioni;
+    }
+
+    //UC17
+
+    
+
+
 }
