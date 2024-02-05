@@ -5,6 +5,8 @@ import java.util.Scanner;
 
 import com.eventfy.Impianto;
 import com.eventfy.Prenotazione;
+import com.eventfy.RecensioneEvento;
+import com.eventfy.RecensioneImpianto;
 import com.eventfy.Exceptions.LogException;
 
 public class MenuGestore extends MenuStrategy {
@@ -16,7 +18,9 @@ public class MenuGestore extends MenuStrategy {
         System.out.println("2. Gestisci prenotazione");
         System.out.println("3. Visualizza prenotazioni accettate");
         System.out.println("4. Visualizza prenotazioni pendenti");
-        System.out.println("5. Logout");
+        System.out.println("5. Visualizza impianti registrati");
+        System.out.println("6. Visualizza recensione impianto");
+        System.out.println("7. Logout");
 
     }
 
@@ -36,6 +40,12 @@ public class MenuGestore extends MenuStrategy {
                 visualizzaPrenotazioniPendenti();
                 break;
             case 5:
+                visualizzaImpianti();
+                break;
+            case 6:
+                mostraRecensione();
+                break;
+            case 7:
                 logout();
                 break;
 
@@ -156,11 +166,51 @@ public class MenuGestore extends MenuStrategy {
         }
 
         // Stampa le prenotazioni pendenti
-        System.out.println("Prenotazioni accettate");
+        System.out.println("Prenotazioni pendenti");
         for (Prenotazione p : prenotazioniPendenti) {
             System.out.println(p);
             System.out.println("\n\n");
         }
 
+    }
+
+    private void visualizzaImpianti(){
+
+        List<Impianto> listaImpianti = sistema.visualizzaImpiantiGestore();
+        
+        if (listaImpianti == null || listaImpianti.isEmpty()) {
+            System.out.println("Nessun impianto inserito.");
+            return;
+        }
+
+        System.out.println("Impianti inseriti");
+        for (Impianto im : listaImpianti) {
+            System.out.println(im);
+            System.out.println("\n\n");
+        }
+
+    }
+
+
+    private void mostraRecensione(){
+
+        visualizzaImpianti();
+
+        System.out.println("inserisci l'id dell'impianto");
+
+        Scanner input = new Scanner(System.in);
+
+        int id = input.nextInt();
+
+        List<RecensioneImpianto> listaRecensione = sistema.mostraRecensioneImpianti(id);
+
+        if (listaRecensione.isEmpty()) {
+            System.out.println("Non hai nessuna recensione sul tuo impianto");
+            return;
+        }
+
+        for (RecensioneImpianto rI : listaRecensione) {
+            System.out.println(rI);
+        }
     }
 }

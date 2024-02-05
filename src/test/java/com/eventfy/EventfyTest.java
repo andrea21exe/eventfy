@@ -516,17 +516,47 @@ public class EventfyTest {
         // faccio il login con un gestore
         eventfy.logIn(1);
 
-        List<RecensioneImpianto> recensioneImpianto = eventfy.mostraRecensioneImpianti();
+        //supponiamo che il gestore abbia inserito l'id dell'impianto di cui vuole vedere le recensioni
 
+        List<RecensioneImpianto> recensioneImpianto = eventfy.mostraRecensioneImpianti(2);
+
+        // verifico che mi venga ritornata una lista
+        assertNotNull(recensioneImpianto);
+
+        // verifico che la dimensione della lista sia corretta
+        assertEquals(1, recensioneImpianto.size());
     }
 
     @Test
     void mostraRecensioneEventoTest() {
 
         // faccio il login con un artista
-        eventfy.logIn(3);
+        eventfy.logIn(4);
 
-        List<RecensioneEvento> recensioneEvento = eventfy.mostraRecensioneEvento();
+        //suppongo che l'artista abbia scelto l'id dell'evento
+        List<RecensioneEvento> recensioneEvento = eventfy.mostraRecensioneEvento(2);
+
+        // verifico che mi venga ritornata una lista
+        assertNotNull(recensioneEvento);
+
+        // verifico che la dimensione della lista sia corretta
+        assertEquals(1, recensioneEvento.size());
+
+    }
+
+    @Test
+    void visualizzaImpiantiGestoreTest(){
+
+         // faccio il login con un gestore
+         eventfy.logIn(1);
+
+         List<Impianto> listaImpianti = eventfy.visualizzaImpiantiGestore();
+ 
+         // verifico che mi venga ritornata una lista
+         assertNotNull(listaImpianti);
+ 
+         // verifico che la dimensione della lista sia corretta
+         assertEquals(1, listaImpianti.size());
 
     }
 

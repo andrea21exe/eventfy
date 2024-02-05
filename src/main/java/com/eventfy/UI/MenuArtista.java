@@ -10,6 +10,8 @@ import com.eventfy.Evento;
 import com.eventfy.Impianto;
 import com.eventfy.Invito;
 import com.eventfy.Prenotazione;
+import com.eventfy.Recensione;
+import com.eventfy.RecensioneEvento;
 import com.eventfy.Utente;
 import com.eventfy.Exceptions.LogException;
 
@@ -24,10 +26,12 @@ public class MenuArtista extends MenuStrategy {
         System.out.println("4. Gestisci Inviti");
         System.out.println("5. Inserisci una recensione per una struttura");
         System.out.println("6. Elimina prenotazione");
-        System.out.println("7. Visualizza eventi organizzati");
-        System.out.println("8. Registra brano");
-        System.out.println("9. Visualizza i tuoi brani");
-        System.out.println("10. Logout");
+        System.out.println("7. visualizza prenotazioni pendenti");
+        System.out.println("8. Visualizza eventi organizzati");
+        System.out.println("9. Registra brano");
+        System.out.println("10. Visualizza i tuoi brani");
+        System.out.println("11. Visualizza recensioni sui tuoi eventi");
+        System.out.println("12. Logout");
     }
 
     @Override
@@ -59,18 +63,26 @@ public class MenuArtista extends MenuStrategy {
                 break;
             case 7:
                 System.out.println("Hai selezionato l'Opzione 7");
-                visualizzaEventi();
+                visualizzaPrenotazioni();
                 break;
             case 8:
                 System.out.println("Hai selezionato l'Opzione 8");
-                registraBrano();
+                visualizzaEventi();
                 break;
             case 9:
                 System.out.println("Hai selezionato l'Opzione 9");
-                visualizzaBrani();
+                registraBrano();
                 break;
             case 10:
                 System.out.println("Hai selezionato l'Opzione 10");
+                visualizzaBrani();
+                break;
+            case 11:
+                System.out.println("Hai selezionato l'Opzione 11");
+                visualizzaRecensioni();
+                break;
+            case 12:
+                System.out.println("Hai selezionato l'Opzione 12");
                 logout();
                 break;
             default:
@@ -351,6 +363,43 @@ public class MenuArtista extends MenuStrategy {
             System.out.println(b);
         }
 
+    }
+
+    private void visualizzaRecensioni(){
+
+        visualizzaEventi();
+
+        System.out.println("inserisci l'id dell'evento");
+        Scanner input = new Scanner(System.in);
+
+        int id = input.nextInt();
+
+        List<RecensioneEvento> listaRecensioni = sistema.mostraRecensioneEvento(id);
+
+        if (listaRecensioni.isEmpty()) {
+            System.out.println("Non hai nessuna recensione sul tuo evento");
+            return;
+        }
+
+        for (RecensioneEvento rE : listaRecensioni) {
+            System.out.println(rE);
+        }
+
+    }
+
+    private void visualizzaPrenotazioni(){
+
+        List<Prenotazione> listaPrenotazioni = sistema.visualizzaPrenotazioniPendentiArtista();
+
+        if (listaPrenotazioni.isEmpty()) {
+            System.out.println("Non hai nessuna recensione sul tuo evento");
+            return;
+        }
+
+        for (Prenotazione p : listaPrenotazioni) {
+            System.out.println(p);
+            System.out.println("\n\n");
+        }
     }
 
 }

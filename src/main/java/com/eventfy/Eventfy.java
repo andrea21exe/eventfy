@@ -575,12 +575,12 @@ public class Eventfy {
 
     // UC15
 
-    public List<RecensioneImpianto> mostraRecensioneImpianti() {
+    public List<RecensioneImpianto> mostraRecensioneImpianti(int id) {
 
         ArrayList<RecensioneImpianto> listaRecensioni = new ArrayList<RecensioneImpianto>();
 
         for (Impianto im : listaImpianti) {
-            if (im.hasGestore((Gestore) utenteCorrente)) {
+            if (im.hasGestore((Gestore) utenteCorrente) && im.getId()==id) {
                 listaRecensioni.addAll(im.getListaRecensioni());
             }
         }
@@ -589,16 +589,18 @@ public class Eventfy {
     }
 
     // UC16
-    public List<RecensioneEvento> mostraRecensioneEvento() {
+    //faccio inserire l'id dell'evento di cui voglio visualizzare le recensioni
+    public List<RecensioneEvento> mostraRecensioneEvento(int id) {
 
         ArrayList<RecensioneEvento> listaRecensioni = new ArrayList<RecensioneEvento>();
 
-        for (int key : mappaPrenotazioniAccettate.keySet()) {
-            Prenotazione p1 = mappaPrenotazioniAccettate.get(key);
-            if (p1.hasArtista((Artista) utenteCorrente)) {
+            Prenotazione p1 = mappaPrenotazioniAccettate.get(id);
+            if (p1.hasArtista((Artista) utenteCorrente) && p1 !=null) {
                 listaRecensioni.addAll(p1.getListaRecensioni());
             }
-        }
+            else{
+                listaRecensioni = null;
+            }
 
         return listaRecensioni;
     }
@@ -704,6 +706,41 @@ public class Eventfy {
         p11.addPartecipazioneFan(f1);
         p12.addPartecipazioneFan(f1);
 
+        p1.creaRecensione("bello sto evento", 4, f1);
+        p2.creaRecensione("mal gestito", 1, f2);
+
     }
 
+
+    //UC18
+
+    public List<Impianto> visualizzaImpiantiGestore(){
+
+        ArrayList<Impianto> listaImpiantiGestore = new ArrayList<Impianto>();
+
+        for (Impianto im : listaImpianti) {
+            if (im.hasGestore((Gestore) utenteCorrente)) {
+                listaImpiantiGestore.add(im);
+            }
+        }
+
+        return listaImpiantiGestore;
+    }
+
+
+    //UC19
+
+    public List<Prenotazione> visualizzaPrenotazioniPendentiArtista(){
+        
+        ArrayList<Prenotazione> prenotazioniPendenti = new ArrayList<Prenotazione>();
+        for (int key : mappaPrenotazioniPendenti.keySet()) {
+            Prenotazione p1 = mappaPrenotazioniPendenti.get(key);
+            if (p1.hasArtista((Artista) utenteCorrente)) {
+                prenotazioniPendenti.add(p1);
+            }
+        }
+
+        return prenotazioniPendenti;
+
+    }
 }
