@@ -16,6 +16,8 @@ public class Evento {
     private List<Brano> listaBrani;
     private List<Fan> listaPartecipanti;
     private List<RecensioneEvento> listaRecensioni;
+    private List<Invito> listaInviti;
+    private Invito invito;
 
     public Evento(int id, String titolo, String descrizione, int durata, LocalDate data, LocalTime ora) {
         this.id = id;
@@ -27,6 +29,7 @@ public class Evento {
         this.listaBrani = new ArrayList<Brano>();
         this.listaPartecipanti = new ArrayList<Fan>();
         this.listaRecensioni = new ArrayList<RecensioneEvento>();
+        this.listaInviti = new ArrayList<Invito>();
     }
 
     public void addBrano(Brano b) {
@@ -83,6 +86,19 @@ public class Evento {
 
     public List<RecensioneEvento> getListaRecensioni() {
         return listaRecensioni;
+    }
+
+    public void invitaArtista(Evento e, Artista artistaMittente){
+        Invito in = new Invito(e, artistaMittente);
+        invito = in;
+    }
+
+    public Invito getInvito(){
+        return invito;
+    }
+
+    public void addInvito(Invito in){
+        listaInviti.add(in);
     }
 
     @Override

@@ -14,7 +14,7 @@ public class Eventfy {
     private Utente utenteCorrente;
     private Impianto impiantoCorrente;
     private Prenotazione prenotazioneCorrente;
-    private Invito invitoCorrente;
+    //private Invito invitoCorrente;
 
     private List<Impianto> listaImpianti;
     private Map<Integer, Impianto> mappaImpiantiTemp;
@@ -28,11 +28,6 @@ public class Eventfy {
 
     // UC6-UC7
     private Map<Integer, Utente> mappaUtentiTemp;
-    private Map<Integer, Invito> mappaInvitiPendenti;
-
-    // UC8
-    private Map<Integer, Invito> mappaInvitiTemp;
-    private Map<Integer, Invito> mappaInvitiAccettati;
 
     // UC9
     // Recensione recensioneCorrente;
@@ -48,8 +43,6 @@ public class Eventfy {
         mappaUtenti = new HashMap<Integer, Utente>();
         mappaPrenotazioniAccettate = new HashMap<Integer, Prenotazione>();
         mappaPrenotazioniPendenti = new HashMap<Integer, Prenotazione>();
-        mappaInvitiPendenti = new HashMap<Integer, Invito>();
-        mappaInvitiAccettati = new HashMap<Integer, Invito>();
         mappaPrenotazioniAnnullate = new HashMap<Integer, Prenotazione>();
     }
 
@@ -156,10 +149,6 @@ public class Eventfy {
         return mappaPrenotazioniAccettate;
     }
 
-    public Map<Integer, Invito> getInviti() {
-        return mappaInvitiPendenti;
-    }
-
     public void logIn(int id) {
         utenteCorrente = mappaUtenti.get(id);
     }
@@ -172,17 +161,6 @@ public class Eventfy {
         return mappaUtenti.get(id);
     }
 
-    public Invito getInvitoCorrente() {
-        return this.invitoCorrente;
-    }
-
-    public Map<Integer, Invito> getMappaInvitiPendenti() {
-        return mappaInvitiPendenti;
-    }
-
-    public Map<Integer, Invito> getMappaInvitiAccettati() {
-        return mappaInvitiAccettati;
-    }
 
     public Map<Integer, Prenotazione> getMappaPrenotazioniAnnullate() {
         return mappaPrenotazioniAnnullate;
@@ -274,8 +252,12 @@ public class Eventfy {
 
     public List<Utente> selezionaPrenotazioneInvito(int codice_prenotazione) {
 
-        invitoCorrente = new Invito(mappaPrenotazioniTemp.get(codice_prenotazione).getEvento(),
-                (Artista) utenteCorrente);
+        Prenotazione p = mappaPrenotazioniTemp.get(codice_prenotazione);
+
+        p.getEvento().invitaArtista(p.getEvento(), (Artista) utenteCorrente);
+
+        prenotazioneCorrente = p;
+
         mappaUtentiTemp = new HashMap<Integer, Utente>();
 
         for (Utente utente : mappaUtenti.values()) {
@@ -290,49 +272,46 @@ public class Eventfy {
 
     public void invitaArtista(int codice_artista) {
 
-        invitoCorrente.setDestinatario((Artista) mappaUtentiTemp.get(codice_artista));
-        mappaInvitiPendenti.put(invitoCorrente.getId(), invitoCorrente);
+        Invito inv =prenotazioneCorrente.getEvento().getInvito();
 
-        invitoCorrente = null;
-        mappaUtentiTemp = null;
-        mappaPrenotazioniTemp = null;
+        inv.setDestinatario((Artista) mappaUtentiTemp.get(codice_artista));
+
+        if(utenteCorrente instanceof Artista){
+            ((Artista)utenteCorrente).addInvitoPendente(inv);
+        }
+
+        prenotazioneCorrente = null;
 
     }
 
     // UC8 ----------------------------------------------------
     public List<Invito> gestisciInvito() {
 
-        mappaInvitiTemp = new HashMap<Integer, Invito>();
-
-        for (int key : mappaInvitiPendenti.keySet()) {
-            Invito i = mappaInvitiPendenti.get(key);
-            if (i.hasDestinatario((Artista) utenteCorrente)) {
-                mappaInvitiTemp.put(i.getId(), i);
-            }
-
-        }
-
-        return new ArrayList<Invito>(mappaInvitiTemp.values());
+        return ((Artista)utenteCorrente).getListaInvitiPendenti();
 
     }
 
     // seleziono un id dalla mappa inviti relativa all'artista
-    public Evento selezionaInvito(int codice_invito) {
+    public Evento accettaInvito(int codice_invito) {
 
-        invitoCorrente = mappaInvitiTemp.get(codice_invito);
-        return invitoCorrente.getEvento();
+        Invito inv = ((Artista)utenteCorrente).getInvitoPendente(codice_invito);
+
+        Evento e = inv.getEvento();
+
+        for (int key : mappaPrenotazioniAccettate.keySet()) {
+            Prenotazione p = mappaPrenotazioniAccettate.get(key);
+            if (p.getEvento().equals(e)) {
+                p.getEvento().addInvito(inv);
+            }
+        }
+
+        ((Artista)utenteCorrente).addInvitoAccettato(inv);
+        ((Artista)utenteCorrente).EliminaInvitoPendente(codice_invito);
+
+        return inv.getEvento();
 
     }
 
-    public void accettaInvito() {
-
-        int codice_invito = invitoCorrente.getId();
-        mappaInvitiPendenti.remove(codice_invito);
-        mappaInvitiAccettati.put(codice_invito, invitoCorrente);
-        invitoCorrente = null;
-        mappaInvitiTemp = null;
-
-    }
 
     // UC9
     // Non tutte le prenotazioni sono recensibili!!!!! solo quelle per le quali
@@ -688,13 +667,14 @@ public class Eventfy {
         mappaPrenotazioniAccettate.put(p11.getId(), p11);
         mappaPrenotazioniAccettate.put(p12.getId(), p12);
 
-        // Inviti (A1 è il mittente di 2 inviti e destinatario di 1 invito)
+        // Inviti (A1 è il mittente di 2 inviti e destinatario di 2 inviti)
         Invito inv1 = new Invito(p3.getEvento(), p3.getArtista(), a3);
         Invito inv2 = new Invito(p4.getEvento(), p4.getArtista(), a2);
         Invito inv3 = new Invito(p0.getEvento(), p0.getArtista(), a1);
-        mappaInvitiPendenti.put(inv1.getId(), inv1);
-        mappaInvitiPendenti.put(inv2.getId(), inv2);
-        mappaInvitiPendenti.put(inv3.getId(), inv3);
+        Invito inv4 = new Invito(p6.getEvento(), p6.getArtista(), a1);
+
+        a1.addInvitoPendente(inv3);
+        a1.addInvitoAccettato(inv4);
 
         // Popola le recensioni
         i1.recensisci("Commento 1", 4, a1);
@@ -742,5 +722,11 @@ public class Eventfy {
 
         return prenotazioniPendenti;
 
+    }
+
+    //per la modifica fatta sugli inviti devo ritornarmi la mappa utenti
+
+    public Map<Integer, Utente> getMappaUtenti(){
+        return mappaUtenti;
     }
 }

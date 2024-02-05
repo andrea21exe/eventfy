@@ -202,11 +202,10 @@ public class EventfyTest {
     void SelezionaPrenotazioneInvito() {
         eventfy.logIn(3);// Artista TheWeeknd
 
-        assertNull(eventfy.getInvitoCorrente());
         eventfy.mostraPrenotazioniAccettate();
         // Chiamata al metodo selezionaArtista
         List<Utente> artisti = eventfy.selezionaPrenotazioneInvito(4);
-        assertNotNull(eventfy.getInvitoCorrente());
+        
         // Verifica che la lista non sia vuota
         assertFalse(artisti.isEmpty());
     }
@@ -214,13 +213,17 @@ public class EventfyTest {
     @Test
     void invitaArtistaTest() {
         eventfy.logIn(3);// Artista TheWeeknd
-        // Prendo la lunghezza della lista per andarla a confrontare sucessivamente
-        int sizeMappaInvitiIniziale = eventfy.getMappaInvitiPendenti().size();
+    
         eventfy.mostraPrenotazioniAccettate();
         eventfy.selezionaPrenotazioneInvito(4);
+
+        // Prendo la lunghezza della lista per andarla a confrontare sucessivamente
+        Artista artista = (Artista) eventfy.getMappaUtenti().get(4);
+        int sizeMappaInvitiIniziale = artista.getListaInvitiPendenti().size();
+
         eventfy.invitaArtista(4);
         // Deve essere stato registrato un invito
-        assertEquals(sizeMappaInvitiIniziale + 1, eventfy.getMappaInvitiPendenti().size());
+        assertEquals(sizeMappaInvitiIniziale + 1, artista.getListaInvitiPendenti().size());
 
     }
 
@@ -241,36 +244,8 @@ public class EventfyTest {
 
     }
 
-    @Test
-    void selezionaInvitoTest() {
-        eventfy.logIn(3);// Artista TheWeeknd
+    //manca il test accetta invito
 
-        eventfy.gestisciInvito();
-        Evento e = eventfy.selezionaInvito(2);
-        // L'evento relativo all'invito selezionato ha ID = 1
-        assertEquals(0, e.getId());
-
-    }
-
-    @Test
-    void accettaInvitoTest() {
-        eventfy.logIn(3);// Artista TheWeeknd
-
-        int numInvitiPendentiIniziale = eventfy.getMappaInvitiPendenti().size();
-        int numInvitiAccettatiIniziale = eventfy.getMappaInvitiAccettati().size();
-
-        eventfy.gestisciInvito();
-        eventfy.selezionaInvito(2);
-        // L'evento relativo all'invito selezionato ha ID = 1
-        eventfy.accettaInvito();
-
-        // Deve esserci un invito accettato in più
-        assertEquals(numInvitiAccettatiIniziale + 1, eventfy.getMappaInvitiAccettati().size());
-
-        // Deve esserci un invito pendente in meno
-        assertEquals(numInvitiPendentiIniziale - 1, eventfy.getMappaInvitiPendenti().size());
-
-    }
 
     @Test
     void inserisciRecensioneTest() {

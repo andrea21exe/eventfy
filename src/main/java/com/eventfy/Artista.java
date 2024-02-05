@@ -8,10 +8,13 @@ import java.util.HashMap;
 public class Artista extends Utente {
 
     private Map<Integer, Brano> mappaBrani;
+    private Map<Integer, Invito> mappaInvitiPendenti;
+    private Map<Integer, Invito> mappaInvitiAccettati;
 
     public Artista(String nome) {
         super(nome);
         this.mappaBrani = new HashMap<Integer, Brano>();
+        this.mappaInvitiPendenti = new HashMap<Integer, Invito>();
     }
 
     public Artista(String nome, Map<Integer, Brano> mappaBrani) {
@@ -47,6 +50,31 @@ public class Artista extends Utente {
 
     public String getNome() {
         return super.getNome();
+    }
+
+    public void addInvitoPendente(Invito inv){
+        this.mappaInvitiPendenti.put(inv.getId(), inv);
+    }
+    
+    public List<Invito> getListaInvitiPendenti() {
+        return new ArrayList<Invito>(this.mappaInvitiPendenti.values());
+    }
+
+    public void addInvitoAccettato(Invito inv){
+        this.mappaInvitiAccettati.put(inv.getId(), inv);
+    }
+    
+    public List<Invito> getListaInvitiAccettati() {
+        return new ArrayList<Invito>(this.mappaInvitiAccettati.values());
+    }
+
+    public Invito getInvitoPendente(int id){
+
+        return this.mappaInvitiPendenti.get(id);
+    }
+
+    public void EliminaInvitoPendente(int id){
+        mappaInvitiPendenti.remove(id);
     }
 
 }

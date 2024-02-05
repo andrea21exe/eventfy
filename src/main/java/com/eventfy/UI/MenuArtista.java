@@ -398,7 +398,6 @@ public class MenuArtista extends MenuStrategy {
 
         for (Prenotazione p : listaPrenotazioni) {
             System.out.println(p);
-            System.out.println("\n\n");
         }
     }
 
