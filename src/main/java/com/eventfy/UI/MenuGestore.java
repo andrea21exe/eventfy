@@ -128,7 +128,11 @@ public class MenuGestore extends MenuStrategy {
         Prenotazione p = sistema.selezionaPrenotazionePendente(codice_prenotazione);
         if (p != null) {
             System.out.println("Hai selezionato la prenotazione:" + p);
-            sistema.accettaPrenotazione();
+            try {
+                sistema.accettaPrenotazione();
+            } catch (Exception e) {
+                System.out.println("La data per il relativo impianto è già occupata");
+            }
             // Se la prenotazione non è valida
         } else {
             System.out.println("Prenotazione non valida.");

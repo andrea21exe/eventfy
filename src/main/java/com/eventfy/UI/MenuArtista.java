@@ -259,9 +259,8 @@ public class MenuArtista extends MenuStrategy {
             }
             System.out.println("Inserisci il codice dell'invito che vuoi accettare:");
             int codice_invito = input.nextInt();
-            Evento invito = sistema.selezionaInvito(codice_invito);
-            System.out.println("Hai selezionato l'invito per l'evento: " + invito);
-            sistema.accettaInvito();
+            Evento invito = sistema.accettaInvito(codice_invito);
+            
             System.out.println("invito accettato");
         } else {
             System.out.println("Nessun invito pendente.");

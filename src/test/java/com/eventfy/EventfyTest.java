@@ -140,7 +140,7 @@ public class EventfyTest {
     }
 
     @Test
-    void testAccettaPrenotazione() {
+    void testAccettaPrenotazione() throws Exception {
         // Facciamo il logIn con un gestore esistente
         eventfy.logIn(0);
 
@@ -244,7 +244,6 @@ public class EventfyTest {
 
     }
 
-    // manca il test accetta invito
     @Test
     void accettaInvitoTest() {
         eventfy.logIn(3); // Artista TheWeeknd assertEquals(2, listaInviti.size());

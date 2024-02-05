@@ -113,12 +113,22 @@ public class Eventfy {
         return prenotazioneCorrente;
     }
 
-    public void accettaPrenotazione() {
+    public void accettaPrenotazione() throws Exception {
         int codice_prenotazione = prenotazioneCorrente.getId();
-        mappaPrenotazioniAccettate.put(codice_prenotazione, prenotazioneCorrente);
-        mappaPrenotazioniPendenti.remove(codice_prenotazione);
-        mappaPrenotazioniTemp = null;
-        prenotazioneCorrente = null;
+
+        for (int key : mappaPrenotazioniAccettate.keySet()) {
+            Prenotazione p = mappaPrenotazioniAccettate.get(key);
+            if (p.getData().equals(prenotazioneCorrente.getData()) && p.hasGestore((Gestore)utenteCorrente) &&p.getImpianto().equals(prenotazioneCorrente.getImpianto())) {
+                throw new Exception("Le date delle prenotazioni sono uguali.");
+            }
+            else{
+                mappaPrenotazioniAccettate.put(codice_prenotazione, prenotazioneCorrente);
+                mappaPrenotazioniPendenti.remove(codice_prenotazione);
+                mappaPrenotazioniTemp = null;
+                prenotazioneCorrente = null;
+            }
+        }
+        
     }
 
     public Impianto getImpiantoCorrente() {
@@ -260,7 +270,7 @@ public class Eventfy {
         mappaUtentiTemp = new HashMap<Integer, Utente>();
 
         for (Utente utente : mappaUtenti.values()) {
-            if (utente instanceof Artista) {
+            if (utente instanceof Artista  && !utente.equals(utenteCorrente)) {
                 mappaUtentiTemp.put(utente.getId(), utente);
             }
         }
@@ -277,13 +287,8 @@ public class Eventfy {
         // L'invito va inserito nell'artista da invitare
         Artista a = (Artista) mappaUtentiTemp.get(codice_artista);
         a.addInvitoPendente(inv);
-        /*
-         * if(utenteCorrente instanceof Artista){
-         * ((Artista)utenteCorrente).addInvitoPendente(inv);
-         * }
-         * 
-         * prenotazioneCorrente = null;
-         */
+       
+        prenotazioneCorrente = null;
     }
 
     // UC8 ----------------------------------------------------

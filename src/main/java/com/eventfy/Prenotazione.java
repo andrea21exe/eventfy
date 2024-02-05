@@ -102,6 +102,12 @@ public class Prenotazione {
         return this.evento.getNumRecensioni();
     }
 
+    
+
+    public LocalDate getData() {
+        return data;
+    }
+
     @Override
     public String toString() {
         return "-- Prenotazione [id=" + id + ", data=" + data + ", ora=" + ora + ", \nevento=" + evento + ",\nartista="
