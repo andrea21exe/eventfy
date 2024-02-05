@@ -205,7 +205,7 @@ public class EventfyTest {
         eventfy.mostraPrenotazioniAccettate();
         // Chiamata al metodo selezionaArtista
         List<Utente> artisti = eventfy.selezionaPrenotazioneInvito(4);
-        
+
         // Verifica che la lista non sia vuota
         assertFalse(artisti.isEmpty());
     }
@@ -213,7 +213,7 @@ public class EventfyTest {
     @Test
     void invitaArtistaTest() {
         eventfy.logIn(3);// Artista TheWeeknd
-    
+
         eventfy.mostraPrenotazioniAccettate();
         eventfy.selezionaPrenotazioneInvito(4);
 
@@ -244,8 +244,21 @@ public class EventfyTest {
 
     }
 
-    //manca il test accetta invito
-
+    // manca il test accetta invito
+    @Test
+    void accettaInvitoTest() {
+        eventfy.logIn(3); // Artista TheWeeknd assertEquals(2, listaInviti.size());
+        Artista a = (Artista) eventfy.getUtenteCorrente();
+        //Serve per inizialiazzare invito
+        eventfy.mostraPrenotazioniAccettate();
+        eventfy.selezionaPrenotazioneInvito(4);
+        //Prendo numero degli inviti accettatti prima di eseguire la funzione accetta invito
+        int numeroAccettatiPrecendenti = a.getListaInvitiAccettati().size();
+        // Accetta l'invito
+        eventfy.accettaInvito(2);
+        // Verifica che l'invito sia stato accettato correttamente, controllando che
+        assertEquals(numeroAccettatiPrecendenti + 1, a.getListaInvitiAccettati().size());
+    }
 
     @Test
     void inserisciRecensioneTest() {
@@ -491,7 +504,8 @@ public class EventfyTest {
         // faccio il login con un gestore
         eventfy.logIn(1);
 
-        //supponiamo che il gestore abbia inserito l'id dell'impianto di cui vuole vedere le recensioni
+        // supponiamo che il gestore abbia inserito l'id dell'impianto di cui vuole
+        // vedere le recensioni
 
         List<RecensioneImpianto> recensioneImpianto = eventfy.mostraRecensioneImpianti(2);
 
@@ -508,7 +522,7 @@ public class EventfyTest {
         // faccio il login con un artista
         eventfy.logIn(4);
 
-        //suppongo che l'artista abbia scelto l'id dell'evento
+        // suppongo che l'artista abbia scelto l'id dell'evento
         List<RecensioneEvento> recensioneEvento = eventfy.mostraRecensioneEvento(2);
 
         // verifico che mi venga ritornata una lista
@@ -520,20 +534,19 @@ public class EventfyTest {
     }
 
     @Test
-    void visualizzaImpiantiGestoreTest(){
+    void visualizzaImpiantiGestoreTest() {
 
-         // faccio il login con un gestore
-         eventfy.logIn(1);
+        // faccio il login con un gestore
+        eventfy.logIn(1);
 
-         List<Impianto> listaImpianti = eventfy.visualizzaImpiantiGestore();
- 
-         // verifico che mi venga ritornata una lista
-         assertNotNull(listaImpianti);
- 
-         // verifico che la dimensione della lista sia corretta
-         assertEquals(1, listaImpianti.size());
+        List<Impianto> listaImpianti = eventfy.visualizzaImpiantiGestore();
+
+        // verifico che mi venga ritornata una lista
+        assertNotNull(listaImpianti);
+
+        // verifico che la dimensione della lista sia corretta
+        assertEquals(1, listaImpianti.size());
 
     }
-
 
 }

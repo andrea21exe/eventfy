@@ -14,7 +14,7 @@ public class Eventfy {
     private Utente utenteCorrente;
     private Impianto impiantoCorrente;
     private Prenotazione prenotazioneCorrente;
-    //private Invito invitoCorrente;
+    // private Invito invitoCorrente;
 
     private List<Impianto> listaImpianti;
     private Map<Integer, Impianto> mappaImpiantiTemp;
@@ -67,7 +67,7 @@ public class Eventfy {
     public List<Impianto> nuovaPrenotazione(String titolo, String descrizione, int durata, int capienza_min,
             LocalDate data, LocalTime ora) {
 
-        prenotazioneCorrente = new Prenotazione(titolo, descrizione, durata, data, ora, (Artista)utenteCorrente,
+        prenotazioneCorrente = new Prenotazione(titolo, descrizione, durata, data, ora, (Artista) utenteCorrente,
                 impiantoCorrente); // inizialmente impianto corrente è null
 
         mappaImpiantiTemp = new HashMap<Integer, Impianto>();
@@ -160,7 +160,6 @@ public class Eventfy {
     public Utente getUtente(int id) {
         return mappaUtenti.get(id);
     }
-
 
     public Map<Integer, Prenotazione> getMappaPrenotazioniAnnullate() {
         return mappaPrenotazioniAnnullate;
@@ -272,29 +271,32 @@ public class Eventfy {
 
     public void invitaArtista(int codice_artista) {
 
-        Invito inv =prenotazioneCorrente.getEvento().getInvito();
+        Invito inv = prenotazioneCorrente.getEvento().getInvito();
 
         inv.setDestinatario((Artista) mappaUtentiTemp.get(codice_artista));
-
-        if(utenteCorrente instanceof Artista){
-            ((Artista)utenteCorrente).addInvitoPendente(inv);
-        }
-
-        prenotazioneCorrente = null;
-
+        // L'invito va inserito nell'artista da invitare
+        Artista a = (Artista) mappaUtentiTemp.get(codice_artista);
+        a.addInvitoPendente(inv);
+        /*
+         * if(utenteCorrente instanceof Artista){
+         * ((Artista)utenteCorrente).addInvitoPendente(inv);
+         * }
+         * 
+         * prenotazioneCorrente = null;
+         */
     }
 
     // UC8 ----------------------------------------------------
     public List<Invito> gestisciInvito() {
 
-        return ((Artista)utenteCorrente).getListaInvitiPendenti();
+        return ((Artista) utenteCorrente).getListaInvitiPendenti();
 
     }
 
     // seleziono un id dalla mappa inviti relativa all'artista
     public Evento accettaInvito(int codice_invito) {
 
-        Invito inv = ((Artista)utenteCorrente).getInvitoPendente(codice_invito);
+        Invito inv = ((Artista) utenteCorrente).getInvitoPendente(codice_invito);
 
         Evento e = inv.getEvento();
 
@@ -305,13 +307,12 @@ public class Eventfy {
             }
         }
 
-        ((Artista)utenteCorrente).addInvitoAccettato(inv);
-        ((Artista)utenteCorrente).EliminaInvitoPendente(codice_invito);
+        ((Artista) utenteCorrente).addInvitoAccettato(inv);
+        ((Artista) utenteCorrente).EliminaInvitoPendente(codice_invito);
 
         return inv.getEvento();
 
     }
-
 
     // UC9
     // Non tutte le prenotazioni sono recensibili!!!!! solo quelle per le quali
@@ -559,7 +560,7 @@ public class Eventfy {
         ArrayList<RecensioneImpianto> listaRecensioni = new ArrayList<RecensioneImpianto>();
 
         for (Impianto im : listaImpianti) {
-            if (im.hasGestore((Gestore) utenteCorrente) && im.getId()==id) {
+            if (im.hasGestore((Gestore) utenteCorrente) && im.getId() == id) {
                 listaRecensioni.addAll(im.getListaRecensioni());
             }
         }
@@ -568,18 +569,17 @@ public class Eventfy {
     }
 
     // UC16
-    //faccio inserire l'id dell'evento di cui voglio visualizzare le recensioni
+    // faccio inserire l'id dell'evento di cui voglio visualizzare le recensioni
     public List<RecensioneEvento> mostraRecensioneEvento(int id) {
 
         ArrayList<RecensioneEvento> listaRecensioni = new ArrayList<RecensioneEvento>();
 
-            Prenotazione p1 = mappaPrenotazioniAccettate.get(id);
-            if (p1.hasArtista((Artista) utenteCorrente) && p1 !=null) {
-                listaRecensioni.addAll(p1.getListaRecensioni());
-            }
-            else{
-                listaRecensioni = null;
-            }
+        Prenotazione p1 = mappaPrenotazioniAccettate.get(id);
+        if (p1.hasArtista((Artista) utenteCorrente) && p1 != null) {
+            listaRecensioni.addAll(p1.getListaRecensioni());
+        } else {
+            listaRecensioni = null;
+        }
 
         return listaRecensioni;
     }
@@ -611,7 +611,7 @@ public class Eventfy {
         mappaUtenti.put(g3.getId(), g3);
         Artista a1 = new Artista("THEWEEKND"); // id 3
         mappaUtenti.put(a1.getId(), a1);
-        Artista a2 = new Artista("SZA"); // id 4S
+        Artista a2 = new Artista("SZA"); // id 4
         mappaUtenti.put(a2.getId(), a2);
         Artista a3 = new Artista("DojaCat"); // id 5
         mappaUtenti.put(a3.getId(), a3);
@@ -675,6 +675,8 @@ public class Eventfy {
 
         a1.addInvitoPendente(inv3);
         a1.addInvitoAccettato(inv4);
+        a2.addInvitoPendente(inv3);
+        a2.addInvitoAccettato(inv4);
 
         // Popola le recensioni
         i1.recensisci("Commento 1", 4, a1);
@@ -691,10 +693,9 @@ public class Eventfy {
 
     }
 
+    // UC18
 
-    //UC18
-
-    public List<Impianto> visualizzaImpiantiGestore(){
+    public List<Impianto> visualizzaImpiantiGestore() {
 
         ArrayList<Impianto> listaImpiantiGestore = new ArrayList<Impianto>();
 
@@ -707,11 +708,10 @@ public class Eventfy {
         return listaImpiantiGestore;
     }
 
+    // UC19
 
-    //UC19
+    public List<Prenotazione> visualizzaPrenotazioniPendentiArtista() {
 
-    public List<Prenotazione> visualizzaPrenotazioniPendentiArtista(){
-        
         ArrayList<Prenotazione> prenotazioniPendenti = new ArrayList<Prenotazione>();
         for (int key : mappaPrenotazioniPendenti.keySet()) {
             Prenotazione p1 = mappaPrenotazioniPendenti.get(key);
@@ -724,9 +724,9 @@ public class Eventfy {
 
     }
 
-    //per la modifica fatta sugli inviti devo ritornarmi la mappa utenti
+    // per la modifica fatta sugli inviti devo ritornarmi la mappa utenti
 
-    public Map<Integer, Utente> getMappaUtenti(){
+    public Map<Integer, Utente> getMappaUtenti() {
         return mappaUtenti;
     }
 }
