@@ -259,7 +259,7 @@ public class MenuArtista extends MenuStrategy {
             }
             System.out.println("Inserisci il codice dell'invito che vuoi accettare:");
             int codice_invito = input.nextInt();
-            Evento invito = sistema.accettaInvito(codice_invito);
+            sistema.accettaInvito(codice_invito);
             
             System.out.println("invito accettato");
         } else {

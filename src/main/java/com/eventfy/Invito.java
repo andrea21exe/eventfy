@@ -31,6 +31,7 @@ public class Invito {
 
     public void setDestinatario(Artista destinatario) {
         this.artistaDestinatario = destinatario;
+        destinatario.addInvitoPendente(this);
     }
 
     public int getId() {
@@ -47,6 +48,10 @@ public class Invito {
 
     public boolean hasDestinatario(Artista artista) {
         return artista == this.artistaDestinatario;
+    }
+
+    public void addInvitoEvento(){
+        this.evento.addInvito(this);
     }
 
     @Override

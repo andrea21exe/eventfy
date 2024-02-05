@@ -82,15 +82,17 @@ public class Evento {
         return this.listaRecensioni.size();
     }
 
-    
-
     public List<RecensioneEvento> getListaRecensioni() {
         return listaRecensioni;
     }
 
-    public void invitaArtista(Evento e, Artista artistaMittente){
-        Invito in = new Invito(e, artistaMittente);
-        invito = in;
+    public void creaInvito(Artista artistaMittente){
+        this.invito = new Invito(this, artistaMittente);
+    }
+
+    public void setDestinatarioInvito(Artista artista){
+        this.invito.setDestinatario(artista);
+        this.invito = null;
     }
 
     public Invito getInvito(){

@@ -61,8 +61,10 @@ public class Artista extends Utente {
         return new ArrayList<Invito>(this.mappaInvitiPendenti.values());
     }
 
-    public void addInvitoAccettato(Invito inv) {
-        this.mappaInvitiAccettati.put(inv.getId(), inv);
+    public void accettaInvito(int id){
+        Invito invitoAccettato = this.mappaInvitiPendenti.remove(id);
+        this.mappaInvitiAccettati.put(invitoAccettato.getId(), invitoAccettato);
+        invitoAccettato.addInvitoEvento();
     }
 
     public List<Invito> getListaInvitiAccettati() {
@@ -70,12 +72,8 @@ public class Artista extends Utente {
     }
 
     public Invito getInvitoPendente(int id) {
-
         return this.mappaInvitiPendenti.get(id);
     }
 
-    public void EliminaInvitoPendente(int id) {
-        mappaInvitiPendenti.remove(id);
-    }
 
 }

@@ -102,10 +102,17 @@ public class Prenotazione {
         return this.evento.getNumRecensioni();
     }
 
-    
-
     public LocalDate getData() {
         return data;
+    }
+
+    public void creaInvito(){
+        this.evento.creaInvito(this.artista);
+    }
+
+    public void setDestinatarioInvito(Artista artista){
+        this.evento.setDestinatarioInvito(artista);
+        
     }
 
     @Override

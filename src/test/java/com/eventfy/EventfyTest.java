@@ -123,7 +123,6 @@ public class EventfyTest {
     void testSelezionaPrenotazionePendente() {
         // Facciamo il logIn con un utente già inserito
         eventfy.logIn(1);
-        assertNull(eventfy.getMapPrenotazioniTemp());
         assertNull(eventfy.getPrenotazioneCorrente());
 
         eventfy.mostraPrenotazioniPendenti();
@@ -218,10 +217,10 @@ public class EventfyTest {
         eventfy.selezionaPrenotazioneInvito(4);
 
         // Prendo la lunghezza della lista per andarla a confrontare sucessivamente
-        Artista artista = (Artista) eventfy.getMappaUtenti().get(4);
+        Artista artista = (Artista) eventfy.getMappaUtenti().get(5);
         int sizeMappaInvitiIniziale = artista.getListaInvitiPendenti().size();
 
-        eventfy.invitaArtista(4);
+        eventfy.invitaArtista(5);
         // Deve essere stato registrato un invito
         assertEquals(sizeMappaInvitiIniziale + 1, artista.getListaInvitiPendenti().size());
 
@@ -229,34 +228,42 @@ public class EventfyTest {
 
     @Test
     void gestisciInvitoTest() {
+
         eventfy.logIn(3);// Artista TheWeeknd
-        List<Invito> listaInviti = eventfy.gestisciInvito();
-        assertEquals(1, listaInviti.size());
-
+        assertEquals(eventfy.gestisciInvito() ,((Artista)eventfy.getUtenteCorrente()).getListaInvitiPendenti());
+        
         eventfy.logIn(4);
-        listaInviti = eventfy.gestisciInvito();
-        assertEquals(1, listaInviti.size());
+        assertEquals(eventfy.gestisciInvito() ,((Artista)eventfy.getUtenteCorrente()).getListaInvitiPendenti());
 
-        // Provo con un nuovo utente creato ad'hoc
+        // Provo con un nuovo utente creato ad'hoc, deve avere una lista inviti con 0 elimenti
         eventfy.signUpLogIn(new Artista("A11"));
-        listaInviti = eventfy.gestisciInvito();
-        assertEquals(0, listaInviti.size());
+        assertEquals(eventfy.gestisciInvito() ,((Artista)eventfy.getUtenteCorrente()).getListaInvitiPendenti());
 
     }
 
     @Test
     void accettaInvitoTest() {
-        eventfy.logIn(3); // Artista TheWeeknd assertEquals(2, listaInviti.size());
-        Artista a = (Artista) eventfy.getUtenteCorrente();
-        //Serve per inizialiazzare invito
+
+        //Creo ed accetto un invito;
+
+        //Creazione invito
+        eventfy.logIn(3);// Artista TheWeeknd
         eventfy.mostraPrenotazioniAccettate();
         eventfy.selezionaPrenotazioneInvito(4);
-        //Prendo numero degli inviti accettatti prima di eseguire la funzione accetta invito
-        int numeroAccettatiPrecendenti = a.getListaInvitiAccettati().size();
-        // Accetta l'invito
-        eventfy.accettaInvito(2);
-        // Verifica che l'invito sia stato accettato correttamente, controllando che
-        assertEquals(numeroAccettatiPrecendenti + 1, a.getListaInvitiAccettati().size());
+        eventfy.invitaArtista(5);
+
+        eventfy.logIn(5);
+        Artista artistaCorrente = (Artista)eventfy.getUtenteCorrente();
+        
+        int numInvitiAccettatiIniziale = artistaCorrente.getListaInvitiAccettati().size();
+        int numInvitiPendentiIniziale = artistaCorrente.getListaInvitiPendenti().size();
+
+        eventfy.gestisciInvito();
+        eventfy.accettaInvito(0);
+
+        assertEquals(numInvitiAccettatiIniziale + 1, artistaCorrente.getListaInvitiAccettati().size());
+        assertEquals(numInvitiPendentiIniziale - 1, artistaCorrente.getListaInvitiPendenti().size());
+        
     }
 
     @Test

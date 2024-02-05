@@ -118,7 +118,7 @@ public class Eventfy {
 
         for (int key : mappaPrenotazioniAccettate.keySet()) {
             Prenotazione p = mappaPrenotazioniAccettate.get(key);
-            if (p.getData().equals(prenotazioneCorrente.getData()) && p.hasGestore((Gestore)utenteCorrente) &&p.getImpianto().equals(prenotazioneCorrente.getImpianto())) {
+            if (p.getData().equals(prenotazioneCorrente.getData()) && p.hasGestore((Gestore)utenteCorrente) && p.getImpianto().equals(prenotazioneCorrente.getImpianto())) {
                 throw new Exception("Le date delle prenotazioni sono uguali.");
             }
             else{
@@ -261,11 +261,8 @@ public class Eventfy {
 
     public List<Utente> selezionaPrenotazioneInvito(int codice_prenotazione) {
 
-        Prenotazione p = mappaPrenotazioniTemp.get(codice_prenotazione);
-
-        p.getEvento().invitaArtista(p.getEvento(), (Artista) utenteCorrente);
-
-        prenotazioneCorrente = p;
+        prenotazioneCorrente = mappaPrenotazioniTemp.get(codice_prenotazione);
+        prenotazioneCorrente.creaInvito();
 
         mappaUtentiTemp = new HashMap<Integer, Utente>();
 
@@ -281,42 +278,20 @@ public class Eventfy {
 
     public void invitaArtista(int codice_artista) {
 
-        Invito inv = prenotazioneCorrente.getEvento().getInvito();
-
-        inv.setDestinatario((Artista) mappaUtentiTemp.get(codice_artista));
+        prenotazioneCorrente.setDestinatarioInvito((Artista) mappaUtentiTemp.get(codice_artista));
         // L'invito va inserito nell'artista da invitare
-        Artista a = (Artista) mappaUtentiTemp.get(codice_artista);
-        a.addInvitoPendente(inv);
-       
+        mappaUtentiTemp = null;
         prenotazioneCorrente = null;
     }
 
     // UC8 ----------------------------------------------------
     public List<Invito> gestisciInvito() {
-
         return ((Artista) utenteCorrente).getListaInvitiPendenti();
-
     }
 
     // seleziono un id dalla mappa inviti relativa all'artista
-    public Evento accettaInvito(int codice_invito) {
-
-        Invito inv = ((Artista) utenteCorrente).getInvitoPendente(codice_invito);
-
-        Evento e = inv.getEvento();
-
-        for (int key : mappaPrenotazioniAccettate.keySet()) {
-            Prenotazione p = mappaPrenotazioniAccettate.get(key);
-            if (p.getEvento().equals(e)) {
-                p.getEvento().addInvito(inv);
-            }
-        }
-
-        ((Artista) utenteCorrente).addInvitoAccettato(inv);
-        ((Artista) utenteCorrente).EliminaInvitoPendente(codice_invito);
-
-        return inv.getEvento();
-
+    public void accettaInvito(int codice_invito) {
+        ((Artista) utenteCorrente).accettaInvito(codice_invito);
     }
 
     // UC9
@@ -645,10 +620,10 @@ public class Eventfy {
         // Popola le prenotazioni
         Prenotazione p0 = new Prenotazione("P0", "d0", 20, LocalDate.of(2029, 12, 1), LocalTime.now(), a3, i1);
         Prenotazione p1 = new Prenotazione("P1", "d1", 203, LocalDate.of(2028, 12, 1), LocalTime.now(), a1, i2);
-        Prenotazione p2 = new Prenotazione("P2", "d2", 120, LocalDate.now(), LocalTime.now(), a2, i3);
-        Prenotazione p3 = new Prenotazione("P3", "d3", 130, LocalDate.now(), LocalTime.now(), a1, i4);
-        Prenotazione p4 = new Prenotazione("P4", "d4", 130, LocalDate.now(), LocalTime.now(), a1, i4);
-        Prenotazione p5 = new Prenotazione("P5", "d5", 130, LocalDate.now(), LocalTime.now(), a1, i1);
+        Prenotazione p2 = new Prenotazione("P2", "d2", 120, LocalDate.of(2049, 12, 1), LocalTime.now(), a2, i3);
+        Prenotazione p3 = new Prenotazione("P3", "d3", 130, LocalDate.of(2027, 10, 1), LocalTime.now(), a1, i4);
+        Prenotazione p4 = new Prenotazione("P4", "d4", 130, LocalDate.of(2025, 2, 1), LocalTime.now(), a1, i4);
+        Prenotazione p5 = new Prenotazione("P5", "d5", 130, LocalDate.of(2026, 7, 1), LocalTime.now(), a1, i1);
         Prenotazione p6 = new Prenotazione("P6", "d6", 320, LocalDate.of(2022, 12, 1), LocalTime.now(), a3, i3);
         Prenotazione p7 = new Prenotazione("P7", "d7", 320, LocalDate.of(2025, 12, 1), LocalTime.now(), a3, i3);
         Prenotazione p8 = new Prenotazione("P8", "d8", 320, LocalDate.of(2021, 12, 1), LocalTime.now(), a1, i3);
@@ -673,15 +648,19 @@ public class Eventfy {
         mappaPrenotazioniAccettate.put(p12.getId(), p12);
 
         // Inviti (A1 è il mittente di 2 inviti e destinatario di 2 inviti)
-        Invito inv1 = new Invito(p3.getEvento(), p3.getArtista(), a3);
+        /*
+        Invito inv1 = new Invito(p3.getEvento(), p3.getArtista(), a2);
         Invito inv2 = new Invito(p4.getEvento(), p4.getArtista(), a2);
         Invito inv3 = new Invito(p0.getEvento(), p0.getArtista(), a1);
         Invito inv4 = new Invito(p6.getEvento(), p6.getArtista(), a1);
 
-        a1.addInvitoPendente(inv3);
-        a1.addInvitoAccettato(inv4);
+
+        
+        a2.addInvitoPendente(inv3);
+        a1.accettaInvito(inv4);
         a2.addInvitoPendente(inv3);
         a2.addInvitoAccettato(inv4);
+        */
 
         // Popola le recensioni
         i1.recensisci("Commento 1", 4, a1);
