@@ -1,7 +1,11 @@
-package com.eventfy;
+package com.eventfy.UI;
 
 import java.util.List;
 import java.util.Scanner;
+
+import com.eventfy.Impianto;
+import com.eventfy.Prenotazione;
+import com.eventfy.Exceptions.LogException;
 
 public class MenuGestore extends MenuStrategy {
 
@@ -12,26 +16,27 @@ public class MenuGestore extends MenuStrategy {
         System.out.println("2. Gestisci prenotazione");
         System.out.println("3. Visualizza prenotazioni accettate");
         System.out.println("4. Visualizza prenotazioni pendenti");
+        System.out.println("5. Logout");
 
     }
 
     @Override
-    protected void processaScelta(int scelta) {
+    protected void processaScelta(int scelta) throws LogException {
         switch (scelta) {
             case 1:
                 inserisciImpianto();
                 break;
             case 2:
                 gestisciPrenotazioni();
-                System.out.println("Hai selezionato l'Opzione 2");
                 break;
             case 3:
                 visualizzaPrenotazioniAccettate();
-                System.out.println("Hai selezionato l'Opzione 3");
                 break;
             case 4:
                 visualizzaPrenotazioniPendenti();
-                System.out.println("Hai selezionato l'Opzione 4");
+                break;
+            case 5:
+                logout();
                 break;
 
             default:

@@ -1,6 +1,10 @@
-package com.eventfy;
+package com.eventfy.UI;
 
 import java.util.Scanner;
+
+import com.eventfy.Eventfy;
+import com.eventfy.Exceptions.LogException;
+import com.eventfy.Exceptions.LogoutException;
 
 public abstract class MenuStrategy {
 
@@ -10,7 +14,7 @@ public abstract class MenuStrategy {
         sistema = Eventfy.getIstanceEventfy();
     }
 
-    public void menu() {
+    public void menu() throws LogException {
         displayMenu();
         int scelta = getOperazioneUtente();
         processaScelta(scelta);
@@ -31,5 +35,10 @@ public abstract class MenuStrategy {
 
     }
 
-    abstract void processaScelta(int scelta);
+    abstract void processaScelta(int scelta) throws LogException;
+
+    protected void logout() throws LogoutException{
+        sistema.logout();
+        throw new LogoutException();
+    }
 }

@@ -1,50 +1,46 @@
-package com.eventfy;
+package com.eventfy.UI;
 
+import java.util.List;
 import java.util.Scanner;
 
+import com.eventfy.Artista;
+import com.eventfy.Fan;
+import com.eventfy.Gestore;
+import com.eventfy.Utente;
 import com.eventfy.Exceptions.LogException;
 import com.eventfy.Exceptions.LoginArtistaException;
 import com.eventfy.Exceptions.LoginFanException;
 import com.eventfy.Exceptions.LoginGestoreException;
-import com.eventfy.Exceptions.LogoutException;
-import com.eventfy.UI.MenuArtista;
-import com.eventfy.UI.MenuFan;
-import com.eventfy.UI.MenuGestore;
-import com.eventfy.UI.MenuLogin;
-import com.eventfy.UI.MenuStrategy;
 
-public class App {
+public class MenuLogin extends MenuStrategy {
 
-    private static Eventfy sistema;
-    private static MenuStrategy menuStrategy;
-
-    public static void main(String[] args) {
-
-        sistema = Eventfy.getIstanceEventfy();
-        sistema.populate();
-        menuStrategy = new MenuLogin();
-        
-        while (true) {
-            try {
-                menuStrategy.menu();
-            } catch (LogoutException e) {
-                menuStrategy = new MenuLogin();
-            } catch(LoginArtistaException e){
-                menuStrategy = new MenuArtista();
-            } catch (LoginFanException e){
-                menuStrategy = new MenuFan();
-            } catch (LoginGestoreException e){
-                menuStrategy = new MenuGestore();
-            } catch (LogException e){
-                return;
-            }
-        }
-
+    @Override
+    protected void displayMenu() {
+        System.out.println("Benvenuto! Seleziona un'opzione:");
+        System.out.println("1. Accedi");
+        System.out.println("2. Registrati");
+        System.out.println("3. Chiudi");
     }
 
-   
-    /*
-    private static void accedi() {
+    @Override
+    protected void processaScelta(int scelta) throws LogException {
+        switch (scelta) {
+            case 1:
+                accedi();
+                break;
+            case 2:
+                registrati();
+                break;
+            case 3:
+                chiudi();
+                break;
+            default:
+                System.out.println("Scelta non valida.");
+                return;
+        }
+    }
+
+    private static void accedi() throws LogException {
 
         Scanner scanner = new Scanner(System.in);
         System.out.println("Inserisci il tuo identificativo:");
@@ -60,15 +56,15 @@ public class App {
         sistema.logIn(id);
         // ... ed si associa il corretto menuStrategy
         if (user instanceof Gestore) {
-            menuStrategy = new MenuGestore();
+            throw new LoginGestoreException();
         } else if (user instanceof Artista) {
-            menuStrategy = new MenuArtista();
+            throw new LoginArtistaException();
         } else {
-            menuStrategy = new MenuFan();
+            throw new LoginFanException();
         }
     }
 
-    private static void registrati() {
+    private static void registrati() throws LogException {
 
         Scanner scanner = new Scanner(System.in);
 
@@ -86,27 +82,25 @@ public class App {
         switch (tipoUtente) {
             case 1:
                 iden = sistema.signUpLogIn(new Artista(nome));
-                menuStrategy = new MenuArtista();
                 System.out.println("Il tuo identificativo e': " + iden);
-                break;
+                throw new LoginArtistaException();
             case 2:
                 iden = sistema.signUpLogIn(new Fan(nome));
-                menuStrategy = new MenuFan();
                 System.out.println("Il tuo identificativo e': " + iden);
-                break;
+                throw new LoginFanException();
             case 3:
                 iden = sistema.signUpLogIn(new Gestore(nome));
-                menuStrategy = new MenuGestore();
                 System.out.println("Il tuo identificativo e': " + iden);
-                break;
-
+                throw new LoginGestoreException();
             default:
                 System.out.println("Tipo di utente non valido.");
                 return;
         }
 
-        System.out.println("Registrazione avvenuta con successo!");
-
     }
-    */
+
+    public void chiudi() throws LogException {
+        throw new LogException();
+    }
+
 }

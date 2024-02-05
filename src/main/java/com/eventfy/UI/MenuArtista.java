@@ -1,9 +1,17 @@
-package com.eventfy;
+package com.eventfy.UI;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Scanner;
+
+import com.eventfy.Brano;
+import com.eventfy.Evento;
+import com.eventfy.Impianto;
+import com.eventfy.Invito;
+import com.eventfy.Prenotazione;
+import com.eventfy.Utente;
+import com.eventfy.Exceptions.LogException;
 
 public class MenuArtista extends MenuStrategy {
 
@@ -16,11 +24,14 @@ public class MenuArtista extends MenuStrategy {
         System.out.println("4. Gestisci Inviti");
         System.out.println("5. Inserisci una recensione per una struttura");
         System.out.println("6. Elimina prenotazione");
-        System.out.println("7. visualizza eventi organizzati");
+        System.out.println("7. Visualizza eventi organizzati");
+        System.out.println("8. Registra brano");
+        System.out.println("9. Visualizza i tuoi brani");
+        System.out.println("10. Logout");
     }
 
     @Override
-    protected void processaScelta(int scelta) {
+    protected void processaScelta(int scelta) throws LogException{
         switch (scelta) {
             case 1:
                 System.out.println("Hai selezionato l'Opzione 1");
@@ -49,6 +60,18 @@ public class MenuArtista extends MenuStrategy {
             case 7:
                 System.out.println("Hai selezionato l'Opzione 7");
                 visualizzaEventi();
+                break;
+            case 8:
+                System.out.println("Hai selezionato l'Opzione 8");
+                registraBrano();
+                break;
+            case 9:
+                System.out.println("Hai selezionato l'Opzione 9");
+                visualizzaBrani();
+                break;
+            case 10:
+                System.out.println("Hai selezionato l'Opzione 10");
+                logout();
                 break;
             default:
                 System.out.println("Opzione non valida");
@@ -293,6 +316,39 @@ public class MenuArtista extends MenuStrategy {
         for (Evento e : eventiOrganizzati) {
             System.out.println(e);
             System.out.println("\n\n");
+        }
+
+    }
+
+    private void registraBrano() {
+
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("Inserisci il titolo del tuo brano:");
+        String titolo = scanner.nextLine();
+
+        System.out.println("Inserisci l'album del tuo brano:");
+        String album = scanner.nextLine();
+
+        System.out.println("Inserisci l'album del tuo brano:");
+        int durata = scanner.nextInt();
+
+        sistema.registraBrano(titolo, album, durata);
+
+        System.out.println("Brano registrato!");
+    }
+
+    private void visualizzaBrani() {
+
+        List<Brano> listaBrani = sistema.visualizzaBrani();
+
+        if (listaBrani.isEmpty()) {
+            System.out.println("Non hai registrato alcun brano");
+            return;
+        }
+
+        for (Brano b : listaBrani) {
+            System.out.println(b);
         }
 
     }

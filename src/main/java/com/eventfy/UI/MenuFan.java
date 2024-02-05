@@ -1,7 +1,12 @@
-package com.eventfy;
+package com.eventfy.UI;
 
 import java.util.List;
 import java.util.Scanner;
+
+import com.eventfy.Evento;
+import com.eventfy.Prenotazione;
+import com.eventfy.Utente;
+import com.eventfy.Exceptions.LogException;
 
 public class MenuFan extends MenuStrategy {
 
@@ -11,11 +16,12 @@ public class MenuFan extends MenuStrategy {
         System.out.println("1. Partecipa ad un evento");
         System.out.println("2. Scrivi una recensione per un evento a cui hai partecipato");
         System.out.println("3. Visualizza eventi di un dato artista");
+        System.out.println("4. Logout");
 
     }
 
     @Override
-    protected void processaScelta(int scelta) {
+    protected void processaScelta(int scelta) throws LogException{
         switch (scelta) {
             case 1:
                 partecipaEvento();
@@ -25,6 +31,9 @@ public class MenuFan extends MenuStrategy {
                 break;
             case 3:
                 visualizzaEventiArtista();
+                break;
+            case 4:
+                logout();
                 break;
             default:
                 System.out.println("Opzione non valida");

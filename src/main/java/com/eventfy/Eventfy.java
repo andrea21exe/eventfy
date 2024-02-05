@@ -689,13 +689,22 @@ public class Eventfy {
             }
         }
 
-
         return listaRecensioni;
     }
 
     //UC17
 
-    
+    //Registra Brano
+    public void registraBrano(String titolo, String album, int durata){
+        ((Artista)utenteCorrente).nuovoBrano(titolo, album, durata);
+    }
 
+    public List<Brano> visualizzaBrani(){
+        return ((Artista)utenteCorrente).getListaBrani();
+    }
+
+    public void logout(){
+        utenteCorrente = null;
+    }
 
 }
