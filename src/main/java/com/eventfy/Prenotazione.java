@@ -2,6 +2,7 @@ package com.eventfy;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 
 public class Prenotazione {
 
@@ -14,18 +15,15 @@ public class Prenotazione {
     private Artista artista;
     private Impianto impianto;
 
-    public Prenotazione(String titolo, String descrizione, int durata, LocalDate data, LocalTime ora, Utente artista,
+    public Prenotazione(String titolo, String descrizione, int durata, LocalDate data, LocalTime ora, Artista artista,
             Impianto impianto) {
-        if (artista instanceof Artista) {
             this.id = currentId++;
             this.data = LocalDate.now();
             this.ora = LocalTime.now();
-            evento = new Evento(id, titolo, descrizione, durata, data, ora);
+            this.evento = new Evento(id, titolo, descrizione, durata, data, ora);
             this.impianto = impianto;
-            this.artista = (Artista) artista;
-        } else {
-            throw new IllegalArgumentException("Utente non artista");
-        }
+            this.artista = artista;
+        
     }
 
     public void setImpianto(Impianto impianto) {
@@ -96,6 +94,10 @@ public class Prenotazione {
         return this.evento.hasPartecipante(fan);
     }
 
+    public List<RecensioneEvento> getListaRecensioni(){
+        return this.evento.getListaRecensioni();
+    } 
+
     public int getNumRecensioniEvento(){
         return this.evento.getNumRecensioni();
     }
@@ -103,7 +105,7 @@ public class Prenotazione {
     @Override
     public String toString() {
         return "-- Prenotazione [id=" + id + ", data=" + data + ", ora=" + ora + ", \nevento=" + evento + ",\nartista="
-                + artista + ", \nimpianto=" + impianto + "]";
+                + artista.getNome() + ", \nimpianto=" + impianto + "]";
     }
 
 }

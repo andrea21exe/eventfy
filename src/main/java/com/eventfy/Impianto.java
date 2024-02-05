@@ -49,6 +49,7 @@ public class Impianto{
         return this.gestore;
     }
 
+    
     public boolean hasGestore(Gestore gestore) {
         return gestore == this.gestore;
     }
@@ -71,7 +72,7 @@ public class Impianto{
     @Override
     public String toString() {
         return "Impianto [id=" + id + ", nome=" + nome + ", luogo=" + luogo + ", capienza=" + capienza + ", superficie="
-                + superficie + ", gestore=" + gestore.toString() + "]";
+                + superficie + ", gestore=" + gestore.getNome() + "]";
     }
 
 }
