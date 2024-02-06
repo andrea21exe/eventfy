@@ -667,19 +667,16 @@ public class Eventfy {
         mappaPrenotazioniAccettate.put(p12.getId(), p12);
 
         // Inviti (A1 è il mittente di 2 inviti e destinatario di 2 inviti)
-        /*
-         * Invito inv1 = new Invito(p3.getEvento(), p3.getArtista(), a2);
-         * Invito inv2 = new Invito(p4.getEvento(), p4.getArtista(), a2);
-         * Invito inv3 = new Invito(p0.getEvento(), p0.getArtista(), a1);
-         * Invito inv4 = new Invito(p6.getEvento(), p6.getArtista(), a1);
-         * 
-         * 
-         * 
-         * a2.addInvitoPendente(inv3);
-         * a1.accettaInvito(inv4);
-         * a2.addInvitoPendente(inv3);
-         * a2.addInvitoAccettato(inv4);
-         */
+        
+          Invito inv1 = new Invito(p3.getEvento(), p3.getArtista(), a2);
+          Invito inv2 = new Invito(p4.getEvento(), p4.getArtista(), a2);
+          Invito inv3 = new Invito(p0.getEvento(), p0.getArtista(), a1);
+          Invito inv4 = new Invito(p6.getEvento(), p6.getArtista(), a1);
+          
+         
+          a2.addInvitoPendente(inv1);
+          a2.addInvitoPendente(inv2);
+         
 
         // Popola le recensioni
         i1.recensisci("Commento 1", 4, a1);
@@ -744,6 +741,8 @@ public class Eventfy {
 
     // Visualizza inviti accettati di cui l'utente corrente è mittente
     // Nella UI viene prima chiamato il metodo mostraPrenotazioniAccettate()
+
+    //UC20
     public List<Invito> mostraInvitiAccettati(int idEvento) {
 
         Prenotazione p = mappaPrenotazioniTemp.get(idEvento);
@@ -764,5 +763,25 @@ public class Eventfy {
         return true;
 
     }
+
+    //UC21
+
+    public List<Recensione> mostraRecensioniFan(){
+
+        ArrayList<Recensione> recensioniEventi = new ArrayList<Recensione>();
+
+        List<Evento> listaEventi = ((Fan)utenteCorrente).getListaEventi();
+
+        for(Evento e : listaEventi){
+            for(Fan f: e.getListaFan()){
+                if(((Fan)utenteCorrente).equals(f)){
+                    recensioniEventi.addAll(e.getListaRecensioni());
+                }
+            }
+        }
+
+        return recensioniEventi;
+    }
+
 
 }

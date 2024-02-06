@@ -5,6 +5,8 @@ import java.util.Scanner;
 
 import com.eventfy.Evento;
 import com.eventfy.Prenotazione;
+import com.eventfy.Recensione;
+import com.eventfy.RecensioneEvento;
 import com.eventfy.Utente;
 import com.eventfy.Exceptions.LogException;
 
@@ -16,7 +18,8 @@ public class MenuFan extends MenuStrategy {
         System.out.println("1. Partecipa ad un evento");
         System.out.println("2. Scrivi una recensione per un evento a cui hai partecipato");
         System.out.println("3. Visualizza eventi di un dato artista");
-        System.out.println("4. Logout");
+        System.out.println("4. Visualizza commenti inseirti");
+        System.out.println("5. Logout");
 
     }
 
@@ -33,6 +36,9 @@ public class MenuFan extends MenuStrategy {
                 visualizzaEventiArtista();
                 break;
             case 4:
+                visualizzaRecensioni();
+                break;
+            case 5:
                 logout();
                 break;
             default:
@@ -105,6 +111,20 @@ public class MenuFan extends MenuStrategy {
         for (Evento e : eventiArtista) {
             System.out.println(e);
             System.out.println("\n\n");
+        }
+    }
+
+    private void visualizzaRecensioni(){
+        List<Recensione> listaRecensioni = sistema.mostraRecensioniFan();
+
+        if (listaRecensioni.isEmpty()) {
+            System.out.println("Non hai nessuna recensione inserita");
+            return;
+        }
+
+        for (Recensione r : listaRecensioni) {
+            System.out.println(r);
+            System.out.println("");
         }
     }
 

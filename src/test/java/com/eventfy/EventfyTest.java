@@ -670,4 +670,52 @@ public class EventfyTest {
 
     }
 
+    @Test
+
+    void visualizzaPrenotazioniPendentiArtista(){
+        eventfy.logIn(3);
+
+        List<Prenotazione> listaPrenotazioni = eventfy.visualizzaPrenotazioniPendentiArtista();
+
+         // verifico che mi venga ritornata una lista
+         assertNotNull(listaPrenotazioni);
+
+         // verifico che la dimensione della lista sia corretta
+         assertEquals(1, listaPrenotazioni.size());
+    }
+
+    @Test
+
+    void mostraInvitiAccettatiTest(){
+
+        eventfy.logIn(4);
+
+        eventfy.accettaInvito(0);
+
+       List<Prenotazione> listaPrenotazioni= eventfy.mostraPrenotazioniAccettate();
+
+        // verifico che mi venga ritornata una lista
+        assertNotNull(listaPrenotazioni);
+
+        // verifico che la dimensione della lista sia corretta
+        assertEquals(1, listaPrenotazioni.size());
+
+    }
+
+
+    @Test
+    void mostraRecensioniFanTest(){
+
+        eventfy.logIn(6);
+
+        List<Recensione> listaRecensioni = eventfy.mostraRecensioniFan();
+
+         // verifico che mi venga ritornata una lista
+         assertNotNull(listaRecensioni);
+
+         // verifico che la dimensione della lista sia corretta
+         assertEquals(1, listaRecensioni.size());
+
+    }
+
 }
