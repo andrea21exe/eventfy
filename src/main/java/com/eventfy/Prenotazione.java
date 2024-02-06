@@ -115,6 +115,18 @@ public class Prenotazione {
         
     }
 
+    public boolean hasImpianto(Impianto im){
+        return this.impianto.equals(im);
+    }
+
+    public boolean hasDataEvento(LocalDate data){
+        return this.evento.getData().equals(data);
+    }
+
+    public LocalDate getDataEvento(){
+        return this.evento.getData();
+    }
+
     @Override
     public String toString() {
         return "-- Prenotazione [id=" + id + ", data=" + data + ", ora=" + ora + ", \nevento=" + evento + ",\nartista="

@@ -26,6 +26,16 @@ public class EventfyTest {
     }
 
     @Test
+    void test1(){
+       
+        List<Prenotazione> lista = new ArrayList<Prenotazione>(eventfy.getPrenotazioniPendenti().values()) ;
+        for(Prenotazione p : lista){
+            System.out.println(p);
+            System.out.println("");
+        }
+    }
+
+    @Test
     void testNuovoImpianto() {
 
         // Login - SignUp
@@ -139,14 +149,19 @@ public class EventfyTest {
     }
 
     @Test
-    void testAccettaPrenotazione() throws Exception {
+    void testAccettaPrenotazione() {
         // Facciamo il logIn con un gestore esistente
         eventfy.logIn(0);
-
         eventfy.mostraPrenotazioniPendenti();
         Prenotazione pRicercata = eventfy.selezionaPrenotazionePendente(0);
         // Accetta la prenotazione selezionata
-        eventfy.accettaPrenotazione();
+        //System.out.println(pRicercata);
+        try {
+            eventfy.accettaPrenotazione();
+        } catch (Exception e) {
+            fail();
+        }
+
         // Verifica che la prenotazione sia stata spostata correttamente da pendente ad
         // accettata
         assertTrue(eventfy.getPrenotazioniAccettate().containsValue(pRicercata));
@@ -155,6 +170,17 @@ public class EventfyTest {
         // Verifica che le variabili temporanee siano state svuotate
         assertNull(eventfy.getPrenotazioneCorrente());
         assertNull(eventfy.getMapPrenotazioniTemp());
+
+        
+        //Proviamo ad accettare una prenotazione che ha una stessa data di P0
+        eventfy.mostraPrenotazioniPendenti();
+        pRicercata = eventfy.selezionaPrenotazionePendente(13);
+
+        try {
+            eventfy.accettaPrenotazione();
+        } catch (Exception e) {
+            assertEquals("Collisione data", e.getMessage());
+        }
 
     }
 
@@ -230,31 +256,32 @@ public class EventfyTest {
     void gestisciInvitoTest() {
 
         eventfy.logIn(3);// Artista TheWeeknd
-        assertEquals(eventfy.gestisciInvito() ,((Artista)eventfy.getUtenteCorrente()).getListaInvitiPendenti());
-        
-        eventfy.logIn(4);
-        assertEquals(eventfy.gestisciInvito() ,((Artista)eventfy.getUtenteCorrente()).getListaInvitiPendenti());
+        assertEquals(eventfy.gestisciInvito(), ((Artista) eventfy.getUtenteCorrente()).getListaInvitiPendenti());
 
-        // Provo con un nuovo utente creato ad'hoc, deve avere una lista inviti con 0 elimenti
+        eventfy.logIn(4);
+        assertEquals(eventfy.gestisciInvito(), ((Artista) eventfy.getUtenteCorrente()).getListaInvitiPendenti());
+
+        // Provo con un nuovo utente creato ad'hoc, deve avere una lista inviti con 0
+        // elimenti
         eventfy.signUpLogIn(new Artista("A11"));
-        assertEquals(eventfy.gestisciInvito() ,((Artista)eventfy.getUtenteCorrente()).getListaInvitiPendenti());
+        assertEquals(eventfy.gestisciInvito(), ((Artista) eventfy.getUtenteCorrente()).getListaInvitiPendenti());
 
     }
 
     @Test
     void accettaInvitoTest() {
 
-        //Creo ed accetto un invito;
+        // Creo ed accetto un invito;
 
-        //Creazione invito
+        // Creazione invito
         eventfy.logIn(3);// Artista TheWeeknd
         eventfy.mostraPrenotazioniAccettate();
         eventfy.selezionaPrenotazioneInvito(4);
         eventfy.invitaArtista(5);
 
         eventfy.logIn(5);
-        Artista artistaCorrente = (Artista)eventfy.getUtenteCorrente();
-        
+        Artista artistaCorrente = (Artista) eventfy.getUtenteCorrente();
+
         int numInvitiAccettatiIniziale = artistaCorrente.getListaInvitiAccettati().size();
         int numInvitiPendentiIniziale = artistaCorrente.getListaInvitiPendenti().size();
 
@@ -263,7 +290,7 @@ public class EventfyTest {
 
         assertEquals(numInvitiAccettatiIniziale + 1, artistaCorrente.getListaInvitiAccettati().size());
         assertEquals(numInvitiPendentiIniziale - 1, artistaCorrente.getListaInvitiPendenti().size());
-        
+
     }
 
     @Test

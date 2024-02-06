@@ -114,21 +114,24 @@ public class Eventfy {
     }
 
     public void accettaPrenotazione() throws Exception {
-        int codice_prenotazione = prenotazioneCorrente.getId();
 
-        for (int key : mappaPrenotazioniAccettate.keySet()) {
-            Prenotazione p = mappaPrenotazioniAccettate.get(key);
-            if (p.getData().equals(prenotazioneCorrente.getData()) && p.hasGestore((Gestore)utenteCorrente) && p.getImpianto().equals(prenotazioneCorrente.getImpianto())) {
-                throw new Exception("Le date delle prenotazioni sono uguali.");
-            }
-            else{
-                mappaPrenotazioniAccettate.put(codice_prenotazione, prenotazioneCorrente);
-                mappaPrenotazioniPendenti.remove(codice_prenotazione);
+        // Check che non ci sia una prenotazione nello stesso impianto nella stessa data
+        List<Prenotazione> prenotazioniAccettateGestore = mostraPrenotazioniAccettateGestore();
+        for (Prenotazione p : prenotazioniAccettateGestore) {
+            if (p.hasImpianto(prenotazioneCorrente.getImpianto())
+                    && p.hasDataEvento(prenotazioneCorrente.getDataEvento())) {
                 mappaPrenotazioniTemp = null;
                 prenotazioneCorrente = null;
+                throw new Exception("Collisione data");
             }
         }
-        
+
+        int codice_prenotazione = prenotazioneCorrente.getId();
+        mappaPrenotazioniAccettate.put(codice_prenotazione, prenotazioneCorrente);
+        mappaPrenotazioniPendenti.remove(codice_prenotazione);
+        mappaPrenotazioniTemp = null;
+        prenotazioneCorrente = null;
+
     }
 
     public Impianto getImpiantoCorrente() {
@@ -267,7 +270,7 @@ public class Eventfy {
         mappaUtentiTemp = new HashMap<Integer, Utente>();
 
         for (Utente utente : mappaUtenti.values()) {
-            if (utente instanceof Artista  && !utente.equals(utenteCorrente)) {
+            if (utente instanceof Artista && !utente.equals(utenteCorrente)) {
                 mappaUtentiTemp.put(utente.getId(), utente);
             }
         }
@@ -618,7 +621,7 @@ public class Eventfy {
         listaImpianti.add(i4);
 
         // Popola le prenotazioni
-        Prenotazione p0 = new Prenotazione("P0", "d0", 20, LocalDate.of(2029, 12, 1), LocalTime.now(), a3, i1);
+        Prenotazione p0 = new Prenotazione("P0", "d0", 20, LocalDate.of(2059, 12, 1), LocalTime.now(), a3, i1);
         Prenotazione p1 = new Prenotazione("P1", "d1", 203, LocalDate.of(2028, 12, 1), LocalTime.now(), a1, i2);
         Prenotazione p2 = new Prenotazione("P2", "d2", 120, LocalDate.of(2049, 12, 1), LocalTime.now(), a2, i3);
         Prenotazione p3 = new Prenotazione("P3", "d3", 130, LocalDate.of(2027, 10, 1), LocalTime.now(), a1, i4);
@@ -628,14 +631,17 @@ public class Eventfy {
         Prenotazione p7 = new Prenotazione("P7", "d7", 320, LocalDate.of(2025, 12, 1), LocalTime.now(), a3, i3);
         Prenotazione p8 = new Prenotazione("P8", "d8", 320, LocalDate.of(2021, 12, 1), LocalTime.now(), a1, i3);
         // la p9 verrà eliminata nel test
-        Prenotazione p9 = new Prenotazione("P9", "d9", 320, LocalDate.of(2025, 12, 1), LocalTime.now(), a1, i3);
+        Prenotazione p9 = new Prenotazione("P9", "d9", 320, LocalDate.of(2025, 6, 1), LocalTime.now(), a1, i3);
         Prenotazione p10 = new Prenotazione("P10", "d10", 320, LocalDate.of(2024, 11, 11), LocalTime.now(), a1, i3);
         Prenotazione p11 = new Prenotazione("P11", "d11", 120, LocalDate.of(2022, 11, 11), LocalTime.now(), a1, i3);
-        Prenotazione p12 = new Prenotazione("P12", "d12", 40, LocalDate.of(2025, 1, 11), LocalTime.now(), a1, i3);
+        Prenotazione p12 = new Prenotazione("P12", "d12", 40, LocalDate.of(2025, 5, 11), LocalTime.now(), a1, i3);
+        Prenotazione p13 = new Prenotazione("P13", "d13", 40, LocalDate.of(2059, 12, 1), LocalTime.now(), a3, i1);
+        
 
         mappaPrenotazioniPendenti.put(p0.getId(), p0);
         mappaPrenotazioniPendenti.put(p1.getId(), p1);
         mappaPrenotazioniPendenti.put(p7.getId(), p7);
+        mappaPrenotazioniPendenti.put(p13.getId(), p13);
         mappaPrenotazioniAccettate.put(p2.getId(), p2);
         mappaPrenotazioniAccettate.put(p3.getId(), p3);
         mappaPrenotazioniAccettate.put(p4.getId(), p4);
@@ -649,18 +655,18 @@ public class Eventfy {
 
         // Inviti (A1 è il mittente di 2 inviti e destinatario di 2 inviti)
         /*
-        Invito inv1 = new Invito(p3.getEvento(), p3.getArtista(), a2);
-        Invito inv2 = new Invito(p4.getEvento(), p4.getArtista(), a2);
-        Invito inv3 = new Invito(p0.getEvento(), p0.getArtista(), a1);
-        Invito inv4 = new Invito(p6.getEvento(), p6.getArtista(), a1);
-
-
-        
-        a2.addInvitoPendente(inv3);
-        a1.accettaInvito(inv4);
-        a2.addInvitoPendente(inv3);
-        a2.addInvitoAccettato(inv4);
-        */
+         * Invito inv1 = new Invito(p3.getEvento(), p3.getArtista(), a2);
+         * Invito inv2 = new Invito(p4.getEvento(), p4.getArtista(), a2);
+         * Invito inv3 = new Invito(p0.getEvento(), p0.getArtista(), a1);
+         * Invito inv4 = new Invito(p6.getEvento(), p6.getArtista(), a1);
+         * 
+         * 
+         * 
+         * a2.addInvitoPendente(inv3);
+         * a1.accettaInvito(inv4);
+         * a2.addInvitoPendente(inv3);
+         * a2.addInvitoAccettato(inv4);
+         */
 
         // Popola le recensioni
         i1.recensisci("Commento 1", 4, a1);
