@@ -12,6 +12,7 @@ import com.eventfy.Invito;
 import com.eventfy.Prenotazione;
 import com.eventfy.Recensione;
 import com.eventfy.RecensioneEvento;
+import com.eventfy.RecensioneImpianto;
 import com.eventfy.Utente;
 import com.eventfy.Exceptions.LogException;
 
@@ -32,7 +33,8 @@ public class MenuArtista extends MenuStrategy {
         System.out.println("10. Visualizza i tuoi brani");
         System.out.println("11. Visualizza recensioni sui tuoi eventi");
         System.out.println("12. Visualizza gli inviti inviati ed accettati per un evento");
-        System.out.println("13. Logout");
+        System.out.println("13. Visualizza le recensioni che hai inserito");
+        System.out.println("14. Logout");
     }
 
     @Override
@@ -87,7 +89,11 @@ public class MenuArtista extends MenuStrategy {
                 invitiAccettatiMittente();
                 break;
             case 13:
-                System.out.println("Hai selezionato l'Opzione 13");
+                System.out.println("Hai selezionato l'Opzione 12");
+                mostraRecensioniInserite();
+                break;
+            case 14:
+                System.out.println("Hai selezionato l'Opzione 14");
                 logout();
                 break;
             default:
@@ -474,6 +480,21 @@ public class MenuArtista extends MenuStrategy {
             System.out.println(i);
         }
 
+    }
+
+    private void mostraRecensioniInserite(){
+
+        List<RecensioneImpianto> listaRecensioni = sistema.mostraRecensioniArtista();
+
+        if (listaRecensioni.isEmpty()) {
+            System.out.println("Nessuna recensione inserita");
+            return;
+        }
+
+        for (Recensione r : listaRecensioni) {
+            System.out.println(r);
+            System.out.println("");
+        }
     }
 
 }

@@ -708,7 +708,22 @@ public class EventfyTest {
 
         eventfy.logIn(6);
 
-        List<Recensione> listaRecensioni = eventfy.mostraRecensioniFan();
+        List<RecensioneEvento> listaRecensioni = eventfy.mostraRecensioniFan();
+
+         // verifico che mi venga ritornata una lista
+         assertNotNull(listaRecensioni);
+
+         // verifico che la dimensione della lista sia corretta
+         assertEquals(1, listaRecensioni.size());
+
+    }
+
+    @Test
+    void mostraRecensioniArtistaTest(){
+
+        eventfy.logIn(3);
+
+        List<RecensioneImpianto> listaRecensioni = eventfy.mostraRecensioniArtista();
 
          // verifico che mi venga ritornata una lista
          assertNotNull(listaRecensioni);

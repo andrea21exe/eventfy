@@ -766,9 +766,9 @@ public class Eventfy {
 
     //UC21
 
-    public List<Recensione> mostraRecensioniFan(){
+    public List<RecensioneEvento> mostraRecensioniFan(){
 
-        ArrayList<Recensione> recensioniEventi = new ArrayList<Recensione>();
+        ArrayList<RecensioneEvento> recensioniEventi = new ArrayList<RecensioneEvento>();
 
         List<Evento> listaEventi = ((Fan)utenteCorrente).getListaEventi();
 
@@ -781,6 +781,28 @@ public class Eventfy {
         }
 
         return recensioniEventi;
+    }
+
+    //UC22
+
+    public List<RecensioneImpianto> mostraRecensioniArtista(){
+
+        List<Prenotazione> listaPrenotazioni = mostraPrenotazioniAccettate();
+
+        ArrayList<RecensioneImpianto> recensioniImpiantoArtista = new ArrayList<RecensioneImpianto>();
+
+        for(Prenotazione p: listaPrenotazioni){
+            List<RecensioneImpianto> recensioniImpianti =p.getImpianto().getListaRecensioni();
+
+            for(RecensioneImpianto ri: recensioniImpianti){
+                if(ri.getUtente().equals((Artista)utenteCorrente)){
+                    recensioniImpiantoArtista.add(ri);
+                }
+            }
+        }
+
+        return recensioniImpiantoArtista;
+
     }
 
 

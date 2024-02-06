@@ -115,15 +115,15 @@ public class MenuFan extends MenuStrategy {
     }
 
     private void visualizzaRecensioni(){
-        List<Recensione> listaRecensioni = sistema.mostraRecensioniFan();
+        List<RecensioneEvento> listaRecensioni = sistema.mostraRecensioniFan();
 
         if (listaRecensioni.isEmpty()) {
             System.out.println("Non hai nessuna recensione inserita");
             return;
         }
 
-        for (Recensione r : listaRecensioni) {
-            System.out.println(r);
+        for (RecensioneEvento re : listaRecensioni) {
+            System.out.println(re);
             System.out.println("");
         }
     }
