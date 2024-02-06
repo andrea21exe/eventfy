@@ -104,8 +104,9 @@ public class Eventfy {
                 // Controllo e annullamento automatico prenotazioni scadute
                 if (p.hasEventoScaduto()) {
                     annullaPrenotazione(p);
+                } else {
+                    mappaPrenotazioniTemp.put(p.getId(), p);
                 }
-                mappaPrenotazioniTemp.put(p.getId(), p);
             }
         }
 
@@ -378,7 +379,7 @@ public class Eventfy {
     public void confermaEliminazione(int codice_prenotazione) {
 
         Prenotazione daEliminare = mappaPrenotazioniTemp.get(codice_prenotazione);
-        
+
         if (daEliminare != null) {
             annullaPrenotazione(daEliminare);
         }
