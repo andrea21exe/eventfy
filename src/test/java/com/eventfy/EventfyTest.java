@@ -26,10 +26,10 @@ public class EventfyTest {
     }
 
     @Test
-    void test1(){
-       
-        List<Prenotazione> lista = new ArrayList<Prenotazione>(eventfy.getPrenotazioniPendenti().values()) ;
-        for(Prenotazione p : lista){
+    void test1() {
+
+        List<Prenotazione> lista = new ArrayList<Prenotazione>(eventfy.getPrenotazioniPendenti().values());
+        for (Prenotazione p : lista) {
             System.out.println(p);
             System.out.println("");
         }
@@ -42,8 +42,20 @@ public class EventfyTest {
         eventfy.signUpLogIn(new Gestore("Carlo"));
 
         assertNull(eventfy.getImpiantoCorrente());
-        eventfy.nuovoImpianto("San Siro", "Milano", 80000, 100);
+        try {
+            eventfy.nuovoImpianto("San Siro", "Milano", 80000, 100);
+        } catch (Exception e) {
+            fail();
+        }
+
         assertNotNull(eventfy.getImpiantoCorrente());
+
+        try {
+            eventfy.nuovoImpianto("San Siro", "Milano", 0, 100);
+        } catch (Exception e) {
+            assertEquals("Impianto identico presente nel sistema", e.getMessage());
+            ;
+        }
 
     }
 
@@ -55,7 +67,14 @@ public class EventfyTest {
         // Ottengo il numero di impianti iniziale
         int numImpiantiIniziale = eventfy.getListaImpianti().size();
 
-        Impianto nuovoImpianto = eventfy.nuovoImpianto("Metro Stad", "Milano", 80000, 100);
+        Impianto nuovoImpianto;
+        try {
+            nuovoImpianto = eventfy.nuovoImpianto("Metro Stad", "Milano", 88000, 100);
+        } catch (Exception e) {
+            fail();
+            return;
+        }
+
         eventfy.confermaImpianto();
 
         assertNull(eventfy.getImpiantoCorrente());
@@ -70,11 +89,43 @@ public class EventfyTest {
         // Login - SignUp
         eventfy.logIn(5);
         assertNull(eventfy.getPrenotazioneCorrente());
+
         // Testo implicitamente il metodo isMaggioreUguale della classe Impianto
-        List<Impianto> impiantiDisponibili = eventfy.nuovaPrenotazione("Prenotazione1", "Descrizione 1", 2,
-                15000, LocalDate.now(), LocalTime.now());
+        List<Impianto> impiantiDisponibili;
+        try {
+            impiantiDisponibili = eventfy.nuovaPrenotazione("Prenotazione1", "Descrizione 1", 2,
+                    15000, LocalDate.of(2029, 9, 1), LocalTime.now());
+        } catch (Exception e) {
+            fail();
+            return;
+        }
+
         assertEquals(3, impiantiDisponibili.size());
         assertNotNull(eventfy.getPrenotazioneCorrente());
+
+    }
+
+    @Test
+    void testNuovaPrenotazioneEccezioni() {
+
+        // Login - SignUp
+        eventfy.logIn(5);
+        assertNull(eventfy.getPrenotazioneCorrente());
+
+        // Se un evento è già scaduto, la richiesta non può essere creata
+        try {
+            eventfy.nuovaPrenotazione("Prenotazione1", "Descrizione 1", 2,
+                    15000, LocalDate.of(2022, 9, 1), LocalTime.now());
+        } catch (Exception e) {
+            assertEquals("Evento già scaduto", e.getMessage());
+        }
+
+        try {
+            eventfy.nuovaPrenotazione("Prenotazione1", "Descrizione 1", 2,
+                    15000, LocalDate.of(2024, 3, 5), LocalTime.now());
+        } catch (Exception e) {
+            assertEquals("Evento già scaduto", e.getMessage());
+        }
 
     }
 
@@ -84,12 +135,40 @@ public class EventfyTest {
         // Login - SignUp
         eventfy.signUpLogIn(new Artista("Dua Lipa"));
 
-        eventfy.nuovaPrenotazione("P1", "d1", 329, 20, LocalDate.now(), LocalTime.now());
-        // SCELGO L'IMPIANTO CON ID = 0
-        eventfy.prenotaImpianto(0);
+        try {
+            eventfy.nuovaPrenotazione("P1", "d1", 329, 20, LocalDate.of(2024, 10, 10), LocalTime.now());
+        } catch (Exception e) {
+            fail();
+        } 
+
+        try {
+            eventfy.prenotaImpianto(0);
+        } catch (Exception e) {
+            fail();
+        }
+
         // L'impianto scelto deve essere associato alla prenotazione corrente
         assertEquals(eventfy.getImpianto(0), eventfy.getPrenotazioneCorrente().getImpianto());
 
+    }
+
+    @Test
+    void testPrenotaImpiantoEccezioni() {
+
+        // Login - SignUp
+        eventfy.signUpLogIn(new Artista("Dua Lipa"));
+
+        try {
+            eventfy.nuovaPrenotazione("P1", "d1", 329, 20, LocalDate.of(2030, 10, 10), LocalTime.now());
+        } catch (Exception e) {
+            fail();
+        } // SCELGO L'IMPIANTO CON ID = 0
+
+        try {
+            eventfy.prenotaImpianto(49);
+        } catch (Exception e) {
+            assertEquals("Hai inserito un ID dell'impianto scorretto", e.getMessage());
+        }
     }
 
     @Test
@@ -101,9 +180,19 @@ public class EventfyTest {
         // confermare una nuova prenotazione
         int mappaPrenotazioniPendenti_size = eventfy.getPrenotazioniPendenti().size();
 
-        eventfy.nuovaPrenotazione("P1", "d1", 329, 20, LocalDate.now(), LocalTime.now());
-        // SCELGO L'IMPIANTO CON ID = 3
-        eventfy.prenotaImpianto(3);
+        try {
+            eventfy.nuovaPrenotazione("P1", "d1", 329, 20, LocalDate.of(2089, 3, 3), LocalTime.now());
+        } catch (Exception e) {
+            fail();
+        }
+
+        try {
+            // scelgo l'impianto 3
+            eventfy.prenotaImpianto(3);
+        } catch (Exception e) {
+            fail();
+        }
+
         // Controllo che Prenotazionecorrente NON sia null
         assertNotNull(eventfy.getPrenotazioneCorrente());
         // Confermo la Prenotazione
@@ -155,7 +244,7 @@ public class EventfyTest {
         eventfy.mostraPrenotazioniPendenti();
         Prenotazione pRicercata = eventfy.selezionaPrenotazionePendente(0);
         // Accetta la prenotazione selezionata
-        //System.out.println(pRicercata);
+        // System.out.println(pRicercata);
         try {
             eventfy.accettaPrenotazione();
         } catch (Exception e) {
@@ -171,8 +260,7 @@ public class EventfyTest {
         assertNull(eventfy.getPrenotazioneCorrente());
         assertNull(eventfy.getMapPrenotazioniTemp());
 
-        
-        //Proviamo ad accettare una prenotazione che ha una stessa data di P0
+        // Proviamo ad accettare una prenotazione che ha una stessa data di P0
         eventfy.mostraPrenotazioniPendenti();
         pRicercata = eventfy.selezionaPrenotazionePendente(13);
 

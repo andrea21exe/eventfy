@@ -3,7 +3,7 @@ package com.eventfy;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Impianto{
+public class Impianto {
 
     private static int currentId = 0;
 
@@ -38,6 +38,14 @@ public class Impianto{
         return this.capienza;
     }
 
+    public int getSuperficie() {
+        return this.superficie;
+    }
+
+    public String getLuogo() {
+        return this.luogo;
+    }
+
     public boolean maggioreUgualeDi(int capienza) {
         if (this.capienza >= capienza) {
             return true;
@@ -45,7 +53,7 @@ public class Impianto{
         return false;
     }
 
-    public String getNome(){
+    public String getNome() {
         return this.nome;
     }
 
@@ -53,7 +61,6 @@ public class Impianto{
         return this.gestore;
     }
 
-    
     public boolean hasGestore(Gestore gestore) {
         return gestore == this.gestore;
     }
@@ -71,6 +78,16 @@ public class Impianto{
     public void recensisci(String commento, int voto, Artista artista) {
         RecensioneImpianto recensione = new RecensioneImpianto(commento, voto, artista);
         listaRecensioni.add(0, recensione);
+    }
+
+    public boolean hasSameAttributes(Impianto impianto) {
+        if (this.nome.equals(impianto.getNome())
+                && this.luogo.equals(impianto.getLuogo())
+                && this.capienza == impianto.getCapienza()
+                && this.superficie == impianto.getSuperficie()) {
+            return true;
+        }
+        return false;
     }
 
     @Override

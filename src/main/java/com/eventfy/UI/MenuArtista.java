@@ -106,29 +106,51 @@ public class MenuArtista extends MenuStrategy {
         System.out.println("Inserisci una descrizione dell'evento");
         String descrizione = input.nextLine(); // descrizione
 
+        // durata
         System.out.println("Per quante ore vuoi prenotare l'impianto?");
-        while (!input.hasNextInt()) {
-            System.out.println("Inserisci un numero intero, riprova");
-            input.next();
-        }
-        int durata = input.nextInt(); // durata
+        int durata;
+        do {
+            System.out.println("Inserisci la durata (deve essere un numero intero maggiore di 0):");
+            while (!input.hasNextInt()) {
+                System.out.println("La durata deve essere un numero intero, riprova:");
+                input.next();
+            }
+            durata = input.nextInt();
 
+            if (durata <= 0) {
+                System.out.println("La durata deve essere maggiore di 0, riprova.");
+            }
+        } while (durata <= 0); 
+
+        input.nextLine();  // Consuma il resto della linea
+
+        // capienza
         System.out.println("Qual è la capienza minima dell'impianto in cui vuoi esibirti?");
-        while (!input.hasNextInt()) {
-            System.out.println("Inserisci un numero intero, riprova");
-            input.next();
-        }
-        int capienza = input.nextInt(); // capienza
-        input.nextLine();
+        int capienza;
+        do {
+            System.out.println("Inserisci la capienza (deve essere un numero intero maggiore di 0):");
+            while (!input.hasNextInt()) {
+                System.out.println("Capienza deve essere un numero intero, riprova:");
+                input.next();
+            }
+            capienza = input.nextInt();
 
+            if (capienza <= 0) {
+                System.out.println("La capienza deve essere maggiore di 0, riprova.");
+            }
+        } while (capienza <= 0); 
+
+        input.nextLine();  // Consuma il resto della linea
+
+        // data
         System.out.println("Quando vuoi esibirti? Inserisci la data nel formato dd.mm.yyyy");
-        String dataString = input.nextLine(); // data
+        String dataString = input.nextLine(); 
         LocalDate data = null;
         try {
-            // Dividi la stringa in giorno, mese e anno
+            // Divide la stringa in giorno, mese e anno
             String[] giornoMeseAnno = dataString.split("\\.");
 
-            // Estrai giorno, mese e anno come interi
+            // Estrae giorno, mese e anno come interi
             int giorno = Integer.parseInt(giornoMeseAnno[0]);
             int mese = Integer.parseInt(giornoMeseAnno[1]);
             int anno = Integer.parseInt(giornoMeseAnno[2]);
@@ -136,32 +158,45 @@ public class MenuArtista extends MenuStrategy {
             data = LocalDate.of(anno, mese, giorno);
 
         } catch (Exception e) {
-            System.out.println("Formato non valido");
+            System.out.println("Hai inserito una data non valida");
+            return;
         }
 
         System.out.println("Inserisci l'ora nel formato hh.mm");
         String oraString = input.nextLine(); // ora
         LocalTime orario = null;
         try {
-            // Dividi la stringa in ora, minuti
+            // Divide la stringa in ora, minuti
             String[] oraMinuti = oraString.split("\\.");
 
-            // Estrai ora minuti come interi
+            // Estrae ora minuti come interi
             int ora = Integer.parseInt(oraMinuti[0]);
             int minuti = Integer.parseInt(oraMinuti[1]);
 
             orario = LocalTime.of(ora, minuti);
 
         } catch (Exception e) {
-            System.out.println("Formato non valido");
+            System.out.println("Hai inserito un orario non valido");
+            return;
         }
 
-        // Si DOVREBBE verificare che i vari parametri siano validi
-        List<Impianto> impiantiDisponibili = sistema.nuovaPrenotazione(titolo,
-                descrizione, durata, capienza, data,
-                orario);
+        List<Impianto> impiantiDisponibili;
+        try {
+            impiantiDisponibili = sistema.nuovaPrenotazione(titolo,
+                    descrizione, durata, capienza, data,
+                    orario);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return;
+        }
 
-        // Stampa la lista di impianti disponibili
+        // Stampa la lista di impianti che possono ospitare l'evento
+        if (impiantiDisponibili.isEmpty()) {
+            System.out.println("Nessun impianto può ospitare il tuo evento");
+            sistema.setPrenotazioneCorrenteNull();
+            return;
+        }
+
         for (Impianto i : impiantiDisponibili) {
             System.out.println(i);
         }
@@ -175,7 +210,13 @@ public class MenuArtista extends MenuStrategy {
         int id = input.nextInt();
         input.nextLine();
 
-        sistema.prenotaImpianto(id);
+        try {
+            sistema.prenotaImpianto(id);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return;
+        }
+
         System.out.println("");
         System.out.println("Premi invio per confermare la prenotazione");
         input.nextLine();
@@ -405,15 +446,15 @@ public class MenuArtista extends MenuStrategy {
         }
     }
 
-    private void invitiAccettatiMittente(){
+    private void invitiAccettatiMittente() {
 
         List<Prenotazione> listaPrenotazioni = sistema.mostraPrenotazioniAccettate();
-        if(listaPrenotazioni.isEmpty()){
+        if (listaPrenotazioni.isEmpty()) {
             System.out.println("Non hai prenotazioni accettate, dunque nessun invito");
             return;
         }
 
-        for(Prenotazione p : listaPrenotazioni){
+        for (Prenotazione p : listaPrenotazioni) {
             System.out.println(p.toStringEventInfo());
         }
 
@@ -424,12 +465,12 @@ public class MenuArtista extends MenuStrategy {
 
         List<Invito> listaInviti = sistema.mostraInvitiAccettati(idEvento);
 
-        if(listaInviti.isEmpty()){
+        if (listaInviti.isEmpty()) {
             System.out.println("Nessun invito accettato per questo evento");
             return;
         }
 
-        for(Invito i : listaInviti){
+        for (Invito i : listaInviti) {
             System.out.println(i);
         }
 

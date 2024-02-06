@@ -54,8 +54,12 @@ public class Eventfy {
     }
     // -------
 
-    public Impianto nuovoImpianto(String nome, String luogo, int capienza, int superficie) {
+    public Impianto nuovoImpianto(String nome, String luogo, int capienza, int superficie) throws Exception {
         impiantoCorrente = new Impianto(nome, luogo, capienza, superficie, utenteCorrente);
+        if (!isUnico(impiantoCorrente)) {
+            impiantoCorrente = null;
+            throw new Exception("Impianto identico presente nel sistema");
+        }
         return impiantoCorrente;
     }
 
@@ -65,10 +69,15 @@ public class Eventfy {
     }
 
     public List<Impianto> nuovaPrenotazione(String titolo, String descrizione, int durata, int capienza_min,
-            LocalDate data, LocalTime ora) {
+            LocalDate data, LocalTime ora) throws Exception{
 
         prenotazioneCorrente = new Prenotazione(titolo, descrizione, durata, data, ora, (Artista) utenteCorrente,
                 impiantoCorrente); // inizialmente impianto corrente è null
+        
+        if(prenotazioneCorrente.hasEventoScaduto()){
+            prenotazioneCorrente = null;
+            throw new Exception("Evento già scaduto");
+        }
 
         mappaImpiantiTemp = new HashMap<Integer, Impianto>();
 
@@ -82,8 +91,12 @@ public class Eventfy {
 
     }
 
-    public void prenotaImpianto(int codice_impianto) {
+    public void prenotaImpianto(int codice_impianto) throws Exception {
         Impianto impianto = mappaImpiantiTemp.get(codice_impianto);
+        if(impianto == null){
+            prenotazioneCorrente = null;
+            throw new Exception("Hai inserito un ID dell'impianto scorretto");
+        }
         prenotazioneCorrente.setImpianto(impianto);
     }
 
@@ -729,15 +742,27 @@ public class Eventfy {
         mappaPrenotazioniAnnullate.put(p.getId(), p);
     }
 
-    
     // Visualizza inviti accettati di cui l'utente corrente è mittente
-    //Nella UI viene prima chiamato il metodo mostraPrenotazioniAccettate()
+    // Nella UI viene prima chiamato il metodo mostraPrenotazioniAccettate()
     public List<Invito> mostraInvitiAccettati(int idEvento) {
 
         Prenotazione p = mappaPrenotazioniTemp.get(idEvento);
         mappaPrenotazioniTemp = null;
-        
+
         return p.getInvitiAccettati();
 
     }
+
+    private boolean isUnico(Impianto impianto) {
+
+        for (Impianto i : this.listaImpianti) {
+            if (i.hasSameAttributes(impianto)) {
+                return false;
+            }
+        }
+
+        return true;
+
+    }
+
 }

@@ -65,29 +65,48 @@ public class MenuGestore extends MenuStrategy {
 
         System.out.println("Inserisci il luogo dell'impianto");
         String luogo = input.nextLine(); // luogo
-        // per evitare che il cursore rimanga incastrato e non funzioni correttamente
-        input.nextLine();
+
         // capienza (int)
-        System.out.println("Inserisci la capienza (intero)");
-        while (!input.hasNextInt()) {
-            System.out.println("Capienza deve essere un numero intero, riprova");
-            input.next();
-        }
-        int capienza = input.nextInt();
+        int capienza;
+        do {
+            System.out.println("Inserisci la capienza (deve essere un numero intero maggiore di 0):");
+            while (!input.hasNextInt()) {
+                System.out.println("Capienza deve essere un numero intero, riprova:");
+                input.next();
+            }
+            capienza = input.nextInt();
+
+            if (capienza <= 0) {
+                System.out.println("La capienza deve essere maggiore di 0, riprova.");
+            }
+        } while (capienza <= 0);
 
         // superficie (int)
-        System.out.println("Inserisci la superficie (intero)");
-        while (!input.hasNextInt()) {
-            System.out.println("Superficie deve essere un numero intero, riprova");
-            input.next();
-        }
+        int superficie;
+        do {
+            System.out.println("Inserisci la superficie (deve essere un numero intero maggiore di 0):");
+            while (!input.hasNextInt()) {
+                System.out.println("La superficie deve essere un numero intero, riprova:");
+                input.next();
+            }
+            superficie = input.nextInt();
+
+            if (superficie <= 0) {
+                System.out.println("La superficie deve essere maggiore di 0, riprova.");
+            }
+        } while (superficie <= 0);
         // per evitare che il cursore rimanga incastrato e non funzioni correttamente
-        input.nextLine();
-        int superficie = input.nextInt();
         input.nextLine();
 
         // Visualizza il riepilogo dell'impianto inserito
-        Impianto impianto = sistema.nuovoImpianto(nome, luogo, capienza, superficie);
+        Impianto impianto;
+        try {
+            impianto = sistema.nuovoImpianto(nome, luogo, capienza, superficie);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return;
+        }
+
         System.out.println("");
         System.out.println("Riepilogo impianto:");
         System.out.println(impianto.toString());
@@ -178,10 +197,10 @@ public class MenuGestore extends MenuStrategy {
 
     }
 
-    private void visualizzaImpianti(){
+    private void visualizzaImpianti() {
 
         List<Impianto> listaImpianti = sistema.visualizzaImpiantiGestore();
-        
+
         if (listaImpianti == null || listaImpianti.isEmpty()) {
             System.out.println("Nessun impianto inserito.");
             return;
@@ -195,8 +214,7 @@ public class MenuGestore extends MenuStrategy {
 
     }
 
-
-    private void mostraRecensione(){
+    private void mostraRecensione() {
 
         visualizzaImpianti();
 
