@@ -101,6 +101,10 @@ public class Eventfy {
         for (int key : mappaPrenotazioniPendenti.keySet()) {
             Prenotazione p = mappaPrenotazioniPendenti.get(key);
             if (p.hasGestore((Gestore) utenteCorrente)) {
+                // Controllo e annullamento automatico prenotazioni scadute
+                if (p.hasEventoScaduto()) {
+                    annullaPrenotazione(p);
+                }
                 mappaPrenotazioniTemp.put(p.getId(), p);
             }
         }
@@ -374,13 +378,9 @@ public class Eventfy {
     public void confermaEliminazione(int codice_prenotazione) {
 
         Prenotazione daEliminare = mappaPrenotazioniTemp.get(codice_prenotazione);
+        
         if (daEliminare != null) {
-            if (mappaPrenotazioniPendenti.remove(codice_prenotazione) == null) {
-                mappaPrenotazioniAccettate.remove(codice_prenotazione);
-            }
-
-            mappaPrenotazioniAnnullate.put(daEliminare.getId(), daEliminare);
-
+            annullaPrenotazione(daEliminare);
         }
 
         mappaPrenotazioniTemp = null;
@@ -636,7 +636,6 @@ public class Eventfy {
         Prenotazione p11 = new Prenotazione("P11", "d11", 120, LocalDate.of(2022, 11, 11), LocalTime.now(), a1, i3);
         Prenotazione p12 = new Prenotazione("P12", "d12", 40, LocalDate.of(2025, 5, 11), LocalTime.now(), a1, i3);
         Prenotazione p13 = new Prenotazione("P13", "d13", 40, LocalDate.of(2059, 12, 1), LocalTime.now(), a3, i1);
-        
 
         mappaPrenotazioniPendenti.put(p0.getId(), p0);
         mappaPrenotazioniPendenti.put(p1.getId(), p1);
@@ -718,5 +717,14 @@ public class Eventfy {
 
     public Map<Integer, Utente> getMappaUtenti() {
         return mappaUtenti;
+    }
+
+    // Annulla prenotazione
+    private void annullaPrenotazione(Prenotazione p) {
+        if (mappaPrenotazioniPendenti.remove(p.getId()) == null) {
+            mappaPrenotazioniAccettate.remove(p.getId());
+        }
+
+        mappaPrenotazioniAnnullate.put(p.getId(), p);
     }
 }

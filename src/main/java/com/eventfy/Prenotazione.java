@@ -127,6 +127,10 @@ public class Prenotazione {
         return this.evento.getData();
     }
 
+    public boolean hasEventoScaduto(){
+        return this.evento.isScaduto();
+    }
+
     @Override
     public String toString() {
         return "-- Prenotazione [id=" + id + ", data=" + data + ", ora=" + ora + ", \nevento=" + evento + ",\nartista="

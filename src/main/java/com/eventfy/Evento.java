@@ -103,6 +103,11 @@ public class Evento {
         listaInviti.add(in);
     }
 
+    public boolean isScaduto(){
+        LocalDate dataScadenza = this.getData().minusMonths(3);
+        return LocalDate.now().isAfter(dataScadenza);
+    }
+
     @Override
     public String toString() {
         return "-- Evento [id=" + id + ", titolo=" + titolo + ", descrizione=" + descrizione + ", durata=" + durata
