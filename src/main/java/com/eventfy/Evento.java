@@ -47,6 +47,10 @@ public class Evento {
     public LocalDate getData() {
         return this.data;
     }
+    
+    public LocalTime getOra(){
+        return ora;
+    }
 
     public void addFan(Fan utenteCorrente) {
         this.listaPartecipanti.add(utenteCorrente);
@@ -95,8 +99,8 @@ public class Evento {
         this.invito = null;
     }
 
-    public Invito getInvito(){
-        return invito;
+    public List<Invito> getInvitiAccettati(){
+        return this.listaInviti;
     }
 
     public void addInvito(Invito in){

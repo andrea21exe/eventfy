@@ -106,6 +106,10 @@ public class Prenotazione {
         return data;
     }
 
+    public LocalTime getOra(){
+        return ora;
+    }
+
     public void creaInvito(){
         this.evento.creaInvito(this.artista);
     }
@@ -131,10 +135,18 @@ public class Prenotazione {
         return this.evento.isScaduto();
     }
 
+    public List<Invito> getInvitiAccettati(){
+        return this.evento.getInvitiAccettati();
+    }
+
     @Override
     public String toString() {
         return "-- Prenotazione [id=" + id + ", data=" + data + ", ora=" + ora + ", \nevento=" + evento + ",\nartista="
                 + artista.getNome() + ", \nimpianto=" + impianto + "]";
+    }
+
+    public String toStringEventInfo(){
+        return "Evento: id= " + id + ", data evento= " + evento.getData() + ", ora evento= " + evento.getOra() + ", impianto: " + impianto.getNome();
     }
 
 }

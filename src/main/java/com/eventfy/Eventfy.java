@@ -728,4 +728,16 @@ public class Eventfy {
 
         mappaPrenotazioniAnnullate.put(p.getId(), p);
     }
+
+    
+    // Visualizza inviti accettati di cui l'utente corrente è mittente
+    //Nella UI viene prima chiamato il metodo mostraPrenotazioniAccettate()
+    public List<Invito> mostraInvitiAccettati(int idEvento) {
+
+        Prenotazione p = mappaPrenotazioniTemp.get(idEvento);
+        mappaPrenotazioniTemp = null;
+        
+        return p.getInvitiAccettati();
+
+    }
 }

@@ -31,11 +31,12 @@ public class MenuArtista extends MenuStrategy {
         System.out.println("9. Registra brano");
         System.out.println("10. Visualizza i tuoi brani");
         System.out.println("11. Visualizza recensioni sui tuoi eventi");
-        System.out.println("12. Logout");
+        System.out.println("12. Visualizza gli inviti inviati ed accettati per un evento");
+        System.out.println("13. Logout");
     }
 
     @Override
-    protected void processaScelta(int scelta) throws LogException{
+    protected void processaScelta(int scelta) throws LogException {
         switch (scelta) {
             case 1:
                 System.out.println("Hai selezionato l'Opzione 1");
@@ -83,6 +84,10 @@ public class MenuArtista extends MenuStrategy {
                 break;
             case 12:
                 System.out.println("Hai selezionato l'Opzione 12");
+                invitiAccettatiMittente();
+                break;
+            case 13:
+                System.out.println("Hai selezionato l'Opzione 13");
                 logout();
                 break;
             default:
@@ -260,7 +265,7 @@ public class MenuArtista extends MenuStrategy {
             System.out.println("Inserisci il codice dell'invito che vuoi accettare:");
             int codice_invito = input.nextInt();
             sistema.accettaInvito(codice_invito);
-            
+
             System.out.println("invito accettato");
         } else {
             System.out.println("Nessun invito pendente.");
@@ -364,7 +369,7 @@ public class MenuArtista extends MenuStrategy {
 
     }
 
-    private void visualizzaRecensioni(){
+    private void visualizzaRecensioni() {
 
         visualizzaEventi();
 
@@ -386,7 +391,7 @@ public class MenuArtista extends MenuStrategy {
 
     }
 
-    private void visualizzaPrenotazioni(){
+    private void visualizzaPrenotazioni() {
 
         List<Prenotazione> listaPrenotazioni = sistema.visualizzaPrenotazioniPendentiArtista();
 
@@ -398,6 +403,36 @@ public class MenuArtista extends MenuStrategy {
         for (Prenotazione p : listaPrenotazioni) {
             System.out.println(p);
         }
+    }
+
+    private void invitiAccettatiMittente(){
+
+        List<Prenotazione> listaPrenotazioni = sistema.mostraPrenotazioniAccettate();
+        if(listaPrenotazioni.isEmpty()){
+            System.out.println("Non hai prenotazioni accettate, dunque nessun invito");
+            return;
+        }
+
+        for(Prenotazione p : listaPrenotazioni){
+            System.out.println(p.toStringEventInfo());
+        }
+
+        Scanner input = new Scanner(System.in);
+
+        System.out.println("Inserisci l'id dell'evento di cui vuoi visualizzare gli inviti");
+        int idEvento = input.nextInt();
+
+        List<Invito> listaInviti = sistema.mostraInvitiAccettati(idEvento);
+
+        if(listaInviti.isEmpty()){
+            System.out.println("Nessun invito accettato per questo evento");
+            return;
+        }
+
+        for(Invito i : listaInviti){
+            System.out.println(i);
+        }
+
     }
 
 }

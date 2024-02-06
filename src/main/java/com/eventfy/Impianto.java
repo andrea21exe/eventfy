@@ -45,6 +45,10 @@ public class Impianto{
         return false;
     }
 
+    public String getNome(){
+        return this.nome;
+    }
+
     public Gestore getGestore() {
         return this.gestore;
     }
