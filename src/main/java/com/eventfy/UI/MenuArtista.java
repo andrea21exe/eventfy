@@ -242,12 +242,13 @@ public class MenuArtista extends MenuStrategy {
                 System.out.println(prenotazione);
             }
             System.out.print("Inserisci il codice della prenotazione: ");
-            int codice_prenotazione = input.nextInt();
 
             while (!input.hasNextInt()) {
                 System.out.println("Inserisci un numero intero, riprova:");
                 input.next(); // Scarta l'input non valido
             }
+
+            int codice_prenotazione = input.nextInt();
 
             List<Brano> listaBrani = sistema.recuperaBraniArtista(codice_prenotazione);
             // Se trova brani da aggiungere
@@ -258,12 +259,14 @@ public class MenuArtista extends MenuStrategy {
                 }
                 // Aggiungi il brano alla scaletta
                 System.out.println("Inserisci il codice del brano da aggiungere: ");
-                int codice_brano = input.nextInt();
 
                 while (!input.hasNextInt()) {
                     System.out.println("Inserisci un numero intero, riprova:");
                     input.next(); // Scarta l'input non valido
                 }
+
+                int codice_brano = input.nextInt();
+
 
                 try {
                     sistema.aggiungiBrano(codice_brano);
