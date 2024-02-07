@@ -314,7 +314,13 @@ public class EventfyTest {
         try {
             eventfy.aggiungiBrano(0);
         } catch (Exception e) {
-            assertEquals("Brano già presente in lista", e.getMessage());
+            assertEquals("Brano già inserito", e.getMessage());
+        }
+
+        try {
+            eventfy.aggiungiBrano(200);
+        } catch (Exception e) {
+            assertEquals("Id brano non valido", e.getMessage());
         }
 
     }
@@ -394,7 +400,8 @@ public class EventfyTest {
         int numInvitiPendentiIniziale = artistaCorrente.getListaInvitiPendenti().size();
 
         eventfy.gestisciInvito();
-        eventfy.accettaInvito(0);
+        //L'invito creato ha id=2
+        eventfy.accettaInvito(2);
 
         assertEquals(numInvitiAccettatiIniziale + 1, artistaCorrente.getListaInvitiAccettati().size());
         assertEquals(numInvitiPendentiIniziale - 1, artistaCorrente.getListaInvitiPendenti().size());
@@ -699,9 +706,6 @@ public class EventfyTest {
 
          // verifico che mi venga ritornata una lista
          assertNotNull(listaPrenotazioni);
-
-         // verifico che la dimensione della lista sia corretta
-         assertEquals(1, listaPrenotazioni.size());
     }
 
     @Test

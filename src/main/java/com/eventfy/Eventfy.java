@@ -256,15 +256,7 @@ public class Eventfy {
     // supponiamo di visualizzare la mappa dei brani con i rispettivi codici e di
     // scegliere un codice di un brano
     public void aggiungiBrano(int codice_brano) throws Exception {
-        if (utenteCorrente instanceof Artista) {
-            for(Brano b: prenotazioneCorrente.getEvento().getListaBrani()){
-                if(b.equals(((Artista) utenteCorrente).getBrano(codice_brano))){
-                    throw new Exception("Brano già presente in lista");
-                }
-            }
-
-            prenotazioneCorrente.addBrano(((Artista) utenteCorrente).getBrano(codice_brano));
-        }
+        prenotazioneCorrente.addBrano(codice_brano);
         prenotazioneCorrente = null;
     }
 
@@ -678,8 +670,7 @@ public class Eventfy {
         
           Invito inv1 = new Invito(p3.getEvento(), p3.getArtista(), a2);
           Invito inv2 = new Invito(p4.getEvento(), p4.getArtista(), a2);
-          Invito inv3 = new Invito(p0.getEvento(), p0.getArtista(), a1);
-          Invito inv4 = new Invito(p6.getEvento(), p6.getArtista(), a1);
+          
           
          
           a2.addInvitoPendente(inv1);
@@ -690,7 +681,7 @@ public class Eventfy {
         i1.recensisci("Commento 1", 4, a1);
         i2.recensisci("Commento 2", 5, a2);
         i3.recensisci("Commento 3", 3, a3);
-        // Sarebbe sbagliato inserire
+
         p1.addPartecipazioneFan(f1);
         p2.addPartecipazioneFan(f2);
         p11.addPartecipazioneFan(f1);

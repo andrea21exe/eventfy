@@ -70,6 +70,15 @@ public class Evento {
         return this.listaPartecipanti.contains(fan);
     }
 
+    public boolean hasBrano(int id){
+        for(Brano b : listaBrani){
+            if(b.getId() == id){
+                return true;
+            }
+        }
+        return false;
+    }
+
     public boolean isRecensibile(){
         return LocalDate.now().isAfter(this.data);
     }

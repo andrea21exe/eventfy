@@ -45,6 +45,14 @@ public class Artista extends Utente {
         this.mappaBrani.put(b.getId(), b);
     }
 
+    public void addBranoAdEvento(int id_brano, Evento e) throws Exception{
+        Brano b = mappaBrani.get(id_brano);
+        if(b == null){
+            throw new Exception("Id brano non valido");
+        }
+        e.addBrano(b);
+    }
+
     public Map<Integer, Brano> getMappaBrani() {
         return mappaBrani;
     }

@@ -54,8 +54,15 @@ public class Prenotazione {
         return this.evento;
     }
 
-    public void addBrano(Brano brano) {
-        evento.addBrano(brano);
+    public void addBrano(int id_brano) throws Exception {
+        if(this.evento.hasBrano(id_brano)){
+            throw new Exception("Brano già inserito");
+        }
+        this.artista.addBranoAdEvento(id_brano, this.evento);
+    }
+
+    public boolean hasBrano(int id_brano){
+        return evento.hasBrano(id_brano);
     }
 
     public boolean isRecensibile() {

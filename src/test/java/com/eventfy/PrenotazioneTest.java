@@ -2,6 +2,7 @@ package com.eventfy;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -31,9 +32,13 @@ public class PrenotazioneTest {
     @Test
     void testAddBrano() {
 
-        Brano b = new Brano("Take My Breath", "Dawn FM", 4);
-        p.addBrano(b);
-        assertTrue(p.getEvento().getListaBrani().contains(b));
+        try {
+            p.addBrano(0);
+        } catch (Exception e) {
+            fail();
+        }
+        assertTrue(p.hasBrano(0));
+        
 
     }
 
