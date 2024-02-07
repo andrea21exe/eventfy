@@ -111,7 +111,7 @@ public class Evento {
     public List<Invito> getInvitiAccettati(){
         return this.listaInviti;
     }
-
+    
     public void addInvito(Invito in){
         listaInviti.add(in);
     }

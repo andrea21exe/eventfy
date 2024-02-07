@@ -18,7 +18,7 @@ public class App {
     private static Eventfy sistema;
     private static MenuStrategy menuStrategy;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
 
         sistema = Eventfy.getIstanceEventfy();
         sistema.populate();

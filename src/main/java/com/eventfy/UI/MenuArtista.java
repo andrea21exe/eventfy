@@ -14,7 +14,6 @@ import com.eventfy.Recensione;
 import com.eventfy.RecensioneEvento;
 import com.eventfy.RecensioneImpianto;
 import com.eventfy.Utente;
-import com.eventfy.Exceptions.LogException;
 
 public class MenuArtista extends MenuStrategy {
 
@@ -38,7 +37,7 @@ public class MenuArtista extends MenuStrategy {
     }
 
     @Override
-    protected void processaScelta(int scelta) throws LogException {
+    protected void processaScelta(int scelta) throws Exception {
         switch (scelta) {
             case 1:
                 System.out.println("Hai selezionato l'Opzione 1");
@@ -126,9 +125,9 @@ public class MenuArtista extends MenuStrategy {
             if (durata <= 0) {
                 System.out.println("La durata deve essere maggiore di 0, riprova.");
             }
-        } while (durata <= 0); 
+        } while (durata <= 0);
 
-        input.nextLine();  // Consuma il resto della linea
+        input.nextLine(); // Consuma il resto della linea
 
         // capienza
         System.out.println("Qual è la capienza minima dell'impianto in cui vuoi esibirti?");
@@ -144,13 +143,13 @@ public class MenuArtista extends MenuStrategy {
             if (capienza <= 0) {
                 System.out.println("La capienza deve essere maggiore di 0, riprova.");
             }
-        } while (capienza <= 0); 
+        } while (capienza <= 0);
 
-        input.nextLine();  // Consuma il resto della linea
+        input.nextLine(); // Consuma il resto della linea
 
         // data
         System.out.println("Quando vuoi esibirti? Inserisci la data nel formato dd.mm.yyyy");
-        String dataString = input.nextLine(); 
+        String dataString = input.nextLine();
         LocalDate data = null;
         try {
             // Divide la stringa in giorno, mese e anno
@@ -267,7 +266,6 @@ public class MenuArtista extends MenuStrategy {
 
                 int codice_brano = input.nextInt();
 
-
                 try {
                     sistema.aggiungiBrano(codice_brano);
                 } catch (Exception e) {
@@ -300,11 +298,19 @@ public class MenuArtista extends MenuStrategy {
             System.out.println("Inserisci il codice della prenotazione per cui desideri inviare un invito:");
             int codice_prenotazione = input.nextInt();
             input.nextLine();
-            List<Utente> artistiDisponibili = sistema.selezionaPrenotazioneInvito(codice_prenotazione);
-            System.out.println("Artisti disponibili per l'invito:");
+           
+            try {
+                List<Utente> artistiDisponibili = sistema.selezionaPrenotazioneInvito(codice_prenotazione);
+                
             for (Utente artista : artistiDisponibili) {
                 System.out.println(artista);
             }
+            } catch (Exception e) {
+                System.out.println("La'prenotazione selezionata è errata");
+                return;
+            } 
+            System.out.println("Artisti disponibili per l'invito:");
+    
             // Invita artista
             System.out.println("Inserisci il codice dell'artista che desideri invitare:");
             int codice_artista = input.nextInt();
@@ -313,6 +319,7 @@ public class MenuArtista extends MenuStrategy {
                 sistema.invitaArtista(codice_artista);
             } catch (Exception e) {
                 System.out.println("L'artista è già stato invitato");
+                return;
             }
             System.out.println("Invito inviato con successo!");
         } else {
@@ -322,7 +329,7 @@ public class MenuArtista extends MenuStrategy {
         }
     }
 
-    private void gestisciInvito() throws Exception {
+    private void gestisciInvito(){
 
         Scanner input = new Scanner(System.in);
         List<Invito> invitiPendenti = sistema.gestisciInvito();
@@ -333,33 +340,34 @@ public class MenuArtista extends MenuStrategy {
             }
             System.out.println("Inserisci il codice dell'invito che vuoi accettare:");
             int codice_invito = input.nextInt();
-            System.out.println("Vuoi accettarlo o rifiutare l'invito");
-            sistema.accettaInvito(codice_invito);
+            input.nextLine();  
+            System.out.println("Vuoi accettare o rifiutare l'invito");
             String scelta = input.nextLine();
 
             if (scelta.equals("accettare")) {
-                try{
-                sistema.accettaInvito(codice_invito);
-            } catch (Exception e) {
-                System.out.println("id codice errato");
-            }
-            } else if (scelta.equals("rifiutare")) {
-                try{
-                    sistema.rifiutaInvito(codice_invito);
+                try {
+                    sistema.accettaInvito(codice_invito);
+                    System.out.println("invito accettato");
                 } catch (Exception e) {
                     System.out.println("id codice errato");
+                    return;
+                }
+            } else if (scelta.equals("rifiutare")) {
+                try {
+                    sistema.rifiutaInvito(codice_invito);
+                    System.out.println("invito rifiutato");
+
+                } catch (Exception e) {
+                    System.out.println("id codice errato");
+                    return;
                 }
             } else {
                 System.out.println("Scelta non valida");
             }
-
-
-
-
-            System.out.println("invito accettato");
         } else {
             System.out.println("Nessun invito pendente.");
         }
+
     }
 
     private void inserisciRecensioneStruttura() {
@@ -525,7 +533,7 @@ public class MenuArtista extends MenuStrategy {
 
     }
 
-    private void mostraRecensioniInserite(){
+    private void mostraRecensioniInserite() {
 
         List<RecensioneImpianto> listaRecensioni = sistema.mostraRecensioniArtista();
 

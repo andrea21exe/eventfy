@@ -126,8 +126,13 @@ public class Eventfy {
         return new ArrayList<Prenotazione>(mappaPrenotazioniTemp.values());
     }
 
-    public Prenotazione selezionaPrenotazionePendente(int codice_prenotazione) {
+    public Prenotazione selezionaPrenotazionePendente(int codice_prenotazione) throws Exception {
+
         prenotazioneCorrente = mappaPrenotazioniTemp.get(codice_prenotazione);
+        if(prenotazioneCorrente == null){
+            prenotazioneCorrente = null;
+            throw new Exception("Hai inserito un ID della prenotazione errato");
+        }
         return prenotazioneCorrente;
     }
 
@@ -813,6 +818,14 @@ public class Eventfy {
         return recensioniImpiantoArtista;
 
     }
+
+ //UC23
+ public List<Invito> mostraInvitiRifiutati() {
+
+    Artista a = (Artista)utenteCorrente;
+    List<Invito> InvitiRifiutati=a.getListaInvitiRifiutati();
+    return InvitiRifiutati;
+}    
 
 
 }

@@ -372,6 +372,11 @@ public class EventfyTest {
         } catch (Exception e1) {
             assertEquals("Artista ", e1.getMessage());
         }
+        try {
+            eventfy.invitaArtista(3);
+        } catch (Exception e1) {
+            assertEquals("Artista ", e1.getMessage());
+        }
         // Deve essere stato registrato un invito
         assertEquals(sizeMappaInvitiIniziale + 1, artista.getListaInvitiPendenti().size());
 

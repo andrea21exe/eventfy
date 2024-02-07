@@ -14,7 +14,7 @@ public abstract class MenuStrategy {
         sistema = Eventfy.getIstanceEventfy();
     }
 
-    public void menu() throws LogException {
+    public void menu() throws Exception {
         displayMenu();
         int scelta = getOperazioneUtente();
         processaScelta(scelta);
@@ -35,7 +35,7 @@ public abstract class MenuStrategy {
 
     }
 
-    abstract void processaScelta(int scelta) throws LogException;
+    abstract void processaScelta(int scelta) throws LogException, Exception;
 
     protected void logout() throws LogoutException{
         sistema.logout();
