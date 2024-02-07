@@ -304,9 +304,11 @@ public class Eventfy {
         
          if (!mappaUtenti.containsKey(codice_artista)){
                
-                throw new Exception("L'artista non esiste");
-            }
+            throw new Exception("L'artista non esiste");
+        }
+        System.out.println("Prima di setDestinatarioInvito");
         prenotazioneCorrente.setDestinatarioInvito((Artista) mappaUtentiTemp.get(codice_artista));
+        System.out.println("Dopo setDestinatarioInvito");
         // L'invito va inserito nell'artista da invitare
         mappaUtentiTemp = null;
         prenotazioneCorrente = null;

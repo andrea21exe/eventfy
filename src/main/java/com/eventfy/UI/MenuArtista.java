@@ -296,8 +296,12 @@ public class MenuArtista extends MenuStrategy {
                 System.out.println(p);
             }
             System.out.println("Inserisci il codice della prenotazione per cui desideri inviare un invito:");
+
+            while (!input.hasNextInt()) {
+                System.out.println("Inserisci un numero intero, riprova:");
+                input.next(); // Scarta l'input non valido
+            }
             int codice_prenotazione = input.nextInt();
-            input.nextLine();
            
             try {
                 List<Utente> artistiDisponibili = sistema.selezionaPrenotazioneInvito(codice_prenotazione);
@@ -313,13 +317,23 @@ public class MenuArtista extends MenuStrategy {
     
             // Invita artista
             System.out.println("Inserisci il codice dell'artista che desideri invitare:");
+            while (!input.hasNextInt()) {
+                System.out.println("Inserisci un numero intero, riprova:");
+                input.next(); // Scarta l'input non valido
+            }
             int codice_artista = input.nextInt();
-            input.nextLine();
+            
             try {
                 sistema.invitaArtista(codice_artista);
             } catch (Exception e) {
-                System.out.println("L'artista è già stato invitato");
-                return;
+                System.out.println("Messaggio dell'eccezione: " + e.getMessage());
+                if (e.getMessage().equals("L'artista non esiste")) {
+                    System.out.println("L'utente inserito non esiste");
+                    return;
+                } else if (e.getMessage().equals("Artista già invitato")) {
+                    System.out.println("L'artista è stato già invitato");
+                    return;
+                }
             }
             System.out.println("Invito inviato con successo!");
         } else {
@@ -339,6 +353,10 @@ public class MenuArtista extends MenuStrategy {
                 System.out.println(invito);
             }
             System.out.println("Inserisci il codice dell'invito che vuoi accettare:");
+            while (!input.hasNextInt()) {
+                System.out.println("Inserisci un numero intero, riprova:");
+                input.next(); // Scarta l'input non valido
+            }
             int codice_invito = input.nextInt();
             input.nextLine();  
             System.out.println("Vuoi accettare o rifiutare l'invito");
