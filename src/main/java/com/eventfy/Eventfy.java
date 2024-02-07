@@ -295,8 +295,12 @@ public class Eventfy {
 
     }
 
-    public void invitaArtista(int codice_artista) {
-
+    public void invitaArtista(int codice_artista) throws Exception{
+        
+         if (!mappaUtenti.containsKey(codice_artista)){
+               
+                throw new Exception("L'artista non esiste");
+            }
         prenotazioneCorrente.setDestinatarioInvito((Artista) mappaUtentiTemp.get(codice_artista));
         // L'invito va inserito nell'artista da invitare
         mappaUtentiTemp = null;
@@ -309,8 +313,15 @@ public class Eventfy {
     }
 
     // seleziono un id dalla mappa inviti relativa all'artista
-    public void accettaInvito(int codice_invito) {
+    public void accettaInvito(int codice_invito) throws Exception{
+        
         ((Artista) utenteCorrente).accettaInvito(codice_invito);
+    }
+
+    //aggiunta dall'estensione
+    public void rifiutaInvito(int codice_invito) throws Exception{
+        
+        ((Artista) utenteCorrente).rifiutaInvito(codice_invito);
     }
 
     // UC9
@@ -322,8 +333,7 @@ public class Eventfy {
         for (int key : mappaPrenotazioniAccettate.keySet()) {
             Prenotazione p = mappaPrenotazioniAccettate.get(key);
 
-            if (p.hasArtista((Artista) utenteCorrente) &&
-                    p.isRecensibile()) {
+            if (p.hasArtista((Artista) utenteCorrente) && p.isRecensibile()) {
                 mappaPrenotazioniTemp.put(p.getId(), p);
             }
         }

@@ -350,6 +350,7 @@ public class EventfyTest {
     }
 
     @Test
+    // da rivedere
     void invitaArtistaTest() {
         eventfy.logIn(3);// Artista TheWeeknd
 
@@ -360,7 +361,17 @@ public class EventfyTest {
         Artista artista = (Artista) eventfy.getMappaUtenti().get(5);
         int sizeMappaInvitiIniziale = artista.getListaInvitiPendenti().size();
 
-        eventfy.invitaArtista(5);
+        try {
+            eventfy.invitaArtista(16);
+        } catch (Exception e) {
+            assertEquals("L'artista non esiste", e.getMessage());
+        }
+
+        try {
+            eventfy.invitaArtista(4);
+        } catch (Exception e1) {
+            assertEquals("Artista ", e1.getMessage());
+        }
         // Deve essere stato registrato un invito
         assertEquals(sizeMappaInvitiIniziale + 1, artista.getListaInvitiPendenti().size());
 
@@ -391,8 +402,16 @@ public class EventfyTest {
         eventfy.logIn(3);// Artista TheWeeknd
         eventfy.mostraPrenotazioniAccettate();
         eventfy.selezionaPrenotazioneInvito(4);
-        eventfy.invitaArtista(5);
-
+        try {
+            eventfy.invitaArtista(12);
+        } catch (Exception e) {
+            assertEquals("L'artista non esiste", e.getMessage());
+        }
+        try {
+            eventfy.invitaArtista(5);
+        } catch (Exception e1) {
+            assertEquals("l'artista è già stato", e1.getMessage());
+        }
         eventfy.logIn(5);
         Artista artistaCorrente = (Artista) eventfy.getUtenteCorrente();
 
@@ -401,9 +420,66 @@ public class EventfyTest {
 
         eventfy.gestisciInvito();
         //L'invito creato ha id=2
-        eventfy.accettaInvito(2);
+       
+        try {
+            eventfy.accettaInvito(4);
+        } catch (Exception e) {
+            assertEquals("Id invito non valido", e.getMessage());
+        }
+
+        try {
+            eventfy.accettaInvito(2);
+        } catch (Exception e) {
+            assertEquals("Id invito non valido", e.getMessage());
+        }
 
         assertEquals(numInvitiAccettatiIniziale + 1, artistaCorrente.getListaInvitiAccettati().size());
+        assertEquals(numInvitiPendentiIniziale - 1, artistaCorrente.getListaInvitiPendenti().size());
+
+    }
+
+
+    @Test
+    void rifiutaInvitotoTest() {
+
+        // Creo ed accetto un invito;
+
+        // Creazione invito
+        eventfy.logIn(3);// Artista TheWeeknd
+        eventfy.mostraPrenotazioniAccettate();
+        eventfy.selezionaPrenotazioneInvito(4);
+        try {
+            eventfy.invitaArtista(12);
+        } catch (Exception e) {
+            assertEquals("L'artista non esiste", e.getMessage());
+        }
+        try {
+            eventfy.invitaArtista(5);
+        } catch (Exception e1) {
+            assertEquals("l'artista è già stato", e1.getMessage());
+        }
+        eventfy.logIn(5);
+        Artista artistaCorrente = (Artista) eventfy.getUtenteCorrente();
+
+        int numInvitiRifiutatiIniziale = artistaCorrente.getListaInvitiRifiutati().size();
+        int numInvitiPendentiIniziale = artistaCorrente.getListaInvitiPendenti().size();
+
+        eventfy.gestisciInvito();
+        //L'invito creato ha id=2
+       
+        try {
+            eventfy.rifiutaInvito(4);
+        } catch (Exception e1) {
+            assertEquals("Id invito non valido", e1.getMessage());
+        }
+
+        try {
+            eventfy.rifiutaInvito(2);
+        } catch (Exception e1) {
+            assertEquals("Id invito non valido", e1.getMessage());
+        }
+        
+        assertEquals(numInvitiRifiutatiIniziale + 1, artistaCorrente.getListaInvitiRifiutati().size());
         assertEquals(numInvitiPendentiIniziale - 1, artistaCorrente.getListaInvitiPendenti().size());
 
     }

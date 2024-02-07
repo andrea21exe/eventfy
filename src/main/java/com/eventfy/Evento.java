@@ -116,6 +116,15 @@ public class Evento {
         listaInviti.add(in);
     }
 
+    public boolean hasArtistaInvitato(int id){
+        for(Invito i : listaInviti){
+            if(i.getArtistaDestinatario().getId() == id){
+                return true;
+            }
+        }
+        return false;
+    }
+
     public boolean isScaduto(){
         LocalDate dataScadenza = this.getData().minusMonths(3);
         return LocalDate.now().isAfter(dataScadenza);

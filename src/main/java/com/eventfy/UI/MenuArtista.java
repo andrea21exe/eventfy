@@ -309,9 +309,12 @@ public class MenuArtista extends MenuStrategy {
             System.out.println("Inserisci il codice dell'artista che desideri invitare:");
             int codice_artista = input.nextInt();
             input.nextLine();
-            sistema.invitaArtista(codice_artista);
+            try {
+                sistema.invitaArtista(codice_artista);
+            } catch (Exception e) {
+                System.out.println("L'artista è già stato invitato");
+            }
             System.out.println("Invito inviato con successo!");
-
         } else {
             // Se l'artista non ha prenotazioni accettate
 
@@ -319,7 +322,7 @@ public class MenuArtista extends MenuStrategy {
         }
     }
 
-    private void gestisciInvito() {
+    private void gestisciInvito() throws Exception {
 
         Scanner input = new Scanner(System.in);
         List<Invito> invitiPendenti = sistema.gestisciInvito();
@@ -330,7 +333,28 @@ public class MenuArtista extends MenuStrategy {
             }
             System.out.println("Inserisci il codice dell'invito che vuoi accettare:");
             int codice_invito = input.nextInt();
+            System.out.println("Vuoi accettarlo o rifiutare l'invito");
             sistema.accettaInvito(codice_invito);
+            String scelta = input.nextLine();
+
+            if (scelta.equals("accettare")) {
+                try{
+                sistema.accettaInvito(codice_invito);
+            } catch (Exception e) {
+                System.out.println("id codice errato");
+            }
+            } else if (scelta.equals("rifiutare")) {
+                try{
+                    sistema.rifiutaInvito(codice_invito);
+                } catch (Exception e) {
+                    System.out.println("id codice errato");
+                }
+            } else {
+                System.out.println("Scelta non valida");
+            }
+
+
+
 
             System.out.println("invito accettato");
         } else {
