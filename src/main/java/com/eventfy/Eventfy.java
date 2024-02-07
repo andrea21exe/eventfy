@@ -255,8 +255,14 @@ public class Eventfy {
 
     // supponiamo di visualizzare la mappa dei brani con i rispettivi codici e di
     // scegliere un codice di un brano
-    public void aggiungiBrano(int codice_brano) {
+    public void aggiungiBrano(int codice_brano) throws Exception {
         if (utenteCorrente instanceof Artista) {
+            for(Brano b: prenotazioneCorrente.getEvento().getListaBrani()){
+                if(b.equals(((Artista) utenteCorrente).getBrano(codice_brano))){
+                    throw new Exception("Brano già presente in lista");
+                }
+            }
+
             prenotazioneCorrente.addBrano(((Artista) utenteCorrente).getBrano(codice_brano));
         }
         prenotazioneCorrente = null;
@@ -389,6 +395,8 @@ public class Eventfy {
 
     // Supponiamo di aver inserito l'id di una prenotazione ricavato dalla lista
     // delle prenotazioni che ci siamo ritornati
+
+    //utilizzata acnhe nell'estensione del caso d'uso UC3
     public void confermaEliminazione(int codice_prenotazione) {
 
         Prenotazione daEliminare = mappaPrenotazioniTemp.get(codice_prenotazione);

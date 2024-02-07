@@ -290,12 +290,32 @@ public class EventfyTest {
         eventfy.logIn(3);
 
         int lunghezzaScalettaIniziale = eventfy.getPrenotazione(5).getEvento().getListaBrani().size();
+        System.out.println(lunghezzaScalettaIniziale);
 
         eventfy.aggiungiScaletta();
-        eventfy.recuperaBraniArtista(5);
-        eventfy.aggiungiBrano(0);
-
+        List<Brano> listaBrani = eventfy.recuperaBraniArtista(5);
+        for(Brano b: listaBrani){
+            System.out.println(b);
+        }
+        try {
+            eventfy.aggiungiBrano(0);
+        } catch (Exception e) {
+            fail();
+            return;
+        }
         assertEquals(lunghezzaScalettaIniziale + 1, eventfy.getPrenotazione(5).getEvento().getListaBrani().size());
+
+        //consideriamo il caso in cui aggiungiamo un brano già presente
+
+        eventfy.getPrenotazione(5).getEvento().getListaBrani().size();
+        eventfy.aggiungiScaletta();
+        eventfy.recuperaBraniArtista(5);
+
+        try {
+            eventfy.aggiungiBrano(0);
+        } catch (Exception e) {
+            assertEquals("Brano già presente in lista", e.getMessage());
+        }
 
     }
 

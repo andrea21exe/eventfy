@@ -147,11 +147,43 @@ public class MenuGestore extends MenuStrategy {
         Prenotazione p = sistema.selezionaPrenotazionePendente(codice_prenotazione);
         if (p != null) {
             System.out.println("Hai selezionato la prenotazione:" + p);
-            try {
-                sistema.accettaPrenotazione();
-            } catch (Exception e) {
-                System.out.println("La data per il relativo impianto è già occupata");
+            System.out.println("Digita 0 se vuoi accettare la prenotazione, 1 per rifiutarla o 2 per tornare indietro");
+
+            int scelta = 0; // Inizializzo una variabile 
+
+            while (!input.hasNextInt()) {
+                System.out.println("Inserisci un numero intero, riprova:");
+                input.next(); // Scarta l'input non valido
             }
+            
+            // Leggi l'input come intero
+            scelta = input.nextInt();
+            
+            // Loop per assicurarsi che l'input sia tra 0, 1 o 2
+            while (scelta != 0 && scelta != 1 && scelta != 2) {
+                System.out.println("Input non valido. Devi inserire 0, 1 o 2:");
+                scelta = input.nextInt(); // Leggi un nuovo input
+            }
+
+            switch (scelta) {
+                case 0:
+                    try {
+                    sistema.accettaPrenotazione();
+                    } catch (Exception e) {
+                    System.out.println("La data per il relativo impianto è già occupata");
+                    }
+                    
+                    break;
+                case 1:
+                    
+                    sistema.confermaEliminazione(codice_prenotazione);
+                    System.out.println("Prenotazione annullata");
+
+                    break;
+                case 2:
+                    return;
+            }
+
             // Se la prenotazione non è valida
         } else {
             System.out.println("Prenotazione non valida.");
