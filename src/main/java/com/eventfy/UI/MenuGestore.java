@@ -144,7 +144,13 @@ public class MenuGestore extends MenuStrategy {
         }
         int codice_prenotazione = input.nextInt();
         // Se la prenotazione è valida
-        Prenotazione p = sistema.selezionaPrenotazionePendente(codice_prenotazione);
+        Prenotazione p;
+        try {
+            p = sistema.selezionaPrenotazionePendente(codice_prenotazione);
+        } catch (Exception e) {
+            System.out.println("La prenotazione inserita non è valida");
+            return;
+        }
         if (p != null) {
             System.out.println("Hai selezionato la prenotazione:" + p);
             System.out.println("Digita 0 se vuoi accettare la prenotazione, 1 per rifiutarla o 2 per tornare indietro");

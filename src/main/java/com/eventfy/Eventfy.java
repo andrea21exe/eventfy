@@ -130,7 +130,7 @@ public class Eventfy {
 
         prenotazioneCorrente = mappaPrenotazioniTemp.get(codice_prenotazione);
         if(prenotazioneCorrente == null){
-            prenotazioneCorrente = null;
+
             throw new Exception("Hai inserito un ID della prenotazione errato");
         }
         return prenotazioneCorrente;
@@ -683,13 +683,14 @@ public class Eventfy {
 
         // Inviti (A1 è il mittente di 2 inviti e destinatario di 2 inviti)
         
-          Invito inv1 = new Invito(p3.getEvento(), p3.getArtista(), a2);
-          Invito inv2 = new Invito(p4.getEvento(), p4.getArtista(), a2);
+        Invito inv1 = new Invito(p3.getEvento(), p3.getArtista(), a2);
+        Invito inv2 = new Invito(p4.getEvento(), p4.getArtista(), a2);
+
+        Invito inv3 = new Invito(p2.getEvento(), p2.getArtista(), a1);
           
-          
-         
-          a2.addInvitoPendente(inv1);
-          a2.addInvitoPendente(inv2);
+        a1.addInvitoPendente(inv3);
+        a2.addInvitoPendente(inv1);
+        a2.addInvitoPendente(inv2);
          
 
         // Popola le recensioni

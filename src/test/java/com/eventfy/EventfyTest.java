@@ -228,13 +228,32 @@ public class EventfyTest {
         assertNotNull(eventfy.getMapPrenotazioniTemp());
 
         // SCELGO il codice di prenotazione 7 già inserito nel sistema
-        Prenotazione pRicercata = eventfy.selezionaPrenotazionePendente(7);
+        Prenotazione pRicercata = null;
+        try {
+            pRicercata = eventfy.selezionaPrenotazionePendente(7);
+        } catch (Exception e) {
+            fail();
+        }
         // Verifica che la prenotazione sia stata selezionata correttamente
         assertNotNull(pRicercata);
         assertNotNull(eventfy.getPrenotazioneCorrente());
         assertEquals(7, pRicercata.getId());
 
         eventfy.setPrenotazioneCorrenteNull();
+
+        //controllo che se viene passato un id non presente mi da errore
+
+        assertNull(eventfy.getPrenotazioneCorrente());
+
+        eventfy.mostraPrenotazioniPendenti();
+        assertNotNull(eventfy.getMapPrenotazioniTemp());
+
+        // SCELGO il codice di prenotazione 7 già inserito nel sistema
+        try {
+            pRicercata = eventfy.selezionaPrenotazionePendente(6);
+        } catch (Exception e) {
+            assertEquals("Hai inserito un ID della prenotazione errato", e.getMessage());
+        }
     }
 
     @Test
@@ -242,7 +261,14 @@ public class EventfyTest {
         // Facciamo il logIn con un gestore esistente
         eventfy.logIn(0);
         eventfy.mostraPrenotazioniPendenti();
-        Prenotazione pRicercata = eventfy.selezionaPrenotazionePendente(0);
+
+        Prenotazione pRicercata = null;
+
+        try {
+            pRicercata = eventfy.selezionaPrenotazionePendente(0);
+        } catch (Exception e) {
+            fail();
+        }
         // Accetta la prenotazione selezionata
         // System.out.println(pRicercata);
         try {
@@ -250,7 +276,6 @@ public class EventfyTest {
         } catch (Exception e) {
             fail();
         }
-
         // Verifica che la prenotazione sia stata spostata correttamente da pendente ad
         // accettata
         assertTrue(eventfy.getPrenotazioniAccettate().containsValue(pRicercata));
@@ -262,7 +287,11 @@ public class EventfyTest {
 
         // Proviamo ad accettare una prenotazione che ha una stessa data di P0
         eventfy.mostraPrenotazioniPendenti();
-        pRicercata = eventfy.selezionaPrenotazionePendente(13);
+        try {
+            pRicercata = eventfy.selezionaPrenotazionePendente(13);
+        } catch (Exception e) {
+            assertEquals("Hai inserito un ID della prenotazione errato", e.getMessage());
+        }
 
         try {
             eventfy.accettaPrenotazione();
@@ -362,23 +391,35 @@ public class EventfyTest {
         int sizeMappaInvitiIniziale = artista.getListaInvitiPendenti().size();
 
         try {
-            eventfy.invitaArtista(16);
+            eventfy.invitaArtista(5);
+        } catch (Exception e) {
+            fail();
+        }
+        // Deve essere stato registrato un invito
+        assertEquals(sizeMappaInvitiIniziale + 1, artista.getListaInvitiPendenti().size());
+
+
+        //Ora controlliamo il caso di fallimento della funzione
+        //prima nel caso in cui si inserisce un id non esistente
+        eventfy.mostraPrenotazioniAccettate();
+        eventfy.selezionaPrenotazioneInvito(4);
+
+        try {
+            eventfy.invitaArtista(12);
         } catch (Exception e) {
             assertEquals("L'artista non esiste", e.getMessage());
         }
 
+        //ora nel caso in cui l'artista è stato già invitato
+
+        eventfy.mostraPrenotazioniAccettate();
+        eventfy.selezionaPrenotazioneInvito(4);
+
         try {
-            eventfy.invitaArtista(4);
-        } catch (Exception e1) {
-            assertEquals("Artista ", e1.getMessage());
+            eventfy.invitaArtista(5);
+        } catch (Exception e) {
+            assertEquals("Artista già invitato", e.getMessage());
         }
-        try {
-            eventfy.invitaArtista(3);
-        } catch (Exception e1) {
-            assertEquals("Artista ", e1.getMessage());
-        }
-        // Deve essere stato registrato un invito
-        assertEquals(sizeMappaInvitiIniziale + 1, artista.getListaInvitiPendenti().size());
 
     }
 
@@ -404,42 +445,41 @@ public class EventfyTest {
         // Creo ed accetto un invito;
 
         // Creazione invito
-        eventfy.logIn(3);// Artista TheWeeknd
-        eventfy.mostraPrenotazioniAccettate();
-        eventfy.selezionaPrenotazioneInvito(4);
-        try {
-            eventfy.invitaArtista(12);
-        } catch (Exception e) {
-            assertEquals("L'artista non esiste", e.getMessage());
-        }
-        try {
-            eventfy.invitaArtista(5);
-        } catch (Exception e1) {
-            assertEquals("l'artista è già stato", e1.getMessage());
-        }
-        eventfy.logIn(5);
+        eventfy.logIn(4);// Artista TheWeeknd
+
         Artista artistaCorrente = (Artista) eventfy.getUtenteCorrente();
 
         int numInvitiAccettatiIniziale = artistaCorrente.getListaInvitiAccettati().size();
         int numInvitiPendentiIniziale = artistaCorrente.getListaInvitiPendenti().size();
+        
+        List<Invito> listaInviti =eventfy.gestisciInvito();
 
-        eventfy.gestisciInvito();
-        //L'invito creato ha id=2
-       
+        for(Invito i: listaInviti){
+            System.out.println(i);
+        }
+        
         try {
-            eventfy.accettaInvito(4);
+            eventfy.accettaInvito(1);
         } catch (Exception e) {
-            assertEquals("Id invito non valido", e.getMessage());
+            fail();
         }
 
-        try {
-            eventfy.accettaInvito(2);
-        } catch (Exception e) {
-            assertEquals("Id invito non valido", e.getMessage());
-        }
 
         assertEquals(numInvitiAccettatiIniziale + 1, artistaCorrente.getListaInvitiAccettati().size());
         assertEquals(numInvitiPendentiIniziale - 1, artistaCorrente.getListaInvitiPendenti().size());
+
+
+        //ora verifico quando il test fallisce
+
+        eventfy.gestisciInvito();
+        
+        try {
+            eventfy.accettaInvito(3);
+        } catch (Exception e) {
+            assertEquals("Id invito non valido", e.getMessage());
+        }
+
+
 
     }
 
@@ -451,41 +491,42 @@ public class EventfyTest {
 
         // Creazione invito
         eventfy.logIn(3);// Artista TheWeeknd
-        eventfy.mostraPrenotazioniAccettate();
-        eventfy.selezionaPrenotazioneInvito(4);
-        try {
-            eventfy.invitaArtista(12);
-        } catch (Exception e) {
-            assertEquals("L'artista non esiste", e.getMessage());
-        }
-        try {
-            eventfy.invitaArtista(5);
-        } catch (Exception e1) {
-            assertEquals("l'artista è già stato", e1.getMessage());
-        }
-        eventfy.logIn(5);
+
         Artista artistaCorrente = (Artista) eventfy.getUtenteCorrente();
 
         int numInvitiRifiutatiIniziale = artistaCorrente.getListaInvitiRifiutati().size();
         int numInvitiPendentiIniziale = artistaCorrente.getListaInvitiPendenti().size();
+        
+        List<Invito> listaInviti =eventfy.gestisciInvito();
 
-        eventfy.gestisciInvito();
-        //L'invito creato ha id=2
-       
-        try {
-            eventfy.rifiutaInvito(4);
-        } catch (Exception e1) {
-            assertEquals("Id invito non valido", e1.getMessage());
+        for(Invito i: listaInviti){
+            System.out.println(i);
         }
-
+      
         try {
             eventfy.rifiutaInvito(2);
         } catch (Exception e1) {
-            assertEquals("Id invito non valido", e1.getMessage());
+            fail();
         }
-        
+
         assertEquals(numInvitiRifiutatiIniziale + 1, artistaCorrente.getListaInvitiRifiutati().size());
         assertEquals(numInvitiPendentiIniziale - 1, artistaCorrente.getListaInvitiPendenti().size());
+
+        //ora verifichiamo in caso di errore
+
+        numInvitiRifiutatiIniziale = artistaCorrente.getListaInvitiRifiutati().size();
+        numInvitiPendentiIniziale = artistaCorrente.getListaInvitiPendenti().size();
+        
+        eventfy.gestisciInvito();
+
+        try {
+            eventfy.rifiutaInvito(10);
+        } catch (Exception e1) {
+            assertEquals("Id invito non valido", e1.getMessage());
+        }
+
+        assertEquals(numInvitiRifiutatiIniziale, artistaCorrente.getListaInvitiRifiutati().size());
+        assertEquals(numInvitiPendentiIniziale, artistaCorrente.getListaInvitiPendenti().size());
 
     }
 
@@ -795,7 +836,11 @@ public class EventfyTest {
 
         eventfy.logIn(4);
 
-        eventfy.accettaInvito(0);
+        try {
+            eventfy.accettaInvito(0);
+        } catch (Exception e) {
+            fail();
+        }
 
        List<Prenotazione> listaPrenotazioni= eventfy.mostraPrenotazioniAccettate();
 
