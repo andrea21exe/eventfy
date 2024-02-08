@@ -501,7 +501,6 @@ public class EventfyTest {
         assertEquals(numInvitiPendentiIniziale - 1, artistaCorrente.getListaInvitiPendenti().size());
 
         // ora verifichiamo in caso di errore
-
         numInvitiRifiutatiIniziale = artistaCorrente.getListaInvitiRifiutati().size();
         numInvitiPendentiIniziale = artistaCorrente.getListaInvitiPendenti().size();
 
@@ -780,15 +779,16 @@ public class EventfyTest {
         int id_prenotazione = 11;
         eventfy.logIn(id_utente);
 
-        //Provo ad effettuare una recensione scorretta
+        // Provo ad effettuare una recensione scorretta
         int voto = -1;
         String commento = "Bello";
         try {
             eventfy.confermaRecensioneEvento(id_prenotazione, commento, voto);
         } catch (Exception e) {
-            assertEquals("Il valore deve essere compreso tra 0 a 5", e.getMessage());;
+            assertEquals("Il valore deve essere compreso tra 0 a 5", e.getMessage());
+            ;
         }
-        
+
         // Confronto il numero di recensioni di un evento prima e dopo la conferma di
         // una nuova recensione
         int numRecensioniIniziali = eventfy.getPrenotazione(id_prenotazione).getNumRecensioniEvento();
@@ -802,7 +802,6 @@ public class EventfyTest {
         // il numero di recensioni iniziale e finale deve differire di 1
         assertEquals(numRecensioniIniziali + 1, eventfy.getPrenotazione(id_prenotazione).getNumRecensioniEvento());
 
-
         // Provo a rieffettuare la procedura con una prenotazione non recensibile
         id_prenotazione = 12;
         numRecensioniIniziali = eventfy.getPrenotazione(id_prenotazione).getNumRecensioniEvento();
@@ -811,15 +810,15 @@ public class EventfyTest {
         } catch (Exception e) {
             assertEquals("Evento non recensibile", e.getMessage());
         }
-        
-        //provo a recensire nuovamente lo stesso evento
+
+        // provo a recensire nuovamente lo stesso evento
         id_prenotazione = 11;
         try {
             eventfy.confermaRecensioneEvento(id_prenotazione, commento, voto);
         } catch (Exception e) {
             assertEquals("L'evento è già stato recensito dal fan corrente", e.getMessage());
         }
-        
+
     }
 
     @Test
@@ -940,7 +939,6 @@ public class EventfyTest {
     }
 
     @Test
-
     void mostraInvitiAccettatiTest() {
 
         eventfy.logIn(4);
@@ -988,6 +986,43 @@ public class EventfyTest {
 
         // verifico che la dimensione della lista sia corretta
         assertEquals(1, listaRecensioni.size());
+
+    }
+
+    @Test
+    void mostraInvitiRifiutatiTest() throws Exception {
+
+        eventfy.logIn(5);
+        // Ottiene la lista degli inviti rifiutati iniziali
+        List<Invito> invitiRifiutatiIniziale = eventfy.mostraInvitiRifiutati();
+
+        // verifico che mi venga ritornata una lista non nulla
+        assertNotNull(invitiRifiutatiIniziale);
+
+        try {
+            eventfy.rifiutaInvito(3);
+        } catch (Exception e1) {
+            fail();
+        }
+
+        // Ottiene la lista degli inviti rifiutati dopo il rifiuto
+        List<Invito> invitiRifiutati = eventfy.mostraInvitiRifiutati();
+        // verifico che mi venga ritornata una lista non nulla
+        assertNotNull(invitiRifiutatiIniziale);
+        // Verifica che il numero di inviti rifiutati dopo il rifiuto sia aumentato di
+        // uno rispetto all'iniziale
+        assertEquals(invitiRifiutatiIniziale.size() + 1, invitiRifiutati.size());
+
+        // ora verifico quando il test fallisce
+        try {
+            eventfy.rifiutaInvito(10);
+        } catch (Exception e1) {
+            assertEquals("Id invito non valido", e1.getMessage());
+        }
+
+        // Verifica che il numero di inviti rifiutati dopo il rifiuto non sia aumentato
+        // di uno rispetto all'iniziale
+        assertEquals(invitiRifiutatiIniziale.size() + 1, invitiRifiutati.size());
 
     }
 

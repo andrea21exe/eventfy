@@ -32,8 +32,9 @@ public class MenuArtista extends MenuStrategy {
         System.out.println("10. Visualizza i tuoi brani");
         System.out.println("11. Visualizza recensioni sui tuoi eventi");
         System.out.println("12. Visualizza gli inviti inviati ed accettati per un evento");
-        System.out.println("13. Visualizza le recensioni che hai inserito");
-        System.out.println("14. Logout");
+        System.out.println("13. Visualizza tutti gli inviti rifiutati ");
+        System.out.println("14. Visualizza le recensioni che hai inserito");
+        System.out.println("15. Logout");
     }
 
     @Override
@@ -88,11 +89,15 @@ public class MenuArtista extends MenuStrategy {
                 invitiAccettatiMittente();
                 break;
             case 13:
-                System.out.println("Hai selezionato l'Opzione 12");
-                mostraRecensioniInserite();
+                System.out.println("Hai selezionato l'Opzione 13");
+                invitiRifiutatiMittente();
                 break;
             case 14:
                 System.out.println("Hai selezionato l'Opzione 14");
+                mostraRecensioniInserite();
+                break;
+            case 15:
+                System.out.println("Hai selezionato l'Opzione 15");
                 logout();
                 break;
             default:
@@ -559,6 +564,25 @@ public class MenuArtista extends MenuStrategy {
             return;
         }
 
+        System.out.println("Gli inviti accettati sono:");
+        for (Invito i : listaInviti) {
+            System.out.println(i);
+        }
+
+    }
+
+    private void invitiRifiutatiMittente() {
+
+        Scanner input = new Scanner(System.in);
+
+        List<Invito> listaInviti = sistema.mostraInvitiRifiutati();
+
+        if (listaInviti.isEmpty()) {
+            System.out.println("Nessun invito rifiutato");
+            return;
+        }
+
+        System.out.println("Gli inviti rifiutati sono:");
         for (Invito i : listaInviti) {
             System.out.println(i);
         }

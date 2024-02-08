@@ -102,7 +102,7 @@ public class MenuFan extends MenuStrategy {
         String commento = input.nextLine();
         // per evitare che il cursore rimanga incastrato e non funzioni correttamente
         input.nextLine();
-        
+
         // Richiede all'utente di inserire il voto per l'evento
         System.out.print("Inserisci il voto (da 0 a 5): ");
         int voto = input.nextInt();

@@ -47,13 +47,13 @@ public class Evento {
     public LocalDate getData() {
         return this.data;
     }
-    
-    public LocalTime getOra(){
+
+    public LocalTime getOra() {
         return ora;
     }
 
-    public void addFan(Fan utenteCorrente) throws Exception{
-        if(this.listaPartecipanti.contains(utenteCorrente)){
+    public void addFan(Fan utenteCorrente) throws Exception {
+        if (this.listaPartecipanti.contains(utenteCorrente)) {
             throw new Exception("Utente già partecipante");
         }
         this.listaPartecipanti.add(utenteCorrente);
@@ -64,8 +64,8 @@ public class Evento {
         return this.listaPartecipanti;
     }
 
-    public void recensisci(String commento, int voto, Fan fan) throws Exception{
-        if(fanHaRecensito(fan)){
+    public void recensisci(String commento, int voto, Fan fan) throws Exception {
+        if (fanHaRecensito(fan)) {
             throw new Exception("L'evento è già stato recensito dal fan corrente");
         }
         RecensioneEvento recensione = new RecensioneEvento(commento, voto, fan);
@@ -76,28 +76,29 @@ public class Evento {
         return this.listaPartecipanti.contains(fan);
     }
 
-    public boolean hasBrano(int id){
-        for(Brano b : listaBrani){
-            if(b.hasId(id)){
+    public boolean hasBrano(int id) {
+        for (Brano b : listaBrani) {
+            if (b.hasId(id)) {
                 return true;
             }
         }
         return false;
     }
 
-    public boolean isRecensibile(){
+    public boolean isRecensibile() {
         return LocalDate.now().isAfter(this.data);
     }
 
-    public boolean isEliminabile(){
-        return LocalDate.now().isBefore(this.data);
-    }
-    //uguali
-    public boolean isPartecipabile(){
+    public boolean isEliminabile() {
         return LocalDate.now().isBefore(this.data);
     }
 
-    public int getNumRecensioni(){
+    // uguali
+    public boolean isPartecipabile() {
+        return LocalDate.now().isBefore(this.data);
+    }
+
+    public int getNumRecensioni() {
         return this.listaRecensioni.size();
     }
 
@@ -105,24 +106,24 @@ public class Evento {
         return listaRecensioni;
     }
 
-    public void creaInvito(Artista artistaMittente){
+    public void creaInvito(Artista artistaMittente) {
         this.invito = new Invito(this, artistaMittente);
     }
 
-    public void setDestinatarioInvito(Artista artista){
+    public void setDestinatarioInvito(Artista artista) {
         this.invito.setDestinatario(artista);
         this.invito = null;
     }
 
-    public List<Invito> getInvitiAccettati(){
+    public List<Invito> getInvitiAccettati() {
         return this.listaInviti;
     }
-    
-    public void addInvito(Invito in){
+
+    public void addInvito(Invito in) {
         listaInviti.add(in);
     }
 
-    public boolean isScaduto(){
+    public boolean isScaduto() {
         LocalDate dataScadenza = this.getData().minusMonths(3);
         return LocalDate.now().isAfter(dataScadenza);
     }
@@ -130,12 +131,13 @@ public class Evento {
     @Override
     public String toString() {
         return "-- Evento [id=" + id + ", titolo=" + titolo + ", descrizione=" + descrizione + ", durata=" + durata
-                + ", data=" + data + ", ora=" + ora +", partecipanti="+ listaPartecipanti.size() +  ", \nbrani=" + listaBrani + "]";
+                + ", data=" + data + ", ora=" + ora + ", partecipanti=" + listaPartecipanti.size() + ",\nbrani="
+                + listaBrani + "]";
     }
 
-    private boolean fanHaRecensito(Fan fan){
-        for(RecensioneEvento recensione : this.listaRecensioni){
-            if(recensione.hasFan(fan)){
+    private boolean fanHaRecensito(Fan fan) {
+        for (RecensioneEvento recensione : this.listaRecensioni) {
+            if (recensione.hasFan(fan)) {
                 return true;
             }
         }

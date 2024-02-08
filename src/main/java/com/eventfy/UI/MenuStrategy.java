@@ -37,7 +37,7 @@ public abstract class MenuStrategy {
 
     abstract void processaScelta(int scelta) throws LogException, Exception;
 
-    protected void logout() throws LogoutException{
+    protected void logout() throws LogoutException {
         sistema.logout();
         throw new LogoutException();
     }

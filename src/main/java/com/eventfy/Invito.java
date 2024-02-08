@@ -50,18 +50,18 @@ public class Invito {
         return artista == this.artistaDestinatario;
     }
 
-    public void addInvitoEvento(){
+    public void addInvitoEvento() {
         this.evento.addInvito(this);
     }
 
-    public boolean hasEvento(Evento evento){
+    public boolean hasEvento(Evento evento) {
         return this.evento.equals(evento);
     }
 
     @Override
     public String toString() {
-        return "Invito [id=" + id + ", data=" + data + ", ora=" + ora + ", evento=" + evento + ", artistaMittente="
-                + artistaMittente + ", artistaDestinatario=" + artistaDestinatario + "]";
+        return "Invito [id=" + id + ", data=" + data + ", ora=" + ora + ", artistaMittente="
+                + artistaMittente + ", artistaDestinatario=" + artistaDestinatario + ", evento=" + evento + "]";
     }
 
 }

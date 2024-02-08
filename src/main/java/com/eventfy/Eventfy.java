@@ -445,9 +445,6 @@ public class Eventfy {
         return new ArrayList<Prenotazione>(mappaPrenotazioniTemp.values());
     }
 
-    // supponiamo di recuperare della lista degli eventi ritornata l'id di un
-    // determinato evento/prenotazione
-    // prenotazione ed il relativo evento hanno stesso ID
     public void confermaPartecipazione(int id_evento) throws Exception {
 
         Prenotazione p = mappaPrenotazioniTemp.get(id_evento);
@@ -688,10 +685,12 @@ public class Eventfy {
         Invito inv2 = new Invito(p4.getEvento(), p4.getArtista(), a2);
 
         Invito inv3 = new Invito(p2.getEvento(), p2.getArtista(), a1);
+        Invito inv4 = new Invito(p5.getEvento(), p5.getArtista(), a3);
 
         a1.addInvitoPendente(inv3);
         a2.addInvitoPendente(inv1);
         a2.addInvitoPendente(inv2);
+        a3.addInvitoPendente(inv4);
 
         // Popola le recensioni
         try {
@@ -830,10 +829,8 @@ public class Eventfy {
 
     // UC23
     public List<Invito> mostraInvitiRifiutati() {
-
         Artista a = (Artista) utenteCorrente;
-        List<Invito> InvitiRifiutati = a.getListaInvitiRifiutati();
-        return InvitiRifiutati;
+        return a.getListaInvitiRifiutati();
     }
 
 }
