@@ -5,8 +5,6 @@ import java.util.Scanner;
 
 import com.eventfy.Impianto;
 import com.eventfy.Prenotazione;
-import com.eventfy.RecensioneEvento;
-import com.eventfy.RecensioneImpianto;
 import com.eventfy.Exceptions.LogException;
 
 public class MenuGestore extends MenuStrategy {
@@ -43,7 +41,7 @@ public class MenuGestore extends MenuStrategy {
                 visualizzaImpianti();
                 break;
             case 6:
-                mostraRecensione();
+                mostraRecensioni();
                 break;
             case 7:
                 logout();
@@ -255,25 +253,15 @@ public class MenuGestore extends MenuStrategy {
 
     }
 
-    private void mostraRecensione() {
+    private void mostraRecensioni() {
 
         visualizzaImpianti();
 
         System.out.println("inserisci l'id dell'impianto");
-
         Scanner input = new Scanner(System.in);
-
         int id = input.nextInt();
 
-        List<RecensioneImpianto> listaRecensione = sistema.mostraRecensioneImpianti(id);
+        sistema.mostraRecensioneImpianti(id);
 
-        if (listaRecensione.isEmpty()) {
-            System.out.println("Non hai nessuna recensione sul tuo impianto");
-            return;
-        }
-
-        for (RecensioneImpianto rI : listaRecensione) {
-            System.out.println(rI);
-        }
     }
 }

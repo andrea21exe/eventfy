@@ -3,12 +3,8 @@ package com.eventfy.UI;
 import java.util.List;
 import java.util.Scanner;
 
-import javax.sound.midi.SysexMessage;
-
 import com.eventfy.Evento;
 import com.eventfy.Prenotazione;
-import com.eventfy.Recensione;
-import com.eventfy.RecensioneEvento;
 import com.eventfy.Utente;
 import com.eventfy.Exceptions.LogException;
 
@@ -19,9 +15,8 @@ public class MenuFan extends MenuStrategy {
         System.out.println("Seleziona un'opzione:");
         System.out.println("1. Partecipa ad un evento");
         System.out.println("2. Scrivi una recensione per un evento a cui hai partecipato");
-        System.out.println("3. Visualizza eventi di un dato artista");
-        System.out.println("4. Visualizza commenti inseirti");
-        System.out.println("5. Logout");
+        System.out.println("3. Visualizza commenti inseriti");
+        System.out.println("4. Logout");
 
     }
 
@@ -35,12 +30,9 @@ public class MenuFan extends MenuStrategy {
                 inserisciRecensioneEvento();
                 break;
             case 3:
-                visualizzaEventiArtista();
-                break;
-            case 4:
                 visualizzaRecensioni();
                 break;
-            case 5:
+            case 4:
                 logout();
                 break;
             default:
@@ -114,40 +106,8 @@ public class MenuFan extends MenuStrategy {
         }
     }
 
-    private void visualizzaEventiArtista() {
-
-        Scanner input = new Scanner(System.in);
-        System.out.print("Inserisci il nome dell'artista di cui vuoi vedere eventi disponibili: ");
-        String nomeArtista = input.nextLine();
-
-        List<Evento> eventiArtista = sistema.mostraEventiArtista(nomeArtista);
-
-        if (eventiArtista == null || eventiArtista.isEmpty()) {
-            System.out.println("Nessuna evento presente dell' artista: " + nomeArtista);
-            return;
-        }
-
-        // Stampa gli eventi
-        System.out.println("eventi artista " + nomeArtista);
-
-        for (Evento e : eventiArtista) {
-            System.out.println(e);
-            System.out.println("\n\n");
-        }
-    }
-
     private void visualizzaRecensioni() {
-        List<RecensioneEvento> listaRecensioni = sistema.mostraRecensioniFan();
-
-        if (listaRecensioni.isEmpty()) {
-            System.out.println("Non hai nessuna recensione inserita");
-            return;
-        }
-
-        for (RecensioneEvento re : listaRecensioni) {
-            System.out.println(re);
-            System.out.println("");
-        }
+        sistema.mostraRecensioniFan();
     }
 
 }

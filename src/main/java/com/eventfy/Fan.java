@@ -46,4 +46,28 @@ public class Fan extends Utente {
         return false;
     }
 
+    public void printRecensioni(){
+
+        if(this.listaEventi.isEmpty()){
+            System.out.println("Nessuna recensione");
+            return;
+        }
+
+        boolean haRecensito = false;
+        for(Evento e : this.listaEventi){
+            if(e.fanHaRecensito(this)){
+                haRecensito = true;
+            }
+        }
+
+        if(!haRecensito){
+            System.out.println("Nessuna recensione");
+            return;
+        }
+
+        for(Evento e : this.listaEventi){
+            e.printRecensioniDi(this);
+        }
+    }
+
 }

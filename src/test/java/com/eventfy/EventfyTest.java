@@ -837,31 +837,6 @@ public class EventfyTest {
     }
 
     @Test
-    void visualizzaEventiOrganizzatiTest() {
-
-        // faccio il login con un'artista
-        eventfy.logIn(3);
-
-        List<Evento> eventiOrganizzati = eventfy.visualizzaEventiOrganizzati();
-
-        // verifico che mi venga ritornata una lista
-        assertNotNull(eventiOrganizzati);
-
-        assertEquals(8, eventiOrganizzati.size());
-    }
-
-    @Test
-    void mostraEventiArtistaTest() {
-
-        List<Evento> eventiOrganizzatiArtista = eventfy.mostraEventiArtista("theweeknd");
-
-        // verifico che mi venga ritornata una lista
-        assertNotNull(eventiOrganizzatiArtista);
-
-        assertEquals(8, eventiOrganizzatiArtista.size());
-    }
-
-    @Test
     void mostraPrenotazioniPendentiGestoreTest() {
 
         // faccio il login con un gestore
@@ -874,41 +849,6 @@ public class EventfyTest {
 
         // verifico che la dimensione della lista sia corretta
         assertEquals(1, prenotazioniPendenti.size());
-    }
-
-    @Test
-    void mostraRecensioneImpiantiTest() {
-
-        // faccio il login con un gestore
-        eventfy.logIn(1);
-
-        // supponiamo che il gestore abbia inserito l'id dell'impianto di cui vuole
-        // vedere le recensioni
-
-        List<RecensioneImpianto> recensioneImpianto = eventfy.mostraRecensioneImpianti(2);
-
-        // verifico che mi venga ritornata una lista
-        assertNotNull(recensioneImpianto);
-
-        // verifico che la dimensione della lista sia corretta
-        assertEquals(1, recensioneImpianto.size());
-    }
-
-    @Test
-    void mostraRecensioneEventoTest() {
-
-        // faccio il login con un artista
-        eventfy.logIn(4);
-
-        // suppongo che l'artista abbia scelto l'id dell'evento
-        List<RecensioneEvento> recensioneEvento = eventfy.mostraRecensioneEvento(2);
-
-        // verifico che mi venga ritornata una lista
-        assertNotNull(recensioneEvento);
-
-        // verifico che la dimensione della lista sia corretta
-        assertEquals(1, recensioneEvento.size());
-
     }
 
     @Test
@@ -937,7 +877,7 @@ public class EventfyTest {
         // verifico che mi venga ritornata una lista
         assertNotNull(listaPrenotazioni);
     }
-
+    /*
     @Test
     void mostraInvitiAccettatiTest() {
 
@@ -958,72 +898,5 @@ public class EventfyTest {
         assertEquals(1, listaPrenotazioni.size());
 
     }
-
-    @Test
-    void mostraRecensioniFanTest() {
-
-        eventfy.logIn(6);
-
-        List<RecensioneEvento> listaRecensioni = eventfy.mostraRecensioniFan();
-
-        // verifico che mi venga ritornata una lista
-        assertNotNull(listaRecensioni);
-
-        // verifico che la dimensione della lista sia corretta
-        assertEquals(1, listaRecensioni.size());
-
-    }
-
-    @Test
-    void mostraRecensioniArtistaTest() {
-
-        eventfy.logIn(3);
-
-        List<RecensioneImpianto> listaRecensioni = eventfy.mostraRecensioniArtista();
-
-        // verifico che mi venga ritornata una lista
-        assertNotNull(listaRecensioni);
-
-        // verifico che la dimensione della lista sia corretta
-        assertEquals(1, listaRecensioni.size());
-
-    }
-
-    @Test
-    void mostraInvitiRifiutatiTest() throws Exception {
-
-        eventfy.logIn(5);
-        // Ottiene la lista degli inviti rifiutati iniziali
-        List<Invito> invitiRifiutatiIniziale = eventfy.mostraInvitiRifiutati();
-
-        // verifico che mi venga ritornata una lista non nulla
-        assertNotNull(invitiRifiutatiIniziale);
-
-        try {
-            eventfy.rifiutaInvito(3);
-        } catch (Exception e1) {
-            fail();
-        }
-
-        // Ottiene la lista degli inviti rifiutati dopo il rifiuto
-        List<Invito> invitiRifiutati = eventfy.mostraInvitiRifiutati();
-        // verifico che mi venga ritornata una lista non nulla
-        assertNotNull(invitiRifiutatiIniziale);
-        // Verifica che il numero di inviti rifiutati dopo il rifiuto sia aumentato di
-        // uno rispetto all'iniziale
-        assertEquals(invitiRifiutatiIniziale.size() + 1, invitiRifiutati.size());
-
-        // ora verifico quando il test fallisce
-        try {
-            eventfy.rifiutaInvito(10);
-        } catch (Exception e1) {
-            assertEquals("Id invito non valido", e1.getMessage());
-        }
-
-        // Verifica che il numero di inviti rifiutati dopo il rifiuto non sia aumentato
-        // di uno rispetto all'iniziale
-        assertEquals(invitiRifiutatiIniziale.size() + 1, invitiRifiutati.size());
-
-    }
-
+     */
 }

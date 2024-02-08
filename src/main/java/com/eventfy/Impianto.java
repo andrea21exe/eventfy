@@ -75,7 +75,7 @@ public class Impianto {
         return this.listaRecensioni;
     }
 
-    public void recensisci(String commento, int voto, Artista artista) throws Exception{
+    public void recensisci(String commento, int voto, Artista artista) throws Exception {
         RecensioneImpianto recensione = new RecensioneImpianto(commento, voto, artista);
         listaRecensioni.add(0, recensione);
     }
@@ -88,6 +88,24 @@ public class Impianto {
             return true;
         }
         return false;
+    }
+
+    public void printRecensioni() {
+        if (this.listaRecensioni.isEmpty()) {
+            System.out.println("Nessuna recensione per questo impianto");
+            return;
+        }
+        for (Recensione r : this.listaRecensioni) {
+            System.out.println(r);
+        }
+    }
+
+    public void printRecensioniArtista(Artista artista){
+        for(RecensioneImpianto recensione : this.listaRecensioni){
+            if(recensione.getUtente().equals(artista)){
+                System.out.println(recensione);
+            }
+        }
     }
 
     @Override

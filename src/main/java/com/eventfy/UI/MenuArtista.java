@@ -6,13 +6,9 @@ import java.util.List;
 import java.util.Scanner;
 
 import com.eventfy.Brano;
-import com.eventfy.Evento;
 import com.eventfy.Impianto;
 import com.eventfy.Invito;
 import com.eventfy.Prenotazione;
-import com.eventfy.Recensione;
-import com.eventfy.RecensioneEvento;
-import com.eventfy.RecensioneImpianto;
 import com.eventfy.Utente;
 
 public class MenuArtista extends MenuStrategy {
@@ -24,17 +20,22 @@ public class MenuArtista extends MenuStrategy {
         System.out.println("2. Aggiungi scaletta ad un evento");
         System.out.println("3. Invita artista");
         System.out.println("4. Gestisci Inviti");
+        System.out.println("");
         System.out.println("5. Inserisci una recensione per una struttura");
         System.out.println("6. Elimina prenotazione");
+        System.out.println("");
         System.out.println("7. visualizza prenotazioni pendenti");
-        System.out.println("8. Visualizza eventi organizzati");
+        System.out.println("8. Visualizza i tuoi eventi");
+        System.out.println("");
         System.out.println("9. Registra brano");
         System.out.println("10. Visualizza i tuoi brani");
+        System.out.println("");
         System.out.println("11. Visualizza recensioni sui tuoi eventi");
         System.out.println("12. Visualizza gli inviti inviati ed accettati per un evento");
-        System.out.println("13. Visualizza tutti gli inviti rifiutati ");
-        System.out.println("14. Visualizza le recensioni che hai inserito");
-        System.out.println("15. Logout");
+        System.out.println("13. Visualizza le recensioni che hai inserito");
+        System.out.println("");
+        System.out.println("14. Logout");
+        System.out.println("");
     }
 
     @Override
@@ -90,14 +91,10 @@ public class MenuArtista extends MenuStrategy {
                 break;
             case 13:
                 System.out.println("Hai selezionato l'Opzione 13");
-                invitiRifiutatiMittente();
+                mostraRecensioniInserite();
                 break;
             case 14:
                 System.out.println("Hai selezionato l'Opzione 14");
-                mostraRecensioniInserite();
-                break;
-            case 15:
-                System.out.println("Hai selezionato l'Opzione 15");
                 logout();
                 break;
             default:
@@ -454,21 +451,7 @@ public class MenuArtista extends MenuStrategy {
     }
 
     private void visualizzaEventi() {
-
-        List<Evento> eventiOrganizzati = sistema.visualizzaEventiOrganizzati();
-
-        if (eventiOrganizzati == null || eventiOrganizzati.isEmpty()) {
-            System.out.println("Nessuna evento organizzato.");
-            return;
-        }
-
-        // Stampa gli eventi
-        System.out.println("Prenotazioni accettate");
-        for (Evento e : eventiOrganizzati) {
-            System.out.println(e);
-            System.out.println("\n\n");
-        }
-
+        sistema.visualizzaEventiOrganizzati();
     }
 
     private void registraBrano() {
@@ -513,15 +496,10 @@ public class MenuArtista extends MenuStrategy {
 
         int id = input.nextInt();
 
-        List<RecensioneEvento> listaRecensioni = sistema.mostraRecensioneEvento(id);
-
-        if (listaRecensioni.isEmpty()) {
-            System.out.println("Non hai nessuna recensione sul tuo evento");
-            return;
-        }
-
-        for (RecensioneEvento rE : listaRecensioni) {
-            System.out.println(rE);
+        try {
+            sistema.mostraRecensioneEvento(id);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
 
     }
@@ -556,52 +534,16 @@ public class MenuArtista extends MenuStrategy {
 
         System.out.println("Inserisci l'id dell'evento di cui vuoi visualizzare gli inviti");
         int idEvento = input.nextInt();
-
-        List<Invito> listaInviti = sistema.mostraInvitiAccettati(idEvento);
-
-        if (listaInviti.isEmpty()) {
-            System.out.println("Nessun invito accettato per questo evento");
-            return;
+        try {
+            sistema.mostraInvitiAccettati(idEvento);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
-
-        System.out.println("Gli inviti accettati sono:");
-        for (Invito i : listaInviti) {
-            System.out.println(i);
-        }
-
     }
 
-    private void invitiRifiutatiMittente() {
-
-        Scanner input = new Scanner(System.in);
-
-        List<Invito> listaInviti = sistema.mostraInvitiRifiutati();
-
-        if (listaInviti.isEmpty()) {
-            System.out.println("Nessun invito rifiutato");
-            return;
-        }
-
-        System.out.println("Gli inviti rifiutati sono:");
-        for (Invito i : listaInviti) {
-            System.out.println(i);
-        }
-
-    }
 
     private void mostraRecensioniInserite() {
-
-        List<RecensioneImpianto> listaRecensioni = sistema.mostraRecensioniArtista();
-
-        if (listaRecensioni.isEmpty()) {
-            System.out.println("Nessuna recensione inserita");
-            return;
-        }
-
-        for (Recensione r : listaRecensioni) {
-            System.out.println(r);
-            System.out.println("");
-        }
+        sistema.mostraRecensioniArtista();
     }
 
 }

@@ -157,6 +157,18 @@ public class Prenotazione {
         return this.evento.getInvitiAccettati();
     }
 
+    public void printEvento(){
+        System.out.println(this.evento);
+    }
+
+    public void printRecensioniEvento(){
+        this.evento.printRecensioniEvento();
+    }
+
+    public void printInvitiAccettati(){
+        this.evento.printInvitiAccettati();
+    }
+
     @Override
     public String toString() {
         return "-- Prenotazione [id=" + id + ", data=" + data + ", ora=" + ora + ", \nevento=" + evento + ",\nartista="

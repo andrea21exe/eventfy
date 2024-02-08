@@ -519,35 +519,24 @@ public class Eventfy {
     }
 
     // UC5
-    public List<Evento> visualizzaEventiOrganizzati() {
-        ArrayList<Evento> eventiArtista = new ArrayList<Evento>();
+    public void visualizzaEventiOrganizzati() {
+
+        Prenotazione p1;
+        int i = 0;
         for (int key : mappaPrenotazioniAccettate.keySet()) {
-            Prenotazione p1 = mappaPrenotazioniAccettate.get(key);
+            p1 = mappaPrenotazioniAccettate.get(key);
             if (p1.hasArtista((Artista) utenteCorrente)) {
-                eventiArtista.add(p1.getEvento());
+                p1.printEvento();
+                i++;
             }
         }
 
-        return eventiArtista;
-    }
-
-    // UC11
-    public List<Evento> mostraEventiArtista(String nomeArtista) {
-
-        ArrayList<Evento> eventiArtista = new ArrayList<Evento>();
-
-        for (int key : mappaPrenotazioniAccettate.keySet()) {
-            Prenotazione p1 = mappaPrenotazioniAccettate.get(key);
-            if (nomeArtista.equalsIgnoreCase(p1.getArtista().getNome())) {
-                eventiArtista.add(p1.getEvento());
-            }
+        if (i == 0) {
+            System.out.println("Nessun evento");
         }
-
-        return eventiArtista;
     }
 
     // UC14
-
     public List<Prenotazione> mostraPrenotazioniPendentiGestore() {
         ArrayList<Prenotazione> prenotazioniPendenti = new ArrayList<Prenotazione>();
 
@@ -564,38 +553,29 @@ public class Eventfy {
     }
 
     // UC15
-
-    public List<RecensioneImpianto> mostraRecensioneImpianti(int id) {
-
-        ArrayList<RecensioneImpianto> listaRecensioni = new ArrayList<RecensioneImpianto>();
-
+    public void mostraRecensioneImpianti(int id) {
         for (Impianto im : listaImpianti) {
             if (im.hasGestore((Gestore) utenteCorrente) && im.getId() == id) {
-                listaRecensioni.addAll(im.getListaRecensioni());
+                im.printRecensioni();
             }
         }
-
-        return listaRecensioni;
     }
 
     // UC16
     // faccio inserire l'id dell'evento di cui voglio visualizzare le recensioni
-    public List<RecensioneEvento> mostraRecensioneEvento(int id) {
-
-        ArrayList<RecensioneEvento> listaRecensioni = new ArrayList<RecensioneEvento>();
+    public void mostraRecensioneEvento(int id) throws Exception{
 
         Prenotazione p1 = mappaPrenotazioniAccettate.get(id);
-        if (p1.hasArtista((Artista) utenteCorrente) && p1 != null) {
-            listaRecensioni.addAll(p1.getListaRecensioni());
-        } else {
-            listaRecensioni = null;
+
+        if(p1 == null || !(p1.hasArtista((Artista) utenteCorrente))){
+            throw new Exception("Evento non valido");
         }
 
-        return listaRecensioni;
+        p1.printRecensioniEvento();
+
     }
 
     // UC17
-
     // Registra Brano
     public void registraBrano(String titolo, String album, int durata) {
         ((Artista) utenteCorrente).nuovoBrano(titolo, album, durata);
@@ -709,14 +689,13 @@ public class Eventfy {
         }
 
         try {
-            p1.creaRecensione("bello sto evento", 4, f1);
+            p1.creaRecensione("bell' evento", 4, f1);
             p2.creaRecensione("mal gestito", 1, f2);
         } catch (Exception e) {
         }
     }
 
     // UC18
-
     public List<Impianto> visualizzaImpiantiGestore() {
 
         ArrayList<Impianto> listaImpiantiGestore = new ArrayList<Impianto>();
@@ -731,7 +710,6 @@ public class Eventfy {
     }
 
     // UC19
-
     public List<Prenotazione> visualizzaPrenotazioniPendentiArtista() {
 
         ArrayList<Prenotazione> prenotazioniPendenti = new ArrayList<Prenotazione>();
@@ -747,7 +725,6 @@ public class Eventfy {
     }
 
     // per la modifica fatta sugli inviti devo ritornarmi la mappa utenti
-
     public Map<Integer, Utente> getMappaUtenti() {
         return mappaUtenti;
     }
@@ -765,12 +742,16 @@ public class Eventfy {
     // Nella UI viene prima chiamato il metodo mostraPrenotazioniAccettate()
 
     // UC20
-    public List<Invito> mostraInvitiAccettati(int idEvento) {
+    public void mostraInvitiAccettati(int idEvento) throws Exception{
 
         Prenotazione p = mappaPrenotazioniTemp.get(idEvento);
         mappaPrenotazioniTemp = null;
 
-        return p.getInvitiAccettati();
+        if(p == null){
+            throw new Exception("Id non valido");
+        }
+
+        p.printInvitiAccettati();
 
     }
 
@@ -787,50 +768,15 @@ public class Eventfy {
     }
 
     // UC21
-
-    public List<RecensioneEvento> mostraRecensioniFan() {
-
-        ArrayList<RecensioneEvento> recensioniEventi = new ArrayList<RecensioneEvento>();
-
-        List<Evento> listaEventi = ((Fan) utenteCorrente).getListaEventi();
-
-        for (Evento e : listaEventi) {
-            for (Fan f : e.getListaFan()) {
-                if (((Fan) utenteCorrente).equals(f)) {
-                    recensioniEventi.addAll(e.getListaRecensioni());
-                }
-            }
-        }
-
-        return recensioniEventi;
+    public void mostraRecensioniFan() {
+        ((Fan)utenteCorrente).printRecensioni();
     }
 
     // UC22
-
-    public List<RecensioneImpianto> mostraRecensioniArtista() {
-
-        List<Prenotazione> listaPrenotazioni = mostraPrenotazioniAccettate();
-
-        ArrayList<RecensioneImpianto> recensioniImpiantoArtista = new ArrayList<RecensioneImpianto>();
-
-        for (Prenotazione p : listaPrenotazioni) {
-            List<RecensioneImpianto> recensioniImpianti = p.getImpianto().getListaRecensioni();
-
-            for (RecensioneImpianto ri : recensioniImpianti) {
-                if (ri.getUtente().equals((Artista) utenteCorrente)) {
-                    recensioniImpiantoArtista.add(ri);
-                }
-            }
+    public void mostraRecensioniArtista() {
+        for(Impianto impianto : listaImpianti){
+            impianto.printRecensioniArtista((Artista)utenteCorrente);
         }
-
-        return recensioniImpiantoArtista;
-
-    }
-
-    // UC23
-    public List<Invito> mostraInvitiRifiutati() {
-        Artista a = (Artista) utenteCorrente;
-        return a.getListaInvitiRifiutati();
     }
 
 }

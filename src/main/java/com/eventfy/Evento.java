@@ -128,6 +128,38 @@ public class Evento {
         return LocalDate.now().isAfter(dataScadenza);
     }
 
+    public void printRecensioniEvento(){
+        if(this.listaRecensioni.isEmpty()){
+            System.out.println("Nessuna recensione");
+            return;
+        }
+
+        for(Recensione r : this.listaRecensioni){
+            System.out.println(r);
+        }
+    }
+
+    public void printInvitiAccettati(){
+        if(this.listaInviti.isEmpty()){
+            System.out.println("Nessun invito accettato");
+            return;
+        }
+
+        for(Invito i : this.listaInviti){
+            System.out.println(i);
+        }
+
+    }
+
+    public void printRecensioniDi(Fan fan){
+        for(RecensioneEvento r : this.listaRecensioni){
+            if(r.hasFan(fan)){
+                System.out.println(r);
+                break;
+            }
+        }
+    }
+
     @Override
     public String toString() {
         return "-- Evento [id=" + id + ", titolo=" + titolo + ", descrizione=" + descrizione + ", durata=" + durata
@@ -135,7 +167,7 @@ public class Evento {
                 + listaBrani + "]";
     }
 
-    private boolean fanHaRecensito(Fan fan) {
+    public boolean fanHaRecensito(Fan fan) {
         for (RecensioneEvento recensione : this.listaRecensioni) {
             if (recensione.hasFan(fan)) {
                 return true;
