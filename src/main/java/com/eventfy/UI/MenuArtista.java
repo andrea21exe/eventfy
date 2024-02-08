@@ -290,6 +290,59 @@ public class MenuArtista extends MenuStrategy {
 
         // Mostra prenotazioni accettate
         List<Prenotazione> prenotazioni = sistema.mostraPrenotazioniAccettate();
+        if (prenotazioni.isEmpty()) {
+            System.out.println("Nessuna prenotazione");
+            return;
+        }
+
+        for (Prenotazione p : prenotazioni) {
+            System.out.println(p);
+            System.out.println("");
+        }
+
+        System.out.println("Inserisci il codice della prenotazione per cui desideri inviare un invito:");
+        while (!input.hasNextInt()) {
+            System.out.println("Inserisci un numero intero, riprova:");
+            input.next(); // Scarta l'input non valido
+        }
+        int codice_prenotazione = input.nextInt();
+
+        // Mostro gli artisti disponibili
+        List<Utente> artistiDisponibili;
+        try {
+            artistiDisponibili = sistema.selezionaPrenotazioneInvito(codice_prenotazione);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return;
+        }
+
+        System.out.println("Artisti disponibili per l'invito: ");
+        for (Utente artista : artistiDisponibili) {
+            System.out.println(artista);
+        }
+
+        System.out.println("Inserisci l'ID dell'artista che vuoi invitare:");
+        while (!input.hasNextInt()) {
+            System.out.println("Inserisci un numero intero, riprova:");
+            input.next(); // Scarta l'input non valido
+        }
+        int codice_artista = input.nextInt();
+
+        try {
+            sistema.invitaArtista(codice_artista);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return;
+        }
+        System.out.println("Invito inviato con successo!");
+
+
+
+
+
+
+        /*
+
         if (!prenotazioni.isEmpty()) {
             System.out.println("Prenotazioni accettate:");
             for (Prenotazione p : prenotazioni) {
@@ -302,19 +355,19 @@ public class MenuArtista extends MenuStrategy {
                 input.next(); // Scarta l'input non valido
             }
             int codice_prenotazione = input.nextInt();
-           
+
             try {
                 List<Utente> artistiDisponibili = sistema.selezionaPrenotazioneInvito(codice_prenotazione);
-                
-            for (Utente artista : artistiDisponibili) {
-                System.out.println(artista);
-            }
+
+                for (Utente artista : artistiDisponibili) {
+                    System.out.println(artista);
+                }
             } catch (Exception e) {
                 System.out.println("La'prenotazione selezionata è errata");
                 return;
-            } 
+            }
             System.out.println("Artisti disponibili per l'invito:");
-    
+
             // Invita artista
             System.out.println("Inserisci il codice dell'artista che desideri invitare:");
             while (!input.hasNextInt()) {
@@ -322,7 +375,7 @@ public class MenuArtista extends MenuStrategy {
                 input.next(); // Scarta l'input non valido
             }
             int codice_artista = input.nextInt();
-            
+
             try {
                 sistema.invitaArtista(codice_artista);
             } catch (Exception e) {
@@ -341,50 +394,104 @@ public class MenuArtista extends MenuStrategy {
 
             System.out.println("Nessuna prenotazione accettata per questo artista. ");
         }
+
+        */
     }
 
-    private void gestisciInvito(){
+    private void gestisciInvito() {
 
         Scanner input = new Scanner(System.in);
         List<Invito> invitiPendenti = sistema.gestisciInvito();
-        if (!invitiPendenti.isEmpty()) {
-            System.out.println("Inviti Pendenti:");
-            for (Invito invito : invitiPendenti) {
-                System.out.println(invito);
-            }
-            System.out.println("Inserisci il codice dell'invito che vuoi accettare:");
-            while (!input.hasNextInt()) {
-                System.out.println("Inserisci un numero intero, riprova:");
-                input.next(); // Scarta l'input non valido
-            }
-            int codice_invito = input.nextInt();
-            input.nextLine();  
-            System.out.println("Vuoi accettare o rifiutare l'invito");
-            String scelta = input.nextLine();
 
-            if (scelta.equals("accettare")) {
+        if (invitiPendenti.isEmpty()) {
+            System.out.println("Nessun invito pendente");
+            return;
+        }
+
+        // Se ci sono inviti pendenti
+        for (Invito invito : invitiPendenti) {
+            System.out.println(invito);
+        }
+
+        System.out.println("Inserisci il codice dell'invito che vuoi gestire:");
+        while (!input.hasNextInt()) {
+            System.out.println("Inserisci un numero intero, riprova:");
+            input.next();
+        }
+        int codice_invito = input.nextInt();
+        input.nextLine();
+
+        System.out.println("Premi 1 e invio per accettare l'invito");
+        System.out.println("Premi 2 e invio per rifiutare l'invito");
+        while (!input.hasNextInt()) {
+            System.out.println("Inserisci un numero intero, riprova:");
+            input.next();
+        }
+        int azione = input.nextInt();
+
+        switch (azione) {
+            case 1:
                 try {
                     sistema.accettaInvito(codice_invito);
-                    System.out.println("invito accettato");
                 } catch (Exception e) {
-                    System.out.println("id codice errato");
+                    System.out.println(e.getMessage());
                     return;
                 }
-            } else if (scelta.equals("rifiutare")) {
+
+                break;
+            case 2:
                 try {
                     sistema.rifiutaInvito(codice_invito);
-                    System.out.println("invito rifiutato");
-
                 } catch (Exception e) {
-                    System.out.println("id codice errato");
+                    System.out.println(e.getMessage());
                     return;
                 }
-            } else {
-                System.out.println("Scelta non valida");
-            }
-        } else {
-            System.out.println("Nessun invito pendente.");
+                break;
+            default:
+                System.out.println("Scelta non valida, ritorno al menu");
         }
+
+        /*
+         * if (!invitiPendenti.isEmpty()) {
+         * System.out.println("Inviti Pendenti:");
+         * for (Invito invito : invitiPendenti) {
+         * System.out.println(invito);
+         * }
+         * System.out.println("Inserisci il codice dell'invito che vuoi accettare:");
+         * while (!input.hasNextInt()) {
+         * System.out.println("Inserisci un numero intero, riprova:");
+         * input.next(); // Scarta l'input non valido
+         * }
+         * int codice_invito = input.nextInt();
+         * input.nextLine();
+         * System.out.println("Premi 1 e invio per accettare l'invito");
+         * System.out.println("Premi 2 e invio per rifiutare l'invito");
+         * String scelta = input.nextLine();
+         * 
+         * if (scelta.equals("accettare")) {
+         * try {
+         * sistema.accettaInvito(codice_invito);
+         * System.out.println("invito accettato");
+         * } catch (Exception e) {
+         * System.out.println("id codice errato");
+         * return;
+         * }
+         * } else if (scelta.equals("rifiutare")) {
+         * try {
+         * sistema.rifiutaInvito(codice_invito);
+         * System.out.println("invito rifiutato");
+         * 
+         * } catch (Exception e) {
+         * System.out.println("id codice errato");
+         * return;
+         * }
+         * } else {
+         * System.out.println("Scelta non valida");
+         * }
+         * } else {
+         * System.out.println("Nessun invito pendente.");
+         * }
+         */
 
     }
 

@@ -10,16 +10,16 @@ public class Artista extends Utente {
     private Map<Integer, Brano> mappaBrani;
     private Map<Integer, Invito> mappaInvitiPendenti;
     private Map<Integer, Invito> mappaInvitiAccettati;
-    //aggiunta dall'estensione
-    private Map<Integer,Invito> mappaInvitiRifiutati;
+    // aggiunta dall'estensione
+    private Map<Integer, Invito> mappaInvitiRifiutati;
 
     public Artista(String nome) {
         super(nome);
         this.mappaBrani = new HashMap<Integer, Brano>();
         this.mappaInvitiPendenti = new HashMap<Integer, Invito>();
         this.mappaInvitiAccettati = new HashMap<Integer, Invito>();
-        //aggiunta dall'estensione
-        this.mappaInvitiRifiutati=new HashMap<Integer, Invito>();
+        // aggiunta dall'estensione
+        this.mappaInvitiRifiutati = new HashMap<Integer, Invito>();
     }
 
     public Artista(String nome, Map<Integer, Brano> mappaBrani) {
@@ -49,9 +49,9 @@ public class Artista extends Utente {
         this.mappaBrani.put(b.getId(), b);
     }
 
-    public void addBranoAdEvento(int id_brano, Evento e) throws Exception{
+    public void addBranoAdEvento(int id_brano, Evento e) throws Exception {
         Brano b = mappaBrani.get(id_brano);
-        if(b == null){
+        if (b == null) {
             throw new Exception("Id brano non valido");
         }
         e.addBrano(b);
@@ -73,8 +73,8 @@ public class Artista extends Utente {
         return new ArrayList<Invito>(this.mappaInvitiPendenti.values());
     }
 
-    public void accettaInvito(int id) throws Exception{
-        if(!mappaInvitiPendenti.containsKey(id)){
+    public void accettaInvito(int id) throws Exception {
+        if (!mappaInvitiPendenti.containsKey(id)) {
             throw new Exception("Id invito non valido");
         }
         Invito invitoAccettato = this.mappaInvitiPendenti.remove(id);
@@ -82,9 +82,9 @@ public class Artista extends Utente {
         invitoAccettato.addInvitoEvento();
     }
 
-    //aggiunta dall'estensione
-    public void rifiutaInvito(int id) throws Exception{
-        if(!mappaInvitiPendenti.containsKey(id)){
+    // aggiunta dall'estensione
+    public void rifiutaInvito(int id) throws Exception {
+        if (!mappaInvitiPendenti.containsKey(id)) {
             throw new Exception("Id invito non valido");
         }
         Invito invitoRifiutato = this.mappaInvitiPendenti.remove(id);
@@ -99,10 +99,24 @@ public class Artista extends Utente {
         return new ArrayList<Invito>(this.mappaInvitiRifiutati.values());
     }
 
-
     public Invito getInvitoPendente(int id) {
         return this.mappaInvitiPendenti.get(id);
     }
 
+    public boolean isInvitato(Evento evento) {
+        List<Invito> listaInviti = new ArrayList<Invito>();
+        listaInviti.addAll(mappaInvitiAccettati.values());
+        listaInviti.addAll(mappaInvitiPendenti.values());
+        listaInviti.addAll(mappaInvitiRifiutati.values());
+        
+        for(Invito invito : listaInviti){
+            if(invito.hasEvento(evento)){
+                return true;
+            }
+        }
+
+        return false;
+
+    }
 
 }

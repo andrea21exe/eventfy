@@ -19,6 +19,10 @@ public class Brano {
         return this.id;
     }
 
+    public boolean hasId(int id){
+        return this.id == id;
+    }
+
     @Override
     public String toString() {
         return "Brano [id=" + id + ", titolo=" + titolo + ", album=" + album + ", durata=" + durata + "]";

@@ -123,10 +123,9 @@ public class Prenotazione {
 
     public void setDestinatarioInvito(Artista artista)throws Exception{
         
-        if(this.evento.hasArtistaInvitato(artista.getId())){
+        if(artista.isInvitato(this.evento)){
             throw new Exception("Artista già invitato");
         }
-
         this.evento.setDestinatarioInvito(artista);
         
     }

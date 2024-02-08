@@ -410,8 +410,14 @@ public class EventfyTest {
             assertEquals("L'artista non esiste", e.getMessage());
         }
 
-        //ora nel caso in cui l'artista è stato già invitato
+        //provo ad invitare un gestore
+        try {
+            eventfy.invitaArtista(1);
+        } catch (Exception e) {
+            assertEquals("L'artista non esiste", e.getMessage());
+        }
 
+        //ora nel caso in cui l'artista è stato già invitato
         eventfy.mostraPrenotazioniAccettate();
         eventfy.selezionaPrenotazioneInvito(4);
 
@@ -433,7 +439,7 @@ public class EventfyTest {
         assertEquals(eventfy.gestisciInvito(), ((Artista) eventfy.getUtenteCorrente()).getListaInvitiPendenti());
 
         // Provo con un nuovo utente creato ad'hoc, deve avere una lista inviti con 0
-        // elimenti
+        // elementi
         eventfy.signUpLogIn(new Artista("A11"));
         assertEquals(eventfy.gestisciInvito(), ((Artista) eventfy.getUtenteCorrente()).getListaInvitiPendenti());
 
@@ -470,16 +476,12 @@ public class EventfyTest {
 
 
         //ora verifico quando il test fallisce
-
         eventfy.gestisciInvito();
-        
         try {
             eventfy.accettaInvito(3);
         } catch (Exception e) {
             assertEquals("Id invito non valido", e.getMessage());
         }
-
-
 
     }
 

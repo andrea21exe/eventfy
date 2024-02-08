@@ -302,13 +302,13 @@ public class Eventfy {
 
     public void invitaArtista(int codice_artista) throws Exception{
         
-         if (!mappaUtenti.containsKey(codice_artista)){
-               
+        Utente utenteSelezionato = mappaUtenti.get(codice_artista);
+
+         if (!(utenteSelezionato instanceof Artista) || utenteSelezionato == null){
             throw new Exception("L'artista non esiste");
         }
-        System.out.println("Prima di setDestinatarioInvito");
-        prenotazioneCorrente.setDestinatarioInvito((Artista) mappaUtentiTemp.get(codice_artista));
-        System.out.println("Dopo setDestinatarioInvito");
+
+        prenotazioneCorrente.setDestinatarioInvito((Artista)utenteSelezionato);
         // L'invito va inserito nell'artista da invitare
         mappaUtentiTemp = null;
         prenotazioneCorrente = null;
@@ -327,7 +327,6 @@ public class Eventfy {
 
     //aggiunta dall'estensione
     public void rifiutaInvito(int codice_invito) throws Exception{
-        
         ((Artista) utenteCorrente).rifiutaInvito(codice_invito);
     }
 

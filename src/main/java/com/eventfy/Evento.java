@@ -72,7 +72,7 @@ public class Evento {
 
     public boolean hasBrano(int id){
         for(Brano b : listaBrani){
-            if(b.getId() == id){
+            if(b.hasId(id)){
                 return true;
             }
         }
@@ -115,7 +115,8 @@ public class Evento {
     public void addInvito(Invito in){
         listaInviti.add(in);
     }
-
+    
+    /*
     public boolean hasArtistaInvitato(int id){
         for(Invito i : listaInviti){
             if(i.getArtistaDestinatario().getId() == id){
@@ -124,6 +125,7 @@ public class Evento {
         }
         return false;
     }
+    */
 
     public boolean isScaduto(){
         LocalDate dataScadenza = this.getData().minusMonths(3);

@@ -54,6 +54,10 @@ public class Invito {
         this.evento.addInvito(this);
     }
 
+    public boolean hasEvento(Evento evento){
+        return this.evento.equals(evento);
+    }
+
     @Override
     public String toString() {
         return "Invito [id=" + id + ", data=" + data + ", ora=" + ora + ", evento=" + evento + ", artistaMittente="
