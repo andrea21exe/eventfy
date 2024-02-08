@@ -69,12 +69,12 @@ public class Eventfy {
     }
 
     public List<Impianto> nuovaPrenotazione(String titolo, String descrizione, int durata, int capienza_min,
-            LocalDate data, LocalTime ora) throws Exception{
+            LocalDate data, LocalTime ora) throws Exception {
 
         prenotazioneCorrente = new Prenotazione(titolo, descrizione, durata, data, ora, (Artista) utenteCorrente,
                 impiantoCorrente); // inizialmente impianto corrente è null
-        
-        if(prenotazioneCorrente.hasEventoScaduto()){
+
+        if (prenotazioneCorrente.hasEventoScaduto()) {
             prenotazioneCorrente = null;
             throw new Exception("Evento già scaduto");
         }
@@ -93,7 +93,7 @@ public class Eventfy {
 
     public void prenotaImpianto(int codice_impianto) throws Exception {
         Impianto impianto = mappaImpiantiTemp.get(codice_impianto);
-        if(impianto == null){
+        if (impianto == null) {
             prenotazioneCorrente = null;
             throw new Exception("Hai inserito un ID dell'impianto scorretto");
         }
@@ -129,7 +129,7 @@ public class Eventfy {
     public Prenotazione selezionaPrenotazionePendente(int codice_prenotazione) throws Exception {
 
         prenotazioneCorrente = mappaPrenotazioniTemp.get(codice_prenotazione);
-        if(prenotazioneCorrente == null){
+        if (prenotazioneCorrente == null) {
 
             throw new Exception("Hai inserito un ID della prenotazione errato");
         }
@@ -300,15 +300,15 @@ public class Eventfy {
 
     }
 
-    public void invitaArtista(int codice_artista) throws Exception{
-        
+    public void invitaArtista(int codice_artista) throws Exception {
+
         Utente utenteSelezionato = mappaUtenti.get(codice_artista);
 
-         if (!(utenteSelezionato instanceof Artista) || utenteSelezionato == null){
+        if (!(utenteSelezionato instanceof Artista) || utenteSelezionato == null) {
             throw new Exception("L'artista non esiste");
         }
 
-        prenotazioneCorrente.setDestinatarioInvito((Artista)utenteSelezionato);
+        prenotazioneCorrente.setDestinatarioInvito((Artista) utenteSelezionato);
         // L'invito va inserito nell'artista da invitare
         mappaUtentiTemp = null;
         prenotazioneCorrente = null;
@@ -320,13 +320,12 @@ public class Eventfy {
     }
 
     // seleziono un id dalla mappa inviti relativa all'artista
-    public void accettaInvito(int codice_invito) throws Exception{
-        
+    public void accettaInvito(int codice_invito) throws Exception {
         ((Artista) utenteCorrente).accettaInvito(codice_invito);
     }
 
-    //aggiunta dall'estensione
-    public void rifiutaInvito(int codice_invito) throws Exception{
+    // aggiunta dall'estensione
+    public void rifiutaInvito(int codice_invito) throws Exception {
         ((Artista) utenteCorrente).rifiutaInvito(codice_invito);
     }
 
@@ -350,36 +349,18 @@ public class Eventfy {
     // recuperiamo l'impianto a cui vogliamo aggiungere un commento relativo alla
     // prenotazione
     // inserisco codice prenotazione
-    // ho sostituito l'operazione seleziona evento con creaRecensione
-    public void creaRecensione(int codice_prenotazione, String commento, int voto) {
+    public void creaRecensione(int codice_prenotazione, String commento, int voto) throws Exception {
 
         Prenotazione p = mappaPrenotazioniTemp.get(codice_prenotazione);
-        p.creaRecensione(commento, voto);
-
         mappaPrenotazioniTemp = null;
 
-        /*
-         * impiantoCorrente = p.getImpianto();
-         * recensioneCorrente = impiantoCorrente.creaRecensioneArtista(LocalDate.now(),
-         * LocalTime.now(), commento, voto, (Artista)utenteCorrente);
-         */
+        if (p == null) {
+            throw new Exception("Id non valido");
+        }
+
+        p.creaRecensione(commento, voto);
+
     }
-
-    // Io toglierei questa operazione. Mettiamo tutto nella precedente
-    /*
-     * public void confermaRecensione(){
-     * 
-     * impiantoCorrente.addRecensione(recensioneCorrente);
-     * impiantoCorrente = null;
-     * recensioneCorrente = null;
-     * }
-     */
-
-    /*
-     * public Recensione getRecensioneCorrente() {
-     * return recensioneCorrente;
-     * }
-     */
 
     // UC10
     public List<Prenotazione> eliminaPrenotazione() {
@@ -404,10 +385,14 @@ public class Eventfy {
     // Supponiamo di aver inserito l'id di una prenotazione ricavato dalla lista
     // delle prenotazioni che ci siamo ritornati
 
-    //utilizzata acnhe nell'estensione del caso d'uso UC3
-    public void confermaEliminazione(int codice_prenotazione) {
+    // utilizzata acnhe nell'estensione del caso d'uso UC3
+    public void confermaEliminazione(int codice_prenotazione) throws Exception {
 
         Prenotazione daEliminare = mappaPrenotazioniTemp.get(codice_prenotazione);
+
+        if (daEliminare == null) {
+            throw new Exception("Id non valido");
+        }
 
         if (daEliminare != null) {
             annullaPrenotazione(daEliminare);
@@ -439,11 +424,15 @@ public class Eventfy {
         return new ArrayList<Utente>(mappaUtentiTemp.values());
     }
 
-    public List<Prenotazione> partecipaEvento(int codice_artista) {
+    public List<Prenotazione> partecipaEvento(int codice_artista) throws Exception {
+
+        Artista a = (Artista) mappaUtentiTemp.get(codice_artista);
+        if (a == null) {
+            mappaUtentiTemp = null;
+            throw new Exception("Id non valido");
+        }
 
         mappaPrenotazioniTemp = new HashMap<Integer, Prenotazione>();
-        Artista a = (Artista) mappaUtentiTemp.get(codice_artista);
-
         for (int key : mappaPrenotazioniAccettate.keySet()) {
             Prenotazione p1 = mappaPrenotazioniAccettate.get(key);
 
@@ -459,14 +448,17 @@ public class Eventfy {
     // supponiamo di recuperare della lista degli eventi ritornata l'id di un
     // determinato evento/prenotazione
     // prenotazione ed il relativo evento hanno stesso ID
-    public void confermaPartecipazione(int id_evento) {
+    public void confermaPartecipazione(int id_evento) throws Exception {
 
         Prenotazione p = mappaPrenotazioniTemp.get(id_evento);
-
-        p.addPartecipazioneFan((Fan) utenteCorrente);
-
         mappaPrenotazioniTemp = null;
         mappaUtentiTemp = null;
+
+        if (p == null) {
+            throw new Exception("Id non valido");
+        }
+
+        p.addPartecipazioneFan((Fan) utenteCorrente);
 
     }
 
@@ -487,7 +479,8 @@ public class Eventfy {
         return null;
     }
 
-    public void confermaRecensioneEvento(int id_evento, String commento, int voto) {
+    public void confermaRecensioneEvento(int id_evento, String commento, int voto) throws Exception {
+
         Prenotazione p = mappaPrenotazioniAccettate.get(id_evento);
 
         // Se:
@@ -496,15 +489,23 @@ public class Eventfy {
         // 3. la prenotazione/evento è recensibile --->
         // ---> Viene creata la recensione
 
-        if (utenteCorrente instanceof Fan) {
-            if (p != null && p.hasPartecipante((Fan) utenteCorrente) && p.isRecensibile()) {
-                p.creaRecensione(commento, voto, (Fan) utenteCorrente);
-            }
+        if (p == null) {
+            throw new Exception("Id non valido");
         }
+
+        if (!(p.hasPartecipante((Fan) utenteCorrente))) {
+            throw new Exception("Utente non partecipante");
+        }
+
+        if (!(p.isRecensibile())) {
+            throw new Exception("Evento non recensibile");
+        }
+
+        p.creaRecensione(commento, voto, (Fan) utenteCorrente);
+
     }
 
     // UC4
-
     public List<Prenotazione> mostraPrenotazioniAccettateGestore() {
 
         ArrayList<Prenotazione> prenotazioniAccettate = new ArrayList<Prenotazione>();
@@ -521,7 +522,6 @@ public class Eventfy {
     }
 
     // UC5
-
     public List<Evento> visualizzaEventiOrganizzati() {
         ArrayList<Evento> eventiArtista = new ArrayList<Evento>();
         for (int key : mappaPrenotazioniAccettate.keySet()) {
@@ -683,30 +683,37 @@ public class Eventfy {
         mappaPrenotazioniAccettate.put(p12.getId(), p12);
 
         // Inviti (A1 è il mittente di 2 inviti e destinatario di 2 inviti)
-        
+
         Invito inv1 = new Invito(p3.getEvento(), p3.getArtista(), a2);
         Invito inv2 = new Invito(p4.getEvento(), p4.getArtista(), a2);
 
         Invito inv3 = new Invito(p2.getEvento(), p2.getArtista(), a1);
-          
+
         a1.addInvitoPendente(inv3);
         a2.addInvitoPendente(inv1);
         a2.addInvitoPendente(inv2);
-         
 
         // Popola le recensioni
-        i1.recensisci("Commento 1", 4, a1);
-        i2.recensisci("Commento 2", 5, a2);
-        i3.recensisci("Commento 3", 3, a3);
+        try {
+            i1.recensisci("Commento 1", 4, a1);
+            i2.recensisci("Commento 2", 5, a2);
+            i3.recensisci("Commento 3", 3, a3);
+        } catch (Exception e) {
+        }
 
-        p1.addPartecipazioneFan(f1);
-        p2.addPartecipazioneFan(f2);
-        p11.addPartecipazioneFan(f1);
-        p12.addPartecipazioneFan(f1);
+        try {
+            p1.addPartecipazioneFan(f1);
+            p2.addPartecipazioneFan(f2);
+            p11.addPartecipazioneFan(f1);
+            p12.addPartecipazioneFan(f1);
+        } catch (Exception e) {
+        }
 
-        p1.creaRecensione("bello sto evento", 4, f1);
-        p2.creaRecensione("mal gestito", 1, f2);
-
+        try {
+            p1.creaRecensione("bello sto evento", 4, f1);
+            p2.creaRecensione("mal gestito", 1, f2);
+        } catch (Exception e) {
+        }
     }
 
     // UC18
@@ -758,7 +765,7 @@ public class Eventfy {
     // Visualizza inviti accettati di cui l'utente corrente è mittente
     // Nella UI viene prima chiamato il metodo mostraPrenotazioniAccettate()
 
-    //UC20
+    // UC20
     public List<Invito> mostraInvitiAccettati(int idEvento) {
 
         Prenotazione p = mappaPrenotazioniTemp.get(idEvento);
@@ -780,17 +787,17 @@ public class Eventfy {
 
     }
 
-    //UC21
+    // UC21
 
-    public List<RecensioneEvento> mostraRecensioniFan(){
+    public List<RecensioneEvento> mostraRecensioniFan() {
 
         ArrayList<RecensioneEvento> recensioniEventi = new ArrayList<RecensioneEvento>();
 
-        List<Evento> listaEventi = ((Fan)utenteCorrente).getListaEventi();
+        List<Evento> listaEventi = ((Fan) utenteCorrente).getListaEventi();
 
-        for(Evento e : listaEventi){
-            for(Fan f: e.getListaFan()){
-                if(((Fan)utenteCorrente).equals(f)){
+        for (Evento e : listaEventi) {
+            for (Fan f : e.getListaFan()) {
+                if (((Fan) utenteCorrente).equals(f)) {
                     recensioniEventi.addAll(e.getListaRecensioni());
                 }
             }
@@ -799,19 +806,19 @@ public class Eventfy {
         return recensioniEventi;
     }
 
-    //UC22
+    // UC22
 
-    public List<RecensioneImpianto> mostraRecensioniArtista(){
+    public List<RecensioneImpianto> mostraRecensioniArtista() {
 
         List<Prenotazione> listaPrenotazioni = mostraPrenotazioniAccettate();
 
         ArrayList<RecensioneImpianto> recensioniImpiantoArtista = new ArrayList<RecensioneImpianto>();
 
-        for(Prenotazione p: listaPrenotazioni){
-            List<RecensioneImpianto> recensioniImpianti =p.getImpianto().getListaRecensioni();
+        for (Prenotazione p : listaPrenotazioni) {
+            List<RecensioneImpianto> recensioniImpianti = p.getImpianto().getListaRecensioni();
 
-            for(RecensioneImpianto ri: recensioniImpianti){
-                if(ri.getUtente().equals((Artista)utenteCorrente)){
+            for (RecensioneImpianto ri : recensioniImpianti) {
+                if (ri.getUtente().equals((Artista) utenteCorrente)) {
                     recensioniImpiantoArtista.add(ri);
                 }
             }
@@ -821,13 +828,12 @@ public class Eventfy {
 
     }
 
- //UC23
- public List<Invito> mostraInvitiRifiutati() {
+    // UC23
+    public List<Invito> mostraInvitiRifiutati() {
 
-    Artista a = (Artista)utenteCorrente;
-    List<Invito> InvitiRifiutati=a.getListaInvitiRifiutati();
-    return InvitiRifiutati;
-}    
-
+        Artista a = (Artista) utenteCorrente;
+        List<Invito> InvitiRifiutati = a.getListaInvitiRifiutati();
+        return InvitiRifiutati;
+    }
 
 }

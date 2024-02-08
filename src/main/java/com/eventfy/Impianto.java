@@ -75,7 +75,7 @@ public class Impianto {
         return this.listaRecensioni;
     }
 
-    public void recensisci(String commento, int voto, Artista artista) {
+    public void recensisci(String commento, int voto, Artista artista) throws Exception{
         RecensioneImpianto recensione = new RecensioneImpianto(commento, voto, artista);
         listaRecensioni.add(0, recensione);
     }

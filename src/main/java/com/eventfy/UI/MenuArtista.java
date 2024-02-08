@@ -336,66 +336,6 @@ public class MenuArtista extends MenuStrategy {
         }
         System.out.println("Invito inviato con successo!");
 
-
-
-
-
-
-        /*
-
-        if (!prenotazioni.isEmpty()) {
-            System.out.println("Prenotazioni accettate:");
-            for (Prenotazione p : prenotazioni) {
-                System.out.println(p);
-            }
-            System.out.println("Inserisci il codice della prenotazione per cui desideri inviare un invito:");
-
-            while (!input.hasNextInt()) {
-                System.out.println("Inserisci un numero intero, riprova:");
-                input.next(); // Scarta l'input non valido
-            }
-            int codice_prenotazione = input.nextInt();
-
-            try {
-                List<Utente> artistiDisponibili = sistema.selezionaPrenotazioneInvito(codice_prenotazione);
-
-                for (Utente artista : artistiDisponibili) {
-                    System.out.println(artista);
-                }
-            } catch (Exception e) {
-                System.out.println("La'prenotazione selezionata è errata");
-                return;
-            }
-            System.out.println("Artisti disponibili per l'invito:");
-
-            // Invita artista
-            System.out.println("Inserisci il codice dell'artista che desideri invitare:");
-            while (!input.hasNextInt()) {
-                System.out.println("Inserisci un numero intero, riprova:");
-                input.next(); // Scarta l'input non valido
-            }
-            int codice_artista = input.nextInt();
-
-            try {
-                sistema.invitaArtista(codice_artista);
-            } catch (Exception e) {
-                System.out.println("Messaggio dell'eccezione: " + e.getMessage());
-                if (e.getMessage().equals("L'artista non esiste")) {
-                    System.out.println("L'utente inserito non esiste");
-                    return;
-                } else if (e.getMessage().equals("Artista già invitato")) {
-                    System.out.println("L'artista è stato già invitato");
-                    return;
-                }
-            }
-            System.out.println("Invito inviato con successo!");
-        } else {
-            // Se l'artista non ha prenotazioni accettate
-
-            System.out.println("Nessuna prenotazione accettata per questo artista. ");
-        }
-
-        */
     }
 
     private void gestisciInvito() {
@@ -451,48 +391,6 @@ public class MenuArtista extends MenuStrategy {
                 System.out.println("Scelta non valida, ritorno al menu");
         }
 
-        /*
-         * if (!invitiPendenti.isEmpty()) {
-         * System.out.println("Inviti Pendenti:");
-         * for (Invito invito : invitiPendenti) {
-         * System.out.println(invito);
-         * }
-         * System.out.println("Inserisci il codice dell'invito che vuoi accettare:");
-         * while (!input.hasNextInt()) {
-         * System.out.println("Inserisci un numero intero, riprova:");
-         * input.next(); // Scarta l'input non valido
-         * }
-         * int codice_invito = input.nextInt();
-         * input.nextLine();
-         * System.out.println("Premi 1 e invio per accettare l'invito");
-         * System.out.println("Premi 2 e invio per rifiutare l'invito");
-         * String scelta = input.nextLine();
-         * 
-         * if (scelta.equals("accettare")) {
-         * try {
-         * sistema.accettaInvito(codice_invito);
-         * System.out.println("invito accettato");
-         * } catch (Exception e) {
-         * System.out.println("id codice errato");
-         * return;
-         * }
-         * } else if (scelta.equals("rifiutare")) {
-         * try {
-         * sistema.rifiutaInvito(codice_invito);
-         * System.out.println("invito rifiutato");
-         * 
-         * } catch (Exception e) {
-         * System.out.println("id codice errato");
-         * return;
-         * }
-         * } else {
-         * System.out.println("Scelta non valida");
-         * }
-         * } else {
-         * System.out.println("Nessun invito pendente.");
-         * }
-         */
-
     }
 
     private void inserisciRecensioneStruttura() {
@@ -515,7 +413,12 @@ public class MenuArtista extends MenuStrategy {
             System.out.println("Inserisci il voto (da 0 a 5):");
             int voto = input.nextInt();
             // Chiama il metodo per creare la recensione
-            sistema.creaRecensione(codice_prenotazione, commento, voto);
+            try {
+                sistema.creaRecensione(codice_prenotazione, commento, voto);
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+                return;
+            }
             System.out.println("Recensione inserita ");
         } else {
             System.out.println("Non hai prenotazioni da poter recensire");
@@ -534,8 +437,12 @@ public class MenuArtista extends MenuStrategy {
 
             System.out.println("Inserisci il codice della prenotazione che vuoi eliminare:");
             int codice_prenotazione = input.nextInt();
-
-            sistema.confermaEliminazione(codice_prenotazione);
+            try {
+                sistema.confermaEliminazione(codice_prenotazione);
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+                return;
+            }
             System.out.println("Prenotazione eliminata con successo!");
 
         }

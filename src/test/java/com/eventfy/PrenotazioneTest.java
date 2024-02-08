@@ -38,14 +38,16 @@ public class PrenotazioneTest {
             fail();
         }
         assertTrue(p.hasBrano(0));
-        
 
     }
 
     @Test
     void testCreaRecensioneArtista() {
-        p.creaRecensione("Impianto bello", 4);
-
+        try {
+            p.creaRecensione("Impianto bello", 4);
+        } catch (Exception e) {
+            fail();
+        }
         // Prendo il commento appena inserito
         RecensioneImpianto r = p.getImpianto().getListaRecensioni().get(0);
         assertEquals("Impianto bello", r.getCommento());

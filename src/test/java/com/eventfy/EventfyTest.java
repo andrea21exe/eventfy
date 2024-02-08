@@ -26,16 +26,6 @@ public class EventfyTest {
     }
 
     @Test
-    void test1() {
-
-        List<Prenotazione> lista = new ArrayList<Prenotazione>(eventfy.getPrenotazioniPendenti().values());
-        for (Prenotazione p : lista) {
-            System.out.println(p);
-            System.out.println("");
-        }
-    }
-
-    @Test
     void testNuovoImpianto() {
 
         // Login - SignUp
@@ -139,7 +129,7 @@ public class EventfyTest {
             eventfy.nuovaPrenotazione("P1", "d1", 329, 20, LocalDate.of(2024, 10, 10), LocalTime.now());
         } catch (Exception e) {
             fail();
-        } 
+        }
 
         try {
             eventfy.prenotaImpianto(0);
@@ -241,7 +231,7 @@ public class EventfyTest {
 
         eventfy.setPrenotazioneCorrenteNull();
 
-        //controllo che se viene passato un id non presente mi da errore
+        // controllo che se viene passato un id non presente mi da errore
 
         assertNull(eventfy.getPrenotazioneCorrente());
 
@@ -323,7 +313,7 @@ public class EventfyTest {
 
         eventfy.aggiungiScaletta();
         List<Brano> listaBrani = eventfy.recuperaBraniArtista(5);
-        for(Brano b: listaBrani){
+        for (Brano b : listaBrani) {
             System.out.println(b);
         }
         try {
@@ -334,7 +324,7 @@ public class EventfyTest {
         }
         assertEquals(lunghezzaScalettaIniziale + 1, eventfy.getPrenotazione(5).getEvento().getListaBrani().size());
 
-        //consideriamo il caso in cui aggiungiamo un brano già presente
+        // consideriamo il caso in cui aggiungiamo un brano già presente
 
         eventfy.getPrenotazione(5).getEvento().getListaBrani().size();
         eventfy.aggiungiScaletta();
@@ -398,9 +388,8 @@ public class EventfyTest {
         // Deve essere stato registrato un invito
         assertEquals(sizeMappaInvitiIniziale + 1, artista.getListaInvitiPendenti().size());
 
-
-        //Ora controlliamo il caso di fallimento della funzione
-        //prima nel caso in cui si inserisce un id non esistente
+        // Ora controlliamo il caso di fallimento della funzione
+        // prima nel caso in cui si inserisce un id non esistente
         eventfy.mostraPrenotazioniAccettate();
         eventfy.selezionaPrenotazioneInvito(4);
 
@@ -410,14 +399,14 @@ public class EventfyTest {
             assertEquals("L'artista non esiste", e.getMessage());
         }
 
-        //provo ad invitare un gestore
+        // provo ad invitare un gestore
         try {
             eventfy.invitaArtista(1);
         } catch (Exception e) {
             assertEquals("L'artista non esiste", e.getMessage());
         }
 
-        //ora nel caso in cui l'artista è stato già invitato
+        // ora nel caso in cui l'artista è stato già invitato
         eventfy.mostraPrenotazioniAccettate();
         eventfy.selezionaPrenotazioneInvito(4);
 
@@ -457,25 +446,23 @@ public class EventfyTest {
 
         int numInvitiAccettatiIniziale = artistaCorrente.getListaInvitiAccettati().size();
         int numInvitiPendentiIniziale = artistaCorrente.getListaInvitiPendenti().size();
-        
-        List<Invito> listaInviti =eventfy.gestisciInvito();
 
-        for(Invito i: listaInviti){
+        List<Invito> listaInviti = eventfy.gestisciInvito();
+
+        for (Invito i : listaInviti) {
             System.out.println(i);
         }
-        
+
         try {
             eventfy.accettaInvito(1);
         } catch (Exception e) {
             fail();
         }
 
-
         assertEquals(numInvitiAccettatiIniziale + 1, artistaCorrente.getListaInvitiAccettati().size());
         assertEquals(numInvitiPendentiIniziale - 1, artistaCorrente.getListaInvitiPendenti().size());
 
-
-        //ora verifico quando il test fallisce
+        // ora verifico quando il test fallisce
         eventfy.gestisciInvito();
         try {
             eventfy.accettaInvito(3);
@@ -484,7 +471,6 @@ public class EventfyTest {
         }
 
     }
-
 
     @Test
     void rifiutaInvitotoTest() {
@@ -498,13 +484,13 @@ public class EventfyTest {
 
         int numInvitiRifiutatiIniziale = artistaCorrente.getListaInvitiRifiutati().size();
         int numInvitiPendentiIniziale = artistaCorrente.getListaInvitiPendenti().size();
-        
-        List<Invito> listaInviti =eventfy.gestisciInvito();
 
-        for(Invito i: listaInviti){
+        List<Invito> listaInviti = eventfy.gestisciInvito();
+
+        for (Invito i : listaInviti) {
             System.out.println(i);
         }
-      
+
         try {
             eventfy.rifiutaInvito(2);
         } catch (Exception e1) {
@@ -514,11 +500,11 @@ public class EventfyTest {
         assertEquals(numInvitiRifiutatiIniziale + 1, artistaCorrente.getListaInvitiRifiutati().size());
         assertEquals(numInvitiPendentiIniziale - 1, artistaCorrente.getListaInvitiPendenti().size());
 
-        //ora verifichiamo in caso di errore
+        // ora verifichiamo in caso di errore
 
         numInvitiRifiutatiIniziale = artistaCorrente.getListaInvitiRifiutati().size();
         numInvitiPendentiIniziale = artistaCorrente.getListaInvitiPendenti().size();
-        
+
         eventfy.gestisciInvito();
 
         try {
@@ -548,15 +534,43 @@ public class EventfyTest {
     @Test
     void testCreaRecensione() {
         eventfy.logIn(3);// Artista TheWeeknd
-        List<Prenotazione> prenotazioniArtista = eventfy.inserisciRecensione();
-        eventfy.creaRecensione(8, "Impianto al top, bravi", 5);
 
-        // Non so se questa cosa si può fare
+        // provo un id non valido
+        eventfy.inserisciRecensione();
+        try {
+            eventfy.creaRecensione(800, "Impianto al top, bravi", 5);
+        } catch (Exception e) {
+            assertEquals("Id non valido", e.getMessage());
+        }
+
+        // provo un voto non valido
+        eventfy.inserisciRecensione();
+        try {
+            eventfy.creaRecensione(8, "Impianto al top, bravi", 6);
+        } catch (Exception e) {
+            assertEquals("Il valore deve essere compreso tra 0 a 5", e.getMessage());
+        }
+
+        // recensione corretta
+        eventfy.inserisciRecensione();
+        try {
+            eventfy.creaRecensione(8, "Impianto al top, bravi", 5);
+        } catch (Exception e) {
+            fail();
+        }
         Prenotazione p8 = eventfy.getPrenotazione(8);
         RecensioneImpianto r8 = p8.getImpianto().getListaRecensioni().get(0);
         assertEquals("Impianto al top, bravi", r8.getCommento());
         assertEquals(5, r8.getVoto());
         assertEquals(eventfy.getUtenteCorrente(), r8.getUtente());
+
+        // Provo ad inserire una recensione per una prenotazione "già recensita"
+        eventfy.inserisciRecensione();
+        try {
+            eventfy.creaRecensione(8, "Impianto al top, bravi", 5);
+        } catch (Exception e) {
+            assertEquals("E' già stato recensito l'impianto per questa prenotazione", e.getMessage());
+        }
 
         assertNull(eventfy.getMapPrenotazioniTemp());
     }
@@ -598,7 +612,12 @@ public class EventfyTest {
         assertNull(eventfy.getMappaPrenotazioniAnnullate().get(codicePrenotazione));
 
         eventfy.eliminaPrenotazione();
-        eventfy.confermaEliminazione(codicePrenotazione);
+        try {
+            eventfy.confermaEliminazione(codicePrenotazione);
+        } catch (Exception e) {
+            fail();
+        }
+
         // Verifica che la prenotazione pendente con il codice 1 sia stata eliminata
         assertNull(eventfy.getPrenotazioniPendenti().get(codicePrenotazione));
         // Verifica la presenza della prenotazione cancellata nella mappa delle pr.
@@ -613,13 +632,27 @@ public class EventfyTest {
         assertNull(eventfy.getMappaPrenotazioniAnnullate().get(codicePrenotazione));
 
         eventfy.eliminaPrenotazione();
-        eventfy.confermaEliminazione(codicePrenotazione);
+        try {
+            eventfy.confermaEliminazione(codicePrenotazione);
+        } catch (Exception e) {
+            fail();
+        }
         // Verifica che la prenotazione pendente con il codice 5 sia stata eliminata
         // dalla mappa pr. accettate
         assertNull(eventfy.getPrenotazioniAccettate().get(codicePrenotazione));
         // Verifica la presenza della prenotazione cancellata nella mappa delle pr.
         // annullate
         assertNotNull(eventfy.getMappaPrenotazioniAnnullate().get(codicePrenotazione));
+
+        // Eliminazione prenotazione non valida
+        codicePrenotazione = 345;
+        eventfy.eliminaPrenotazione();
+        try {
+            eventfy.confermaEliminazione(codicePrenotazione);
+        } catch (Exception e) {
+            assertEquals("Id non valido", e.getMessage());
+            ;
+        }
     }
 
     // 12
@@ -642,13 +675,28 @@ public class EventfyTest {
     void partecipaEventoTest() {
         // Registro ed effettuo il login con un nuovo utente (FAN)
         eventfy.signUpLogIn(new Utente("albertoFan"));
-        // AlbertoFan vuole partecipare ad un evento di theweeknd
+        // AlbertoFan vuole partecipare ad un evento di theweeknd (prima si prova un
+        // artista non valido con codice non esistente)
         eventfy.mostraArtistiEventi();
-        List<Prenotazione> prenotazioniTheWeekndPartecipabili = eventfy.partecipaEvento(3);
+
+        // provo un artista non valido
+        List<Prenotazione> prenotazioniTheWeekndPartecipabili = null;
+        try {
+            prenotazioniTheWeekndPartecipabili = eventfy.partecipaEvento(300);
+        } catch (Exception e) {
+            assertEquals("Id non valido", e.getMessage());
+        }
+
+        // artista valido
+        eventfy.mostraArtistiEventi();
+        try {
+            prenotazioniTheWeekndPartecipabili = eventfy.partecipaEvento(3);
+        } catch (Exception e) {
+            fail();
+        }
         // Deve esistere almeno una prenotazione partecipabile
         assertTrue(prenotazioniTheWeekndPartecipabili.size() > 0);
-        // Nelle estensioni dovremmo provare il caso in cui un utente cerca di
-        // partecipare ad un evento piu di una volta
+
     }
 
     @Test
@@ -656,20 +704,56 @@ public class EventfyTest {
         // Registro ed effettuo il login con un nuovo utente (FAN)
         eventfy.signUpLogIn(new Fan("albertoFan"));
 
-        int codice_prenotazione = 10;
-
+        int codice_prenotazione = 105;
         Utente utenteCorrente = eventfy.getUtenteCorrente();
+
         // AlbertoFan vuole partecipare ad un evento di theweeknd
         eventfy.mostraArtistiEventi();
-        eventfy.partecipaEvento(3);
+        try {
+            eventfy.partecipaEvento(3);
+        } catch (Exception e) {
+            fail();
+        }
+
+        // provo un evento non valido
+        try {
+            // metodo da testare
+            eventfy.confermaPartecipazione(codice_prenotazione);
+        } catch (Exception e) {
+            assertEquals("Id non valido", e.getMessage());
+        }
+
         // Partecipo all'evento con ID 10 (Vedesi metodo populate, è un evento
         // partecipabile di theWeeknd)
-        eventfy.confermaPartecipazione(codice_prenotazione);
+        codice_prenotazione = 10;
+        eventfy.mostraArtistiEventi();
+        try {
+            eventfy.partecipaEvento(3);
+        } catch (Exception e) {
+        }
+        try {
+            // metodo da testare
+            eventfy.confermaPartecipazione(codice_prenotazione);
+        } catch (Exception e) {
+            fail();
+        }
+
         assertTrue(((Fan) utenteCorrente).isPartecipante(codice_prenotazione));
         assertTrue(eventfy.getPrenotazione(codice_prenotazione).hasPartecipante((Fan) utenteCorrente));
         assertNull(eventfy.getMapPrenotazioniTemp());
-        // Nelle estensioni dovremmo provare il caso in cui un utente cerca di
-        // partecipare ad un evento piu di una volta
+
+        // Provo a partecipare nuovamente allo stesso evento
+        eventfy.mostraArtistiEventi();
+        try {
+            eventfy.partecipaEvento(3);
+        } catch (Exception e) {
+        }
+        try {
+            // metodo da testare
+            eventfy.confermaPartecipazione(codice_prenotazione);
+        } catch (Exception e) {
+            assertEquals("Utente già partecipante", e.getMessage());
+        }
 
     }
 
@@ -692,27 +776,50 @@ public class EventfyTest {
     void confermaRecensioneEvento() {
         // Registro ed effettuo il login con il fan id=6
         // l'utente partecipa all'evento(/prenotazione) id=11
-        // Confronto il numero di recensioni di un evento prima e dopo la conferma di
-        // una nuova recensione
         int id_utente = 6;
         int id_prenotazione = 11;
         eventfy.logIn(id_utente);
 
-        int numRecensioniIniziali = eventfy.getPrenotazione(id_prenotazione).getNumRecensioniEvento();
-
-        int voto = 5;
+        //Provo ad effettuare una recensione scorretta
+        int voto = -1;
         String commento = "Bello";
-        eventfy.confermaRecensioneEvento(id_prenotazione, commento, voto);
+        try {
+            eventfy.confermaRecensioneEvento(id_prenotazione, commento, voto);
+        } catch (Exception e) {
+            assertEquals("Il valore deve essere compreso tra 0 a 5", e.getMessage());;
+        }
+        
+        // Confronto il numero di recensioni di un evento prima e dopo la conferma di
+        // una nuova recensione
+        int numRecensioniIniziali = eventfy.getPrenotazione(id_prenotazione).getNumRecensioniEvento();
+        voto = 5;
+        commento = "Bello";
+        try {
+            eventfy.confermaRecensioneEvento(id_prenotazione, commento, voto);
+        } catch (Exception e) {
+            fail();
+        }
         // il numero di recensioni iniziale e finale deve differire di 1
         assertEquals(numRecensioniIniziali + 1, eventfy.getPrenotazione(id_prenotazione).getNumRecensioniEvento());
+
 
         // Provo a rieffettuare la procedura con una prenotazione non recensibile
         id_prenotazione = 12;
         numRecensioniIniziali = eventfy.getPrenotazione(id_prenotazione).getNumRecensioniEvento();
-        eventfy.confermaRecensioneEvento(id_prenotazione, commento, voto);
-        // Il numero di recensioni prima e dopo deve essere uguale
-        assertEquals(numRecensioniIniziali, eventfy.getPrenotazione(id_prenotazione).getNumRecensioniEvento());
-
+        try {
+            eventfy.confermaRecensioneEvento(id_prenotazione, commento, voto);
+        } catch (Exception e) {
+            assertEquals("Evento non recensibile", e.getMessage());
+        }
+        
+        //provo a recensire nuovamente lo stesso evento
+        id_prenotazione = 11;
+        try {
+            eventfy.confermaRecensioneEvento(id_prenotazione, commento, voto);
+        } catch (Exception e) {
+            assertEquals("L'evento è già stato recensito dal fan corrente", e.getMessage());
+        }
+        
     }
 
     @Test
@@ -823,18 +930,18 @@ public class EventfyTest {
 
     @Test
 
-    void visualizzaPrenotazioniPendentiArtista(){
+    void visualizzaPrenotazioniPendentiArtista() {
         eventfy.logIn(3);
 
         List<Prenotazione> listaPrenotazioni = eventfy.visualizzaPrenotazioniPendentiArtista();
 
-         // verifico che mi venga ritornata una lista
-         assertNotNull(listaPrenotazioni);
+        // verifico che mi venga ritornata una lista
+        assertNotNull(listaPrenotazioni);
     }
 
     @Test
 
-    void mostraInvitiAccettatiTest(){
+    void mostraInvitiAccettatiTest() {
 
         eventfy.logIn(4);
 
@@ -844,7 +951,7 @@ public class EventfyTest {
             fail();
         }
 
-       List<Prenotazione> listaPrenotazioni= eventfy.mostraPrenotazioniAccettate();
+        List<Prenotazione> listaPrenotazioni = eventfy.mostraPrenotazioniAccettate();
 
         // verifico che mi venga ritornata una lista
         assertNotNull(listaPrenotazioni);
@@ -854,34 +961,33 @@ public class EventfyTest {
 
     }
 
-
     @Test
-    void mostraRecensioniFanTest(){
+    void mostraRecensioniFanTest() {
 
         eventfy.logIn(6);
 
         List<RecensioneEvento> listaRecensioni = eventfy.mostraRecensioniFan();
 
-         // verifico che mi venga ritornata una lista
-         assertNotNull(listaRecensioni);
+        // verifico che mi venga ritornata una lista
+        assertNotNull(listaRecensioni);
 
-         // verifico che la dimensione della lista sia corretta
-         assertEquals(1, listaRecensioni.size());
+        // verifico che la dimensione della lista sia corretta
+        assertEquals(1, listaRecensioni.size());
 
     }
 
     @Test
-    void mostraRecensioniArtistaTest(){
+    void mostraRecensioniArtistaTest() {
 
         eventfy.logIn(3);
 
         List<RecensioneImpianto> listaRecensioni = eventfy.mostraRecensioniArtista();
 
-         // verifico che mi venga ritornata una lista
-         assertNotNull(listaRecensioni);
+        // verifico che mi venga ritornata una lista
+        assertNotNull(listaRecensioni);
 
-         // verifico che la dimensione della lista sia corretta
-         assertEquals(1, listaRecensioni.size());
+        // verifico che la dimensione della lista sia corretta
+        assertEquals(1, listaRecensioni.size());
 
     }
 

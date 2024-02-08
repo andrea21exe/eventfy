@@ -14,6 +14,7 @@ public class Prenotazione {
     private Evento evento;
     private Artista artista;
     private Impianto impianto;
+    private boolean impiantoRecensito;
 
     public Prenotazione(String titolo, String descrizione, int durata, LocalDate data, LocalTime ora, Artista artista,
             Impianto impianto) {
@@ -23,7 +24,7 @@ public class Prenotazione {
             this.evento = new Evento(id, titolo, descrizione, durata, data, ora);
             this.impianto = impianto;
             this.artista = artista;
-        
+            this.impiantoRecensito = false;
     }
 
     public void setImpianto(Impianto impianto) {
@@ -85,15 +86,21 @@ public class Prenotazione {
         return artista.getId();
     }
 
-    public void addPartecipazioneFan(Fan fan) {
+    public void addPartecipazioneFan(Fan fan) throws Exception{
         this.evento.addFan(fan);
     }
 
-    public void creaRecensione(String commento, int voto) {
+    public void creaRecensione(String commento, int voto) throws Exception{
+
+        if(this.impiantoRecensito == true){
+            throw new Exception("E' già stato recensito l'impianto per questa prenotazione");
+        }
+
         this.impianto.recensisci(commento, voto, this.artista);
+        this.impiantoRecensito = true;
     }
 
-    public void creaRecensione(String commento, int voto, Fan fan) {
+    public void creaRecensione(String commento, int voto, Fan fan) throws Exception{
         this.evento.recensisci(commento, voto, fan);
     }
 

@@ -3,6 +3,8 @@ package com.eventfy.UI;
 import java.util.List;
 import java.util.Scanner;
 
+import javax.sound.midi.SysexMessage;
+
 import com.eventfy.Evento;
 import com.eventfy.Prenotazione;
 import com.eventfy.Recensione;
@@ -24,7 +26,7 @@ public class MenuFan extends MenuStrategy {
     }
 
     @Override
-    protected void processaScelta(int scelta) throws LogException{
+    protected void processaScelta(int scelta) throws LogException {
         switch (scelta) {
             case 1:
                 partecipaEvento();
@@ -58,14 +60,27 @@ public class MenuFan extends MenuStrategy {
         int codice_artista = input.nextInt();
         // per evitare che il cursore rimanga incastrato e non funzioni correttamente
         input.nextLine();
-        List<Prenotazione> prenotazioniPartecipabili = sistema.partecipaEvento(codice_artista);
+
+        List<Prenotazione> prenotazioniPartecipabili;
+        try {
+            prenotazioniPartecipabili = sistema.partecipaEvento(codice_artista);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return;
+        }
         System.out.println("Prenotazioni partecipabili:");
         for (Prenotazione p : prenotazioniPartecipabili) {
             System.out.println(p);
         }
+
         System.out.println("Inserisci il codice della prenotazione a cui vuoi partecipare:");
         int codice_prenotazione = input.nextInt();
-        sistema.confermaPartecipazione(codice_prenotazione);
+        try {
+            sistema.confermaPartecipazione(codice_prenotazione);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return;
+        }
         System.out.println("Partecipazione confermata con successo!");
 
     }
@@ -78,18 +93,25 @@ public class MenuFan extends MenuStrategy {
         for (Evento e : eventi) {
             System.out.println(e);
         }
+
         System.out.print("Inserisci l'id dell'evento per cui vuoi scrivere una recensione: ");
         int codice_evento = input.nextInt();
+
         // Richiede all'utente di inserire il commento per la recensione
         System.out.print("Inserisci il commento: ");
         String commento = input.nextLine();
         // per evitare che il cursore rimanga incastrato e non funzioni correttamente
         input.nextLine();
+        
         // Richiede all'utente di inserire il voto per l'evento
         System.out.print("Inserisci il voto (da 0 a 5): ");
         int voto = input.nextInt();
         // Conferma la recensione
-        sistema.confermaRecensioneEvento(codice_evento, commento, voto);
+        try {
+            sistema.confermaRecensioneEvento(codice_evento, commento, voto);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     private void visualizzaEventiArtista() {
@@ -114,7 +136,7 @@ public class MenuFan extends MenuStrategy {
         }
     }
 
-    private void visualizzaRecensioni(){
+    private void visualizzaRecensioni() {
         List<RecensioneEvento> listaRecensioni = sistema.mostraRecensioniFan();
 
         if (listaRecensioni.isEmpty()) {

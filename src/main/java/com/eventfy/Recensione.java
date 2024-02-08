@@ -12,10 +12,10 @@ public abstract class Recensione {
     private String commento;
     private int voto;
 
-    public Recensione(String commento, int voto) {
+    public Recensione(String commento, int voto) throws Exception {
 
         if (voto < 0 || voto > 5) {
-            throw new IllegalArgumentException("Il valore deve essere compreso tra 0 a 5");
+            throw new Exception("Il valore deve essere compreso tra 0 a 5");
         }
 
         this.dataCommento = LocalDate.now();
