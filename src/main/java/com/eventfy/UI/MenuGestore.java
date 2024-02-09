@@ -175,14 +175,16 @@ public class MenuGestore extends MenuStrategy {
                         sistema.accettaPrenotazione();
                     } catch (Exception e) {
                         System.out.println("La data per il relativo impianto è già occupata");
+                        return;
                     }
-
+                    System.out.println("prenotazione accettata");
                     break;
                 case 1:
                     try {
                         sistema.confermaEliminazione(codice_prenotazione);
                     } catch (Exception e) {
                         System.out.println(e.getMessage());
+                        return;
                     }
                     System.out.println("Prenotazione annullata");
 
@@ -259,6 +261,10 @@ public class MenuGestore extends MenuStrategy {
 
         System.out.println("inserisci l'id dell'impianto");
         Scanner input = new Scanner(System.in);
+        while (!input.hasNextInt()) {
+            System.out.println("Inserisci un numero intero, riprova:");
+            input.next(); // Scarta l'input non valido
+        }
         int id = input.nextInt();
 
         sistema.mostraRecensioneImpianti(id);

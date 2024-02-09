@@ -274,6 +274,7 @@ public class MenuArtista extends MenuStrategy {
             sistema.aggiungiBrano(codice_brano);
         } catch (Exception e) {
             System.out.println("Il brano è già presente in lista");
+            return;
         }
         System.out.println("Brano aggiunto alla scaletta");
 
@@ -373,6 +374,8 @@ public class MenuArtista extends MenuStrategy {
                     return;
                 }
 
+                System.out.println("invito accettato");
+
                 break;
             case 2:
                 try {
@@ -381,6 +384,8 @@ public class MenuArtista extends MenuStrategy {
                     System.out.println(e.getMessage());
                     return;
                 }
+
+                System.out.println("invito rifiutato");
                 break;
             default:
                 System.out.println("Scelta non valida, ritorno al menu");
@@ -404,12 +409,20 @@ public class MenuArtista extends MenuStrategy {
         // Chiede all'utente di inserire il codice della prenotazione per cui vuole
         // scrivere una recensione
         System.out.println("Inserisci il codice della prenotazione per cui vuoi scrivere una recensione:");
+        while (!input.hasNextInt()) {
+            System.out.println("Inserisci un numero intero, riprova:");
+            input.next(); // Scarta l'input non valido
+        }
         int codice_prenotazione = input.nextInt();
         System.out.println("Inserisci il commento:");
         String commento = input.nextLine();
         // per evitare che il cursore rimanga incastrato e non funzioni correttamente
         input.nextLine();
         System.out.println("Inserisci il voto (da 0 a 5):");
+        while (!input.hasNextInt()) {
+            System.out.println("Inserisci un numero intero, riprova:");
+            input.next(); // Scarta l'input non valido
+        }
         int voto = input.nextInt();
         while (voto < 0 || voto > 5) {
             System.out.println("Il voto deve essere compreso tra 0 e 5. Riprova.");
@@ -440,6 +453,10 @@ public class MenuArtista extends MenuStrategy {
         }
 
         System.out.println("Inserisci il codice della prenotazione che vuoi eliminare:");
+        while (!input.hasNextInt()) {
+            System.out.println("Inserisci un numero intero, riprova:");
+            input.next(); // Scarta l'input non valido
+        }
         int codice_prenotazione = input.nextInt();
         try {
             sistema.confermaEliminazione(codice_prenotazione);
@@ -465,7 +482,11 @@ public class MenuArtista extends MenuStrategy {
         System.out.println("Inserisci l'album del tuo brano:");
         String album = scanner.nextLine();
 
-        System.out.println("Inserisci l'album del tuo brano:");
+        System.out.println("Inserisci la durata del tuo brano:");
+        while (!scanner.hasNextInt()) {
+            System.out.println("Inserisci un numero intero, riprova:");
+            scanner.next(); // Scarta l'input non valido
+        }
         int durata = scanner.nextInt();
 
         sistema.registraBrano(titolo, album, durata);
@@ -494,6 +515,10 @@ public class MenuArtista extends MenuStrategy {
 
         System.out.println("inserisci l'id dell'evento");
         Scanner input = new Scanner(System.in);
+        while (!input.hasNextInt()) {
+            System.out.println("Inserisci un numero intero, riprova:");
+            input.next(); // Scarta l'input non valido
+        }
 
         int id = input.nextInt();
 
@@ -534,6 +559,10 @@ public class MenuArtista extends MenuStrategy {
         Scanner input = new Scanner(System.in);
 
         System.out.println("Inserisci l'id dell'evento di cui vuoi visualizzare gli inviti");
+        while (!input.hasNextInt()) {
+            System.out.println("Inserisci un numero intero, riprova:");
+            input.next(); // Scarta l'input non valido
+        }
         int idEvento = input.nextInt();
         try {
             sistema.mostraInvitiAccettati(idEvento);

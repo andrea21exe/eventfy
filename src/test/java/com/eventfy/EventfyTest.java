@@ -31,6 +31,8 @@ public class EventfyTest {
         // Login - SignUp
         eventfy.signUpLogIn(new Gestore("Carlo"));
 
+        //solo dopo aver creato l'impianto deve essere settato impianto corrente
+
         assertNull(eventfy.getImpiantoCorrente());
         try {
             eventfy.nuovoImpianto("San Siro", "Milano", 80000, 100);
@@ -39,6 +41,8 @@ public class EventfyTest {
         }
 
         assertNotNull(eventfy.getImpiantoCorrente());
+
+        //si controlla che non si possono aggiungere due impianti uguali
 
         try {
             eventfy.nuovoImpianto("San Siro", "Milano", 0, 100);
@@ -67,6 +71,8 @@ public class EventfyTest {
 
         eventfy.confermaImpianto();
 
+        //verifichiamo che alla lista impianti sia stato aggiunto l'impianto
+
         assertNull(eventfy.getImpiantoCorrente());
         assertEquals(numImpiantiIniziale + 1, eventfy.getListaImpianti().size());
         assertTrue(eventfy.getListaImpianti().contains(nuovoImpianto));
@@ -78,9 +84,11 @@ public class EventfyTest {
 
         // Login - SignUp
         eventfy.logIn(5);
+
+        //verifico che la prenotazione corrente sia settata dopo che viene creata la prenotazione
+
         assertNull(eventfy.getPrenotazioneCorrente());
 
-        // Testo implicitamente il metodo isMaggioreUguale della classe Impianto
         List<Impianto> impiantiDisponibili;
         try {
             impiantiDisponibili = eventfy.nuovaPrenotazione("Prenotazione1", "Descrizione 1", 2,
@@ -275,6 +283,7 @@ public class EventfyTest {
         assertNull(eventfy.getPrenotazioneCorrente());
         assertNull(eventfy.getMapPrenotazioniTemp());
 
+        //Proviamo a selezionare una prenotazione errata
         // Proviamo ad accettare una prenotazione che ha una stessa data di P0
         eventfy.mostraPrenotazioniPendenti();
         try {
@@ -291,10 +300,13 @@ public class EventfyTest {
 
     }
 
+
     @Test
     void testRecuperaBraniArtista() {
-        // Facciamo il logIn con un gestore esistente
+        // Facciamo il logIn con un artista esistente
         eventfy.logIn(3);
+        //ritorniamo la lista delle prenotazioni accettate e inseriamo la prenotazione
+        //verifico che la dimensione della lista è corretta
 
         eventfy.aggiungiScaletta();
         List<Brano> brani = eventfy.recuperaBraniArtista(5);
@@ -322,6 +334,9 @@ public class EventfyTest {
             fail();
             return;
         }
+
+        
+        //verifichiamo che il brano sia stato aggiunto alla lista iniziale
         assertEquals(lunghezzaScalettaIniziale + 1, eventfy.getPrenotazione(5).getEvento().getListaBrani().size());
 
         // consideriamo il caso in cui aggiungiamo un brano già presente
@@ -335,6 +350,8 @@ public class EventfyTest {
         } catch (Exception e) {
             assertEquals("Brano già inserito", e.getMessage());
         }
+
+        //consideriamo il caso in cui si inserisce un id brano non valido
 
         try {
             eventfy.aggiungiBrano(200);
@@ -369,7 +386,7 @@ public class EventfyTest {
     }
 
     @Test
-    // da rivedere
+
     void invitaArtistaTest() {
         eventfy.logIn(3);// Artista TheWeeknd
 
@@ -389,7 +406,7 @@ public class EventfyTest {
         assertEquals(sizeMappaInvitiIniziale + 1, artista.getListaInvitiPendenti().size());
 
         // Ora controlliamo il caso di fallimento della funzione
-        // prima nel caso in cui si inserisce un id non esistente
+        // prima nel caso in cui si inserisce un id dell'artista non esistente
         eventfy.mostraPrenotazioniAccettate();
         eventfy.selezionaPrenotazioneInvito(4);
 
@@ -422,6 +439,7 @@ public class EventfyTest {
     void gestisciInvitoTest() {
 
         eventfy.logIn(3);// Artista TheWeeknd
+        //verifica che la lista degli inviti sia uguale a quella dell'utente corrente
         assertEquals(eventfy.gestisciInvito(), ((Artista) eventfy.getUtenteCorrente()).getListaInvitiPendenti());
 
         eventfy.logIn(4);
@@ -458,6 +476,8 @@ public class EventfyTest {
         } catch (Exception e) {
             fail();
         }
+
+        //verifico che l'invito sia stato accettato con suggesso e che le mappe si siano aggiornate
 
         assertEquals(numInvitiAccettatiIniziale + 1, artistaCorrente.getListaInvitiAccettati().size());
         assertEquals(numInvitiPendentiIniziale - 1, artistaCorrente.getListaInvitiPendenti().size());
@@ -497,6 +517,7 @@ public class EventfyTest {
             fail();
         }
 
+        //verifico che l'invito sia stato rifiutato controllando la dimensione delle mappe
         assertEquals(numInvitiRifiutatiIniziale + 1, artistaCorrente.getListaInvitiRifiutati().size());
         assertEquals(numInvitiPendentiIniziale - 1, artistaCorrente.getListaInvitiPendenti().size());
 
@@ -512,6 +533,7 @@ public class EventfyTest {
             assertEquals("Id invito non valido", e1.getMessage());
         }
 
+        //la dimensione delle mappe deve essere rimasta invariata
         assertEquals(numInvitiRifiutatiIniziale, artistaCorrente.getListaInvitiRifiutati().size());
         assertEquals(numInvitiPendentiIniziale, artistaCorrente.getListaInvitiPendenti().size());
 
@@ -529,7 +551,7 @@ public class EventfyTest {
         assertTrue(prenotazioniArtista.size() > 0);
     }
 
-    // ----- Sono qui
+  
     @Test
     void testCreaRecensione() {
         eventfy.logIn(3);// Artista TheWeeknd
@@ -557,6 +579,9 @@ public class EventfyTest {
         } catch (Exception e) {
             fail();
         }
+
+        // verifico che la recensione sia stata inserita
+
         Prenotazione p8 = eventfy.getPrenotazione(8);
         RecensioneImpianto r8 = p8.getImpianto().getListaRecensioni().get(0);
         assertEquals("Impianto al top, bravi", r8.getCommento());
@@ -737,6 +762,8 @@ public class EventfyTest {
             fail();
         }
 
+        //verifico che il fan sia stato aggiunto alla lista dei partecipanti dell'evento
+
         assertTrue(((Fan) utenteCorrente).isPartecipante(codice_prenotazione));
         assertTrue(eventfy.getPrenotazione(codice_prenotazione).hasPartecipante((Fan) utenteCorrente));
         assertNull(eventfy.getMapPrenotazioniTemp());
@@ -832,7 +859,7 @@ public class EventfyTest {
         // verifico che mi venga ritornata una lista
         assertNotNull(prenotazioniAccettate);
 
-        // controllo che la lsuat ritornata sia della dimensione esatta
+        // controllo che la lista ritornata sia della dimensione esatta
         assertEquals(7, prenotazioniAccettate.size());
     }
 
@@ -877,26 +904,5 @@ public class EventfyTest {
         // verifico che mi venga ritornata una lista
         assertNotNull(listaPrenotazioni);
     }
-    /*
-    @Test
-    void mostraInvitiAccettatiTest() {
 
-        eventfy.logIn(4);
-
-        try {
-            eventfy.accettaInvito(0);
-        } catch (Exception e) {
-            fail();
-        }
-
-        List<Prenotazione> listaPrenotazioni = eventfy.mostraPrenotazioniAccettate();
-
-        // verifico che mi venga ritornata una lista
-        assertNotNull(listaPrenotazioni);
-
-        // verifico che la dimensione della lista sia corretta
-        assertEquals(1, listaPrenotazioni.size());
-
-    }
-     */
 }

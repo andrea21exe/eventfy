@@ -52,6 +52,10 @@ public class MenuFan extends MenuStrategy {
             System.out.println(artista);
         }
         System.out.println("Seleziona un artista inserendo il suo codice:");
+        while (!input.hasNextInt()) {
+            System.out.println("Inserisci un numero intero, riprova:");
+            input.next(); // Scarta l'input non valido
+        }
         int codice_artista = input.nextInt();
         // Consuma il resto della linea
         input.nextLine();
@@ -69,6 +73,10 @@ public class MenuFan extends MenuStrategy {
         }
 
         System.out.println("Inserisci il codice della prenotazione a cui vuoi partecipare:");
+        while (!input.hasNextInt()) {
+            System.out.println("Inserisci un numero intero, riprova:");
+            input.next(); // Scarta l'input non valido
+        }
         int codice_prenotazione = input.nextInt();
         try {
             sistema.confermaPartecipazione(codice_prenotazione);
@@ -94,6 +102,10 @@ public class MenuFan extends MenuStrategy {
         }
 
         System.out.print("Inserisci l'id dell'evento per cui vuoi scrivere una recensione: ");
+        while (!input.hasNextInt()) {
+            System.out.println("Inserisci un numero intero, riprova:");
+            input.next(); // Scarta l'input non valido
+        }
         int codice_evento = input.nextInt();
 
         // Richiede all'utente di inserire il commento per la recensione
@@ -104,11 +116,16 @@ public class MenuFan extends MenuStrategy {
 
         // Richiede all'utente di inserire il voto per l'evento
         System.out.print("Inserisci il voto (da 0 a 5): ");
+        while (!input.hasNextInt()) {
+            System.out.println("Inserisci un numero intero, riprova:");
+            input.next(); // Scarta l'input non valido
+        }
         int voto = input.nextInt();
         while (voto < 0 || voto > 5) {
             System.out.println("Il voto deve essere compreso tra 0 e 5. Riprova.");
             voto = input.nextInt();
         }
+        
         // Conferma la recensione
         try {
             sistema.confermaRecensioneEvento(codice_evento, commento, voto);

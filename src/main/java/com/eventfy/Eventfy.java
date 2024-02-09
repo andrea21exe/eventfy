@@ -53,7 +53,7 @@ public class Eventfy {
         return sistema;
     }
     // -------
-
+    //inserimento di un nuovo impianto
     public Impianto nuovoImpianto(String nome, String luogo, int capienza, int superficie) throws Exception {
         impiantoCorrente = new Impianto(nome, luogo, capienza, superficie, utenteCorrente);
         if (!isUnico(impiantoCorrente)) {
@@ -62,12 +62,14 @@ public class Eventfy {
         }
         return impiantoCorrente;
     }
-
+    //impianto aggiunto alla lista impianti
     public void confermaImpianto() {
         listaImpianti.add(impiantoCorrente);
         impiantoCorrente = null;
     }
 
+    //creazione di una nuova prenotazione di un artista
+    //controllo che la prenotazione sia alemno 3 mesi prima dell'evento
     public List<Impianto> nuovaPrenotazione(String titolo, String descrizione, int durata, int capienza_min,
             LocalDate data, LocalTime ora) throws Exception {
 
@@ -91,6 +93,8 @@ public class Eventfy {
 
     }
 
+
+    //prenotazione dell'impianto inserito ottenuto dalla lista
     public void prenotaImpianto(int codice_impianto) throws Exception {
         Impianto impianto = mappaImpiantiTemp.get(codice_impianto);
         if (impianto == null) {
@@ -99,7 +103,7 @@ public class Eventfy {
         }
         prenotazioneCorrente.setImpianto(impianto);
     }
-
+    //inserimento della prenotazioni nella mappa prenotazioni pendenti
     public Prenotazione confermaPrenotazione() {
         int codice_prenotazione = prenotazioneCorrente.getId();
         mappaPrenotazioniPendenti.put(codice_prenotazione, prenotazioneCorrente);
@@ -108,6 +112,8 @@ public class Eventfy {
         return mappaPrenotazioniPendenti.get(codice_prenotazione);
     }
 
+    //ritorna tutte le prenotazioni pendenti
+    //ogni volta che viene chiamata verifica se qualche prenotazione è scaduta
     public List<Prenotazione> mostraPrenotazioniPendenti() {
 
         mappaPrenotazioniTemp = new HashMap<Integer, Prenotazione>();
@@ -126,6 +132,7 @@ public class Eventfy {
         return new ArrayList<Prenotazione>(mappaPrenotazioniTemp.values());
     }
 
+    //ritorna la prenotazione selezionata
     public Prenotazione selezionaPrenotazionePendente(int codice_prenotazione) throws Exception {
 
         prenotazioneCorrente = mappaPrenotazioniTemp.get(codice_prenotazione);
@@ -136,6 +143,7 @@ public class Eventfy {
         return prenotazioneCorrente;
     }
 
+    //inserimento della prenotazione nella mappa accettate ed eliminazione dalla mappa pendenti
     public void accettaPrenotazione() throws Exception {
 
         // Check che non ci sia una prenotazione nello stesso impianto nella stessa data
@@ -242,7 +250,7 @@ public class Eventfy {
         return new ArrayList<>(mappaPrenotazioniTemp.values());
     }
 
-    // ho sostituito la seconda operazione aggiungiScaletta2 con questa
+    //settiamo la prenotazione e ritorniamo la lista brani da artista
     public List<Brano> recuperaBraniArtista(int codice_prenotazione) {
 
         prenotazioneCorrente = mappaPrenotazioniTemp.get(codice_prenotazione);
@@ -258,8 +266,9 @@ public class Eventfy {
 
     }
 
-    // supponiamo di visualizzare la mappa dei brani con i rispettivi codici e di
-    // scegliere un codice di un brano
+    // supponiamo di visualizzare la mappa dei brani con i rispettivi codici
+    // aggiunge il brano alla lista brani di evento
+    //viene verificato che il brano non è già presente e che si inserisce un id valido
     public void aggiungiBrano(int codice_brano) throws Exception {
         prenotazioneCorrente.addBrano(codice_brano);
         prenotazioneCorrente = null;
@@ -268,6 +277,7 @@ public class Eventfy {
     // UC7-------------------------------------------------------
     // SImile al metodo "aggiungiscaletta" sopra. In astah abbiamo chiamato questo
     // metodo "invitaArtista"
+    //ritorna le prenotazioni accettate di un dato artista
     public List<Prenotazione> mostraPrenotazioniAccettate() {
 
         mappaPrenotazioniTemp = new HashMap<Integer, Prenotazione>();
@@ -283,6 +293,9 @@ public class Eventfy {
 
     }
 
+
+    //seleziona la prenotazione e fa creare da evento invito e setta il mittente
+    //ritorna gli artista da invitare
     public List<Utente> selezionaPrenotazioneInvito(int codice_prenotazione) {
 
         prenotazioneCorrente = mappaPrenotazioniTemp.get(codice_prenotazione);
@@ -300,6 +313,8 @@ public class Eventfy {
 
     }
 
+    //verifica che l'artista è presente e lo inserisce come destinatario dell'invito
+
     public void invitaArtista(int codice_artista) throws Exception {
 
         Utente utenteSelezionato = mappaUtenti.get(codice_artista);
@@ -315,16 +330,20 @@ public class Eventfy {
     }
 
     // UC8 ----------------------------------------------------
+    //ritorna tutti gli inviti ricevuti e non accettati
     public List<Invito> gestisciInvito() {
         return ((Artista) utenteCorrente).getListaInvitiPendenti();
     }
 
     // seleziono un id dalla mappa inviti relativa all'artista
+    //inserisce l'invito nella mappa accettati, lo rimuove in quella pendenti
+    //aggiunge l'invito ad evento
     public void accettaInvito(int codice_invito) throws Exception {
         ((Artista) utenteCorrente).accettaInvito(codice_invito);
     }
 
     // aggiunta dall'estensione
+    //rimuove l'invito dalla mappa pendenti e lo aggiunge a quelli eliminati
     public void rifiutaInvito(int codice_invito) throws Exception {
         ((Artista) utenteCorrente).rifiutaInvito(codice_invito);
     }
@@ -348,7 +367,7 @@ public class Eventfy {
 
     // recuperiamo l'impianto a cui vogliamo aggiungere un commento relativo alla
     // prenotazione
-    // inserisco codice prenotazione
+    // inserisco codice prenotazione per agginugere la recensione ad impianto
     public void creaRecensione(int codice_prenotazione, String commento, int voto) throws Exception {
 
         Prenotazione p = mappaPrenotazioniTemp.get(codice_prenotazione);
@@ -363,6 +382,8 @@ public class Eventfy {
     }
 
     // UC10
+    //recupera le prenotazioni dell'artista e controlla se l'evento 
+    //non è ancora avvenuto
     public List<Prenotazione> eliminaPrenotazione() {
         mappaPrenotazioniTemp = new HashMap<Integer, Prenotazione>();
 
@@ -382,10 +403,9 @@ public class Eventfy {
         return new ArrayList<Prenotazione>(mappaPrenotazioniTemp.values());
     }
 
-    // Supponiamo di aver inserito l'id di una prenotazione ricavato dalla lista
-    // delle prenotazioni che ci siamo ritornati
 
-    // utilizzata acnhe nell'estensione del caso d'uso UC3
+    //prende la prenotazioni dalla mappa temporanea e la aggiunge alle eliminate
+    // utilizzata anche nell'estensione del caso d'uso UC3
     public void confermaEliminazione(int codice_prenotazione) throws Exception {
 
         Prenotazione daEliminare = mappaPrenotazioniTemp.get(codice_prenotazione);
@@ -404,9 +424,8 @@ public class Eventfy {
 
     // UC12
 
-    // Da aggiungere questa funzione in astah, mostra gli artisti che hanno almeno
+    // mostra gli artisti che hanno almeno
     // una prenotazione accettata e di conseguenza un evento
-    // ritorna solo gli artisti che hanno almeno una prenotazione accettata
     public List<Utente> mostraArtistiEventi() {
         mappaUtentiTemp = new HashMap<Integer, Utente>();
 
@@ -423,7 +442,10 @@ public class Eventfy {
         }
         return new ArrayList<Utente>(mappaUtentiTemp.values());
     }
+    
 
+    // ritorna la lista delle prenotazioni di un dato artista in cui l'evento
+    //non è anteriore alla data corrente
     public List<Prenotazione> partecipaEvento(int codice_artista) throws Exception {
 
         Artista a = (Artista) mappaUtentiTemp.get(codice_artista);
@@ -438,13 +460,14 @@ public class Eventfy {
 
             if (p1.hasArtista(a) && p1.isPartecipabile()) {
                 mappaPrenotazioniTemp.put(p1.getId(), p1);
-                // listaEventi.add(p1.getEvento());
             }
         }
 
         return new ArrayList<Prenotazione>(mappaPrenotazioniTemp.values());
     }
 
+    //l'id evento corrisponde all'id della prenotazione
+    //aggiunge il fan all'evento e l'evento alla lista del fan
     public void confermaPartecipazione(int id_evento) throws Exception {
 
         Prenotazione p = mappaPrenotazioniTemp.get(id_evento);
@@ -459,6 +482,7 @@ public class Eventfy {
 
     }
 
+    //ritorna la prenotazione selezionata
     public Prenotazione getPrenotazione(int codice_prenotazione) {
 
         Prenotazione p = mappaPrenotazioniAccettate.get(codice_prenotazione);
@@ -469,6 +493,7 @@ public class Eventfy {
     }
 
     // UC13
+    //ritorna da fan la lista degli eventi che già si sono svolti
     public List<Evento> inserisciRecensioneEvento() {
         if (utenteCorrente instanceof Fan) {
             return ((Fan) utenteCorrente).getListaEventiRecensibili();
@@ -476,6 +501,9 @@ public class Eventfy {
         return null;
     }
 
+
+    //crea la recensione da evento e l'aggiunge alla lista
+    //id evento uguale ad id prenotazione
     public void confermaRecensioneEvento(int id_evento, String commento, int voto) throws Exception {
 
         Prenotazione p = mappaPrenotazioniAccettate.get(id_evento);
@@ -519,6 +547,7 @@ public class Eventfy {
     }
 
     // UC5
+    //visualizza gli eventi che sono stati accettati
     public void visualizzaEventiOrganizzati() {
 
         Prenotazione p1;
@@ -562,6 +591,7 @@ public class Eventfy {
 
     // UC16
     // faccio inserire l'id dell'evento di cui voglio visualizzare le recensioni
+    //id evento uguale a id prenotazione
     public void mostraRecensioneEvento(int id) throws Exception {
 
         Prenotazione p1 = mappaPrenotazioniAccettate.get(id);
@@ -575,7 +605,7 @@ public class Eventfy {
     }
 
     // UC17
-    // Registra Brano
+    // fa aggiungere all'artista corrente un nuovo brano
     public void registraBrano(String titolo, String album, int durata) {
         ((Artista) utenteCorrente).nuovoBrano(titolo, album, durata);
     }
