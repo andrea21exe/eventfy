@@ -786,13 +786,16 @@ public class Eventfy {
 
     private boolean isUnico(Impianto impianto) {
 
+        boolean isUnico = true;
+
         for (Impianto i : this.listaImpianti) {
             if (i.hasSameAttributes(impianto)) {
-                return false;
+                isUnico = false;
+                break;
             }
         }
 
-        return true;
+        return isUnico;
 
     }
 
