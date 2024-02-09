@@ -42,15 +42,18 @@ public class MenuFan extends MenuStrategy {
 
     private void partecipaEvento() {
         Scanner input = new Scanner(System.in);
-
         List<Utente> artisti = sistema.mostraArtistiEventi();
+        if (artisti.isEmpty()) {
+            System.out.println("Non sono presenti artisti nel sistema");
+            return;
+        }
         System.out.println("Lista degli artisti:");
         for (Utente artista : artisti) {
             System.out.println(artista);
         }
         System.out.println("Seleziona un artista inserendo il suo codice:");
         int codice_artista = input.nextInt();
-        // per evitare che il cursore rimanga incastrato e non funzioni correttamente
+        // Consuma il resto della linea
         input.nextLine();
 
         List<Prenotazione> prenotazioniPartecipabili;
@@ -81,6 +84,10 @@ public class MenuFan extends MenuStrategy {
         Scanner input = new Scanner(System.in);
         // Ottiene la lista degli eventi disponibili per la recensione
         List<Evento> eventi = sistema.inserisciRecensioneEvento();
+        if (eventi.isEmpty()) {
+            System.out.println("Eventi non disponibili per recensione:");
+            return;
+        }
         System.out.println("Eventi disponibili per recensione:");
         for (Evento e : eventi) {
             System.out.println(e);
@@ -92,12 +99,16 @@ public class MenuFan extends MenuStrategy {
         // Richiede all'utente di inserire il commento per la recensione
         System.out.print("Inserisci il commento: ");
         String commento = input.nextLine();
-        // per evitare che il cursore rimanga incastrato e non funzioni correttamente
+        // Consuma il resto della linea
         input.nextLine();
 
         // Richiede all'utente di inserire il voto per l'evento
         System.out.print("Inserisci il voto (da 0 a 5): ");
         int voto = input.nextInt();
+        while (voto < 0 || voto > 5) {
+            System.out.println("Il voto deve essere compreso tra 0 e 5. Riprova.");
+            voto = input.nextInt();
+        }
         // Conferma la recensione
         try {
             sistema.confermaRecensioneEvento(codice_evento, commento, voto);

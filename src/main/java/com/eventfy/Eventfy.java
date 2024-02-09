@@ -530,7 +530,6 @@ public class Eventfy {
                 i++;
             }
         }
-
         if (i == 0) {
             System.out.println("Nessun evento");
         }
@@ -563,11 +562,11 @@ public class Eventfy {
 
     // UC16
     // faccio inserire l'id dell'evento di cui voglio visualizzare le recensioni
-    public void mostraRecensioneEvento(int id) throws Exception{
+    public void mostraRecensioneEvento(int id) throws Exception {
 
         Prenotazione p1 = mappaPrenotazioniAccettate.get(id);
 
-        if(p1 == null || !(p1.hasArtista((Artista) utenteCorrente))){
+        if (p1 == null || !(p1.hasArtista((Artista) utenteCorrente))) {
             throw new Exception("Evento non valido");
         }
 
@@ -742,12 +741,12 @@ public class Eventfy {
     // Nella UI viene prima chiamato il metodo mostraPrenotazioniAccettate()
 
     // UC20
-    public void mostraInvitiAccettati(int idEvento) throws Exception{
+    public void mostraInvitiAccettati(int idEvento) throws Exception {
 
         Prenotazione p = mappaPrenotazioniTemp.get(idEvento);
         mappaPrenotazioniTemp = null;
 
-        if(p == null){
+        if (p == null) {
             throw new Exception("Id non valido");
         }
 
@@ -769,13 +768,13 @@ public class Eventfy {
 
     // UC21
     public void mostraRecensioniFan() {
-        ((Fan)utenteCorrente).printRecensioni();
+        ((Fan) utenteCorrente).printRecensioni();
     }
 
     // UC22
     public void mostraRecensioniArtista() {
-        for(Impianto impianto : listaImpianti){
-            impianto.printRecensioniArtista((Artista)utenteCorrente);
+        for (Impianto impianto : listaImpianti) {
+            impianto.printRecensioniArtista((Artista) utenteCorrente);
         }
     }
 

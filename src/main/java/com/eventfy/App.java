@@ -23,19 +23,19 @@ public class App {
         sistema = Eventfy.getIstanceEventfy();
         sistema.populate();
         menuStrategy = new MenuLogin();
-        
+
         while (true) {
             try {
                 menuStrategy.menu();
             } catch (LogoutException e) {
                 menuStrategy = new MenuLogin();
-            } catch(LoginArtistaException e){
+            } catch (LoginArtistaException e) {
                 menuStrategy = new MenuArtista();
-            } catch (LoginFanException e){
+            } catch (LoginFanException e) {
                 menuStrategy = new MenuFan();
-            } catch (LoginGestoreException e){
+            } catch (LoginGestoreException e) {
                 menuStrategy = new MenuGestore();
-            } catch (LogException e){
+            } catch (LogException e) {
                 return;
             }
         }
