@@ -45,7 +45,7 @@ public class EventfyTest {
         //si controlla che non si possono aggiungere due impianti uguali
 
         try {
-            eventfy.nuovoImpianto("San Siro", "Milano", 0, 100);
+            eventfy.nuovoImpianto("San Siro", "Milano", 80000, 100);
         } catch (Exception e) {
             assertEquals("Impianto identico presente nel sistema", e.getMessage());
             ;
